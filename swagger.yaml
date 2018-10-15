@@ -1,0 +1,158 @@
+openapi: 3.0.0
+paths:
+  /usuarios:
+    post:
+      tags:
+        - User
+      summary: Rota de criação de usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/Usuario'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '500':
+          $ref: '#/components/responses/500'
+    get:
+      tags:
+        - User
+      summary: Rota de listagem de usuários
+      parameters:
+        - $ref: '#/components/parameters/nameParam'
+        - in: query
+          name: email
+          description: E-mail do usuário
+          schema:
+            type: string
+            format: email
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  /users/{id}:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - User
+      summary: Rota de detalhamento de usuário
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - User
+      summary: Rota de remoção de usuário
+      responses:
+        '200':
+          $ref: '#/components/responses/200Remove'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+    patch:
+      tags:
+        - User
+      summary: Rota de alteração de usuário
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Usuario'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Remove'
+        '400':
+          $ref: '#/components/responses/400'
+        '403':
+          $ref: '#/components/responses/403'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+          
+components:
+  securitySchemes:
+    authenticationUser:
+      type: apiKey
+      name: Authorization
+      in: header
+  parameters:
+    idParam:
+      in: path
+      name: id
+      description: Object Id
+      schema:
+        type: string
+    limitParam:
+      in: query
+      name: limit
+      description: Limite de dados a serem retornados
+      schema:
+        type: integer
+    pageParam:
+      in: query
+      name: page
+      description: Página a ser consultada
+      schema:
+        type: integer
+    nameParam:
+      in: query
+      name: name
+      description: Nome
+      schema:
+        type: string
+  responses:
+    '200Detail':
+      description: Objeto detalhado
+    '200List':
+      description: Retorna a lista de objetos e a contagem total
+    '200Remove':
+      description: Objeto removido
+    '200Update':
+      description: Objeto atualizado
+    '201':
+      description: Objeto criado
+    '400':
+      description: Erro de validação
+    '403':
+      description: Forbidden
+    '404':
+      description: Objeto não encontrado
+    '500':
+      description: Erro interno do servidor
+  schemas:
+    Usuario:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phone:
+          type: string
+        password:
+          type: string
