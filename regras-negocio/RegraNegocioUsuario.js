@@ -2,9 +2,10 @@
 const save = async function (request, response, next) {
 
     let promisseStack = [
-        response.locals._MODELS.Usuario.countDocuments({ 'name': request.body.name }).exec(),
-        response.locals._MODELS.Usuario.countDocuments({ 'phone': request.body.phone }).exec(),
-        response.locals._MODELS.Usuario.countDocuments({ 'email': request.body.email }).exec()
+        response.locals._MODELS.Usuario.countDocuments({ 'name': request.body.name }).exec()
+        // ,
+        // response.locals._MODELS.Usuario.countDocuments({ 'phone': request.body.phone }).exec(),
+        // response.locals._MODELS.Usuario.countDocuments({ 'email': request.body.email }).exec()
     ];
 
     let resolvedPromisses = await Promise.all(promisseStack);

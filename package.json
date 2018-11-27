@@ -4,6 +4,7 @@
   "description": "POC Middleware Pattern",
   "main": "index.js",
   "scripts": {
+    "test": "mocha"
   },
   "author": "Felipe Trevisan",
   "license": "ISC",
@@ -17,5 +18,10 @@
     "mongoose": "^5.2.17",
     "swagger-ui-express": "^4.0.1",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "jest": "^23.6.0",
+    "mocha": "^5.2.0",
+    "sinon": "^7.0.0"
   }
 }
