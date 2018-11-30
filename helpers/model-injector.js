@@ -1,5 +1,5 @@
 // --------------- Import de arquivos do core --------------- //
-const user = require('../models/user').MongooseModel;
+const user = require('../models/user').mongooseModel;
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -16,8 +16,8 @@ const injector = function (...modelNames) {
 
 // --------------------- Funções Locais --------------------- //
 function getModel(modelName) {
-    switch (modelName) {
-        case 'User': return user;
+    switch (modelName.toLowerCase()) {
+        case 'user': return user;
     }
 };
 

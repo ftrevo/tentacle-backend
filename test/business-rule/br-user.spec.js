@@ -1,6 +1,8 @@
+// ----------------- Import de dependências ----------------- //
 const should = require('should');
 
-const brUser = require('../business-rule/br-user');
+// --------------- Import de arquivos do core --------------- //
+const brUser = require('../../business-rule/br-user');
 
 describe('Regra de negócio do Usuário', function () {
 
@@ -55,7 +57,7 @@ function getResponseMock(mockCountDocuments) {
         }),
         locals: {
             '_MODELS': {
-                'Usuario': {
+                'user': {
                     'countDocuments': mockCountDocuments
                 }
             }

@@ -3,9 +3,9 @@
 const save = async function (request, response, next) {
 
     let promisseStack = [
-        response.locals._MODELS.Usuario.countDocuments({ 'name': request.body.name }).exec(),
-        response.locals._MODELS.Usuario.countDocuments({ 'phone': request.body.phone }).exec(),
-        response.locals._MODELS.Usuario.countDocuments({ 'email': request.body.email }).exec()
+        response.locals._MODELS.user.countDocuments({ 'name': request.body.name }).exec(),
+        response.locals._MODELS.user.countDocuments({ 'phone': request.body.phone }).exec(),
+        response.locals._MODELS.user.countDocuments({ 'email': request.body.email }).exec()
     ];
 
     let resolvedPromisses = await Promise.all(promisseStack);
@@ -21,19 +21,19 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     let promisseStack = [
-        response.locals._MODELS.Usuario.countDocuments(
+        response.locals._MODELS.user.countDocuments(
             {
                 '_id': { '$ne': ObjectId(request.params._id) },
                 'name': request.body.name
             }
         ).exec(),
-        response.locals._MODELS.Usuario.countDocuments(
+        response.locals._MODELS.user.countDocuments(
             {
                 '_id': { '$ne': ObjectId(request.params._id) },
                 'phone': request.body.phone
             }
         ).exec(),
-        response.locals._MODELS.Usuario.countDocuments(
+        response.locals._MODELS.user.countDocuments(
             {
                 '_id': { '$ne': ObjectId(request.params._id) },
                 'email': request.body.email

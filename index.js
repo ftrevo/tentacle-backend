@@ -4,6 +4,7 @@ require('dotenv').config();
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
 const express = require('express');
+const helmet = require('helmet')
 const cors = require('cors');
 
 // --------------- Import de arquivos do core --------------- //
@@ -11,14 +12,15 @@ const errorMapper = require('./helpers/error-mapper');
 const util = require('./helpers/util');
 const routes = require('./routes');
 
-// Inicialização e configuração do app
 const swaggerYaml = require('yamljs').load('./swagger.yaml');
 
 // Conexão com o banco de dados
 require('./helpers/datasource');
 
+// Inicialização e configuração do app
 const app = express();
 
+app.use(helmet())
 app.use(cors());
 app.use(bodyParser.json({ limit: '5mb' }));
 
