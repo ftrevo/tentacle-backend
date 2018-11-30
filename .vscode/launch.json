@@ -34,19 +34,6 @@
             ],
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null
-        },
-        {
-            "name": "Run Jest Tests",
-            "type": "node",
-            "request": "launch",
-            "program": "${workspaceRoot}/node_modules/jest/bin/jest",
-            "stopOnEntry": false,
-            "args": [
-                "./test/**/*.spec.js",
-                "--forceExit"
-            ],
-            "cwd": "${workspaceRoot}",
-            "runtimeExecutable": null
         }
     ]
 }

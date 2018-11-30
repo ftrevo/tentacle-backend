@@ -1,32 +1,21 @@
 // --------------- Import de arquivos do core --------------- //
-const Validador = require('./helpers/Validador');
-const ModelInjector = require('./helpers/ModelInjector');
-const RNUsuario = require('./regras-negocio/RegraNegocioUsuario');
-const BancoUsuario = require('./banco-dados/BancoDadosUsuario');
+const validador = require('./helpers/validator');
+const modelInjector = require('./helpers/model-injector');
+const brUser = require('./business-rule/br-user');
+const repoUser = require('./repositories/repo-user');
+const defMethods = require('./helpers/default-methods');
 
-module.exports = (app) => {
-  app.get('/', (request, response) => {
-    response.locals._UTIL.handleRequests(200, { 'message': 'Server is up!', 'data': new Date() }, response);
-  });
+// ------------------- Funções Exportadas ------------------- //
+const routes = function (app) {
+  app.get('/', defMethods.route, defMethods.requestHandler);
 
   app.route('/usuarios')
-    .get(
-      Validador('Usuario', 'consulta', 'body'), ModelInjector('Usuario'), RNUsuario.find, BancoUsuario.find, handlerRequisicoes)
-    .post(
-      Validador('Usuario', 'criacao', 'body'), ModelInjector('Usuario'), RNUsuario.save, BancoUsuario.save, handlerRequisicoes);
+    .get(validador('user', 'find', 'body'), modelInjector('user'), brUser.find, repoUser.find, defMethods.requestHandler)
+    .post(validador('user', 'create', 'body'), modelInjector('user'), brUser.save, repoUser.save, defMethods.requestHandler);
 
   app.route('/usuarios/:_id')
-    .put(
-      Validador('Usuario', 'atualizacao', 'query'), ModelInjector('Usuario'), RNUsuario.update, BancoUsuario.update, handlerRequisicoes);
+    .put(validador('user', 'update', 'query'), modelInjector('user'), brUser.update, repoUser.update, defMethods.requestHandler);
 };
 
-function handlerRequisicoes(request, response, next) {
-  response.locals._UTIL.handleRequests(
-    response.locals.statusCode,
-    {
-      'message': response.locals.message,
-      'data': response.locals.data
-    },
-    response);
-};
-
+// --------------------- Module Exports --------------------- //
+module.exports = routes;

@@ -1,3 +1,4 @@
+// ------------------- Funções Exportadas ------------------- //
 const resolvePagination = (params) => {
     let page = parseInt(params.page) || 0;
     let limit = parseInt(params.limit) || 9999999999;
@@ -52,7 +53,7 @@ const transformObjectToQuery = (filter = {}) => {
     return mongodbFilter;
 }
 
-
+// --------------------- Module Exports --------------------- //
 module.exports = {
     'clearObject': clearObject,
     'handleRequests': handleRequests,
