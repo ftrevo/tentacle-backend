@@ -17,6 +17,7 @@ const validate = function (schemaName, functionValidation, requestObject) {
 const validationMethods = {
     'user': {
         'create': userJoi.create,
+        'id': userJoi.id,
         'update': userJoi.update,
         'search': userJoi.search
     }

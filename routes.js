@@ -9,12 +9,15 @@ const defMethods = require('./helpers/default-methods');
 const routes = function (app) {
   app.get('/', defMethods.route, defMethods.requestHandler);
 
-  app.route('/usuarios')
-    .get(validador('user', 'find', 'body'), modelInjector('user'), brUser.find, repoUser.find, defMethods.requestHandler)
+  app.route('/users')
+    .get(validador('user', 'search', 'query'), modelInjector('user'), brUser.find, repoUser.find, defMethods.requestHandler)
     .post(validador('user', 'create', 'body'), modelInjector('user'), brUser.save, repoUser.save, defMethods.requestHandler);
 
-  app.route('/usuarios/:_id')
-    .put(validador('user', 'update', 'query'), modelInjector('user'), brUser.update, repoUser.update, defMethods.requestHandler);
+  app.route('/users/:_id')
+    .patch(
+      validador('user', 'id', 'params'), validador('user', 'update', 'query'), modelInjector('user'),
+      brUser.update, repoUser.update, defMethods.requestHandler
+    );
 };
 
 // --------------------- Module Exports --------------------- //

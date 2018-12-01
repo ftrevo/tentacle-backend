@@ -4,7 +4,10 @@
   "description": "POC Middleware Pattern",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "pretest": "npm install",
+    "test": "nyc --check-coverage --lines 80 --reporter=html --reporter=text mocha --opts --reporter spec ./test --recursive --timeout 10000 --exit",
+    "prestart": "npm install",
+    "start": "node ."
   },
   "author": "Felipe Trevisan",
   "license": "ISC",
@@ -22,6 +25,7 @@
   },
   "devDependencies": {
     "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
     "should": "^13.2.3"
   }
 }

@@ -22,7 +22,7 @@ const handleErrors = function (error, request, response, next) {
 
 // --------------------- Funções Locais --------------------- //
 function getMessageFromDetail(detail) {
-    if (detail.type.startsWith('string')) {
+    if (detail.type.startsWith('string') || detail.type === 'date.base') {
         return `Dados inválidos para o campo \'${fieldMap[detail.context.key]}\'.`;
     }
     if (detail.type === 'any.required') {
@@ -31,7 +31,7 @@ function getMessageFromDetail(detail) {
     if (detail.type === 'any.unknown') {
         return `O campo \'${fieldMap[detail.context.key]}\' não pode ser informado para esta ação.`;
     }
-    
+
     return detail.message;
 }
 

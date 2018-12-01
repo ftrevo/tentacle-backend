@@ -3,6 +3,7 @@ require('dotenv').config();
 // ----------------- Import de dependências ----------------- //
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const express = require('express');
 const helmet = require('helmet')
 const cors = require('cors');
@@ -27,6 +28,7 @@ app.use(bodyParser.json({ limit: '5mb' }));
 //Middleware para definição do Locals
 app.all('*', (request, response, next) => {
     response.locals._UTIL = util;
+    response.locals._MONGOOSE = mongoose;
     next();
 });
 

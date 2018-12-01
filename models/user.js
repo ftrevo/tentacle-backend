@@ -38,6 +38,19 @@ UserSchema.pre('save', async function (next) {
 
     next();
 });
+UserSchema.pre('findOneAndUpdate', async function (next) {
+    let query = this;
+
+    if (!query._update.password) {
+        return next();
+    }
+
+    let salt = await bcrypt.genSalt(10);
+
+    query._update.password = await bcrypt.hash(query._update.password, salt);
+
+    next();
+});
 
 // ------------------- Funções Exportadas ------------------- //
 const joiCreate = joi.object().options({ abortEarly: false, allowUnknown: true }).keys({
@@ -66,10 +79,14 @@ const joiSearch = joi.object().options({ abortEarly: false, allowUnknown: true }
     email: joi.string().lowercase().trim().optional(),
     phone: joi.string().trim().optional(),
     password: joi.any().forbidden(),
-    createdAt: joi.date().timestamp().optional(),
-    updatedAt: joi.date().timestamp().optional(),
-    page: joi.number().optional().default(0),
-    limit: joi.number().optional().default(9999999999)
+    createdAt: joi.date().optional().raw(),
+    updatedAt: joi.date().optional(),
+    page: joi.number().default(0),
+    limit: joi.number().default(9999999999)
+});
+
+const joiId = joi.object().options({ abortEarly: false, allowUnknown: true }).keys({
+    _id: joi.string().regex(/^[0-9a-fA-F]{24}$/).required(),
 });
 
 // --------------------- Module Exports --------------------- //
@@ -77,6 +94,7 @@ module.exports = {
     'mongooseModel': mongoose.model('Usuario', UserSchema),
     'joi': {
         'create': joiCreate,
+        'id': joiId,
         'update': joiUpdate,
         'search': joiSearch
     }

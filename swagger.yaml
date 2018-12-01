@@ -1,6 +1,6 @@
 openapi: 3.0.0
 paths:
-  /usuarios:
+  /users:
     post:
       tags:
         - User
@@ -30,6 +30,11 @@ paths:
           schema:
             type: string
             format: email
+        - in: query
+          name: createdAt
+          description: Data de criação
+          schema:
+            type: date
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:

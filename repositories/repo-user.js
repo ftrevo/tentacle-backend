@@ -1,43 +1,60 @@
 // ------------------- Funções Exportadas ------------------- //
-//TODO IMPLEMENTAR OS OUTROS MÉTODOS, SÓ O SAVE TÁ CERTO
 const save = async function (request, response, next) {
-    let toBeIncluded = new response.locals._MODELS.user(request.body);
+    try {
+        let toBeIncluded = new response.locals._MODELS.user(request.body);
 
-    await toBeIncluded.save();
+        await toBeIncluded.save();
 
-    response.locals.message = 'Usuário salvo no banco.';
-    response.locals.statusCode = 201;
+        response.locals.message = 'Usuário salvo no banco.';
+        response.locals.statusCode = 201;
 
-    response.locals.data = toBeIncluded.toObject();
-    response.locals._UTIL.clearObject(response.locals.data, ['password']);
-    response.location(`/users/${response.locals.data._id}`);
+        response.locals.data = toBeIncluded.toObject();
+        response.locals._UTIL.clearObject(response.locals.data, ['password']);
+        response.location(`/users/${response.locals.data._id}`);
 
-    next();
+        next();
+    } catch (error) {
+        next(error);
+    }
 };
 
 const update = async function (request, response, next) {
-    let toBeIncluded = new response.locals._MODELS.user(request.body);
-    
-    await toBeIncluded.save();
-    
-    response.locals.message = 'Usuário atualizado no banco.';
-    response.locals.statusCode = 201;
+    try {
+        let updated = await response.locals._MODELS.user.findOneAndUpdate({ '_id': request.params._id }, request.body, { 'new': true });
 
-    response.locals.data = toBeIncluded.toObject();
-    response.locals._UTIL.clearObject(response.locals.data, ['password']);
-    response.location(`/users/${response.locals.data._id}`);
+        response.locals.message = 'Usuário atualizado no banco.';
+        response.locals.statusCode = 201;
 
-    next();
+        response.locals.data = updated.toObject();
+        response.locals._UTIL.clearObject(response.locals.data, ['password']);
+        response.location(`/users/${response.locals.data._id}`);
+
+        next();
+    } catch (error) {
+        next(error);
+    }
 };
 
 const find = async function (request, response, next) {
-    let usuarioInclusao = new response.locals._MODELS.user(request.body);
+    try {
+        let promisseStack = [
+            response.locals._MODELS.user.find(request.query, { 'password': 0 })
+                .skip(response.locals.pagination.skip)
+                .limit(response.locals.pagination.max)
+                .sort({ 'name': 1 }).exec(),
 
-    await usuarioInclusao.save();
+            response.locals._MODELS.user.find(request.query).countDocuments().exec()
+        ];
 
-    response.locals.message = 'Usuário salvo no banco.';
+        let resolvedPromisses = await Promise.all(promisseStack);
 
-    next();
+        response.locals.statusCode = 200;
+        response.locals.data = { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] };
+
+        next();
+    } catch (error) {
+        next(error);
+    }
 };
 
 // --------------------- Module Exports --------------------- //
