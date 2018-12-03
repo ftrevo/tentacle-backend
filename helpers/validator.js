@@ -7,17 +7,17 @@ const userJoi = require('../models/user').joi;
 // ------------------- Funções Exportadas ------------------- //
 const validate = function (schemaName, functionValidation, requestObject) {
     return async function (request, response, next) {
-        let validatedObject = await joi.validate(request[requestObject], validationMethods[schemaName][functionValidation]);
+        try {
+            let validatedObject = await joi.validate(request[requestObject], validationMethods[schemaName][functionValidation]);
 
-        if (validatedObject && validatedObject.error) {
-            return next(validatedObject.error);
+            //Sanitize or not
+            if (requestObject !== 'params') {
+                request[requestObject] = validatedObject;
+            }
+            next();
+        } catch (error) {
+            return next(error);
         }
-
-        //Sanitize or not
-        if(requestObject !== 'params'){
-            request[requestObject] = validatedObject;
-        }
-        next();
     };
 };
 

@@ -77,11 +77,27 @@ const findById = async function (request, response, next) {
     }
 };
 
+const remove = async function (request, response, next) {
+    try {
+        let foundObject = await response.locals._MODELS.user.findByIdAndDelete(request.params._id, { 'select': { 'password': 0 } });
+
+        response.locals.data = foundObject;
+        response.locals.message = 'Usuário removido';
+        response.locals.statusCode = 200;
+        response.location(`/users/${request.params._id}`);
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
     'find': find,
-    'findById': findById
+    'findById': findById,
+    'remove': remove
 };
 
