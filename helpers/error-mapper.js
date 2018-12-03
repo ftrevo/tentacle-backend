@@ -1,9 +1,14 @@
 // ------------------- Funções Exportadas ------------------- //
 const handleErrors = function (error, request, response, next) {
-    if (error.isJoi || error.isBusiness) {
+    if (error.isJoi || error.isBusiness || error.isDatabase) {
+        let errorCode = 400;
         let errorStack;
 
-        if (error.isBusiness) {
+        if (error.isNotFound) {
+            errorCode = 404;
+        }
+
+        if (error.isBusiness || error.isDatabase) {
             if (Array.isArray(error.message)) {
                 errorStack = error.message;
             } else {
@@ -13,7 +18,7 @@ const handleErrors = function (error, request, response, next) {
             errorStack = error.details.map(getMessageFromDetail);
         }
 
-        return response.locals._UTIL.handleRequests(400, { 'message': errorStack }, response);
+        return response.locals._UTIL.handleRequests(errorCode, { 'message': errorStack }, response);
     }
 
     console.log(error);

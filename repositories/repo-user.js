@@ -23,7 +23,7 @@ const update = async function (request, response, next) {
         let updated = await response.locals._MODELS.user.findOneAndUpdate({ '_id': request.params._id }, request.body, { 'new': true });
 
         response.locals.message = 'Usuário atualizado no banco.';
-        response.locals.statusCode = 201;
+        response.locals.statusCode = 200;
 
         response.locals.data = updated.toObject();
         response.locals._UTIL.clearObject(response.locals.data, ['password']);
@@ -57,10 +57,31 @@ const find = async function (request, response, next) {
     }
 };
 
+const findById = async function (request, response, next) {
+    try {
+        let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0 }, { lean: true });
+
+        if (!foundObject) {
+            return next({ isDatabase: true, message: 'Usuário não encontrado', isNotFound: true });
+        }
+
+        response.locals.data = foundObject;
+        response.locals.message = 'Usuário encontrado';
+        response.locals.statusCode = 200;
+
+        response.location(`/users/${request.params._id}`);
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
-    'find': find
+    'find': find,
+    'findById': findById
 };
 

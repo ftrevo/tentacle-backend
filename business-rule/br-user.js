@@ -23,28 +23,54 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     try {
-        let promisseStack = [
+        let promisseStack = [];
+
+        if (request.body.name) {
+            promisseStack.push(
+                response.locals._MODELS.user.countDocuments(
+                    {
+                        '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
+                        'name': request.body.name
+                    }
+                ).exec()
+            );
+        }
+
+        if (request.body.phone) {
+            promisseStack.push(
+                response.locals._MODELS.user.countDocuments(
+                    {
+                        '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
+                        'phone': request.body.phone
+                    }
+                ).exec()
+            );
+        }
+
+        if (request.body.email) {
+            promisseStack.push(
+                response.locals._MODELS.user.countDocuments(
+                    {
+                        '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
+                        'email': request.body.email
+                    }
+                ).exec()
+            );
+        }
+
+        promisseStack.push(
             response.locals._MODELS.user.countDocuments(
                 {
-                    '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                    'name': request.body.name
-                }
-            ).exec(),
-            response.locals._MODELS.user.countDocuments(
-                {
-                    '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                    'phone': request.body.phone
-                }
-            ).exec(),
-            response.locals._MODELS.user.countDocuments(
-                {
-                    '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                    'email': request.body.email
+                    '_id': response.locals._MONGOOSE.Types.ObjectId(request.params._id)
                 }
             ).exec()
-        ];
+        );
 
         let resolvedPromisses = await Promise.all(promisseStack);
+
+        if (resolvedPromisses[3] === 0) {
+            return next({ isBusiness: true, message: 'Usuário não encontrado', isNotFound: true });
+        }
 
         let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
 
@@ -75,15 +101,15 @@ function validateDataAlreadyRegistered(resolvedPromisses) {
     let validationErrors = [];
 
     if (resolvedPromisses[0] > 0) {
-        validationErrors.push('Nome já cadastrado.');
+        validationErrors.push('Nome já cadastrado');
     }
 
     if (resolvedPromisses[1] > 0) {
-        validationErrors.push('Telefone já cadastrado.');
+        validationErrors.push('Telefone já cadastrado');
     }
 
     if (resolvedPromisses[2] > 0) {
-        validationErrors.push('E-mail já cadastrado.');
+        validationErrors.push('E-mail já cadastrado');
     }
 
     return validationErrors;

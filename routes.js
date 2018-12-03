@@ -14,8 +14,9 @@ const routes = function (app) {
     .post(validador('user', 'create', 'body'), modelInjector('user'), brUser.save, repoUser.save, defMethods.requestHandler);
 
   app.route('/users/:_id')
+    .get(validador('user', '_id', 'params'), modelInjector('user'), repoUser.findById, defMethods.requestHandler)
     .patch(
-      validador('user', 'id', 'params'), validador('user', 'update', 'query'), modelInjector('user'),
+      validador('user', '_id', 'params'), validador('user', 'update', 'body'), modelInjector('user'),
       brUser.update, repoUser.update, defMethods.requestHandler
     );
 };
