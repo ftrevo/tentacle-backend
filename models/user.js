@@ -78,15 +78,13 @@ const joiUpdate = joi.object().options({ abortEarly: false, stripUnknown: true }
     'email': joiKeys.email.optional(),
     'phone': joiKeys.phone.optional(),
     'password': joiKeys.password.optional()
-});
+}).or('name', 'email', 'phone', 'password');
 
 const joiSearch = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': joiKeys._id.optional(),
     'name': joiKeys.name.optional(),
     'email': joiKeys.email.optional(),
     'phone': joiKeys.phone.optional(),
-    'createdAt': joiKeys.createdAt.optional(),
-    'updatedAt': joiKeys.updatedAt.optional(),
     'page': joiKeys.page,
     'limit': joiKeys.limit
 });

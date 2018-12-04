@@ -36,9 +36,16 @@ function getMessageFromDetail(detail) {
     if (detail.type === 'any.unknown') {
         return `O campo \'${fieldMap[detail.context.key]}\' não pode ser informado para esta ação.`;
     }
+    if (detail.type === 'object.missing') {
+        return `Para esta ação você deve informar ao menos um dos seguintes campos: ${getFieldNames(detail.context.peers).join(', ')}.`
+    }
 
     return detail.message;
-}
+};
+
+function getFieldNames(fieldArray) {
+    return fieldArray.map(fieldName => fieldMap[fieldName]);
+};
 
 // --------------------- Objetos Locais --------------------- //
 const fieldMap = {
