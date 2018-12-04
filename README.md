@@ -15,7 +15,7 @@ LOGGER_LEVEL=silly
 MONGOOSE_DEBUG=true
 ```
 #### TODO's
-* Fazer os testes dos métodos do br-user
+* Fazer os testes dos métodos do br-user e do validator user que faltaram
 * Adicionar dados que faltam dos endpoints do SWAGGER
 * Implementar autenticação
 * Criar endpoint de detalhamento de usuário logado

@@ -19,9 +19,9 @@ describe('Regra de negócio do Usuário', function () {
                 nextObject.should.have.property('message').with.lengthOf(3);
                 nextObject.message.should.containDeepOrdered(
                     [
-                        'Nome já cadastrado.',
-                        'Telefone já cadastrado.',
-                        'E-mail já cadastrado.'
+                        'Nome já cadastrado',
+                        'Telefone já cadastrado',
+                        'E-mail já cadastrado'
                     ]
                 );
             });
