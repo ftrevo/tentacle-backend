@@ -21,6 +21,10 @@ const handleErrors = function (error, request, response, next) {
         return response.locals._UTIL.handleRequests(errorCode, { 'message': errorStack }, response);
     }
 
+    if (error instanceof SyntaxError && error.type === 'entity.parse.failed') {
+        return handleBodyParserParsingError(response);
+    }
+
     console.log(error);
     response.locals._UTIL.handleRequests(500, { 'message': error.message }, response);
 };
@@ -46,6 +50,11 @@ function getMessageFromDetail(detail) {
 function getFieldNames(fieldArray) {
     return fieldArray.map(fieldName => fieldMap[fieldName]);
 };
+
+//Não tem o contexto do primeiro middleware de injeção do UTIL, por isso deve ser tratado de maneira diferente
+function handleBodyParserParsingError(response) {
+    return response.status(400).send({ 'message': 'Dados inválidos.' });
+}
 
 // --------------------- Objetos Locais --------------------- //
 const fieldMap = {
