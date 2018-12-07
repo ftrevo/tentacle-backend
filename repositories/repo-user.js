@@ -35,7 +35,7 @@ const update = async function (request, response, next) {
     }
 };
 
-const find = async function (request, response, next) {
+const search = async function (request, response, next) {
     try {
         let promisseStack = [
             response.locals._MODELS.user.find(request.query, { 'password': 0 })
@@ -96,8 +96,8 @@ const remove = async function (request, response, next) {
 module.exports = {
     'save': save,
     'update': update,
-    'find': find,
     'findById': findById,
-    'remove': remove
+    'remove': remove,
+    'search': search
 };
 

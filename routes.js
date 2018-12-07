@@ -10,7 +10,7 @@ const routes = function (app) {
   app.get('/', defMethods.route, defMethods.requestHandler);
 
   app.route('/users')
-    .get(validador('user', 'search', 'query'), modelInjector('user'), brUser.find, repoUser.find, defMethods.requestHandler)
+    .get(validador('user', 'search', 'query'), modelInjector('user'), brUser.search, repoUser.search, defMethods.requestHandler)
     .post(validador('user', 'create', 'body'), modelInjector('user'), brUser.save, repoUser.save, defMethods.requestHandler);
 
   app.route('/users/:_id')

@@ -1,7 +1,9 @@
 // ------------------- Funções Exportadas ------------------- //
 const resolvePagination = (params) => {
-    let page = parseInt(params.page) || 0;
-    let limit = parseInt(params.limit) || 9999999999;
+    let page = parseInt(params.page);
+    let limit = parseInt(params.limit);
+
+    clearObject(params, ['page', 'limit']);
 
     return { 'skip': page * limit, 'max': limit };
 };

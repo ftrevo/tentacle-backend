@@ -34,6 +34,8 @@ const update = async function (request, response, next) {
                     }
                 ).exec()
             );
+        } else {
+            promisseStack.push(0);
         }
 
         if (request.body.phone) {
@@ -45,6 +47,8 @@ const update = async function (request, response, next) {
                     }
                 ).exec()
             );
+        } else {
+            promisseStack.push(0);
         }
 
         if (request.body.email) {
@@ -56,20 +60,18 @@ const update = async function (request, response, next) {
                     }
                 ).exec()
             );
+        } else {
+            promisseStack.push(0);
         }
 
         promisseStack.push(
-            response.locals._MODELS.user.countDocuments(
-                {
-                    '_id': response.locals._MONGOOSE.Types.ObjectId(request.params._id)
-                }
-            ).exec()
+            response.locals._MODELS.user.findById(request.params._id).exec()
         );
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        if (resolvedPromisses[3] === 0) {
-            return next({ isBusiness: true, message: 'Usuário não encontrado', isNotFound: true });
+        if (!resolvedPromisses[3]) {
+            return next({ isBusiness: true, message: ['Usuário não encontrado'], isNotFound: true });
         }
 
         let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
@@ -84,10 +86,9 @@ const update = async function (request, response, next) {
     }
 };
 
-const find = async function (request, response, next) {
+const search = async function (request, response, next) {
     try {
         response.locals.pagination = response.locals._UTIL.resolvePagination(request.query);
-        response.locals._UTIL.clearObject(request.query, ['page', 'limit']);
 
         request.query = response.locals._UTIL.transformObjectToQuery(request.query);
         next();
@@ -119,5 +120,5 @@ function validateDataAlreadyRegistered(resolvedPromisses) {
 module.exports = {
     'save': save,
     'update': update,
-    'find': find
+    'search': search
 };

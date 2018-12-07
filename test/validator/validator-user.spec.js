@@ -5,9 +5,9 @@ const validator = require('../../helpers/validator');
 
 describe('Validador do Usuário', function () {
 
-    describe('#create', function () {
+    describe('#Create', function () {
 
-        it('Campos obrigatórios', function () {
+        it('campos obrigatórios', function () {
             let request = {
                 'body': {}
             };
@@ -27,7 +27,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Campos inválidos', function () {
+        it('campos inválidos', function () {
             let request = {
                 'body': {
                     'name': 'Jhon Doe',
@@ -54,7 +54,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', function () {
             let request = {
                 'body': {
                     'name': 'Jhon Doe',
@@ -78,8 +78,8 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#id', function () {
-        it('Campos obrigatórios', function () {
+    describe('#Id', function () {
+        it('campos obrigatórios', function () {
             let request = {
                 'params': {}
             };
@@ -96,7 +96,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Campo inválido', function () {
+        it('campo inválido', function () {
             let request = {
                 'params': {
                     '_id': 'invalidId'
@@ -118,7 +118,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', function () {
             let request = {
                 'params': {
                     'name': 'Jhon Doe',
@@ -135,8 +135,8 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#search', function () {
-        it('Campos inválidos', function () {
+    describe('#Search', function () {
+        it('campos inválidos', function () {
             let request = {
                 'query': {
                     '_id': 'invalidId',
@@ -165,7 +165,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Limpeza e inserção de campos e dados OK', function () {
+        it('limpeza e inserção de campos e dados OK', function () {
             let request = {
                 'query': {
                     'name': 'Jhon Doe',
@@ -189,9 +189,9 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#update', function () {
+    describe('#Update', function () {
 
-        it('Ao menos um campo opcional é obrigatório', function () {
+        it('ao menos um campo opcional é obrigatório', function () {
             let request = {
                 'body': {}
             };
@@ -208,7 +208,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Campos inválidos', function () {
+        it('campos inválidos', function () {
             let request = {
                 'body': {
                     'email': 'invalidEmail',
@@ -234,7 +234,7 @@ describe('Validador do Usuário', function () {
             });
         });
 
-        it('Limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', function () {
             let request = {
                 'body': {
                     'name': 'Jhon Doe',
