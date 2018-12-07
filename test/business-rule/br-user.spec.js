@@ -3,6 +3,7 @@ const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const brUser = require('../../business-rule/br-user');
+const util = require('../../helpers/util');
 
 describe('Regra de negócio do Usuário', function () {
 
@@ -134,6 +135,23 @@ describe('Regra de negócio do Usuário', function () {
             });
         });
     });
+
+    describe('#Search', function () {
+        let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
+
+        it('nome e paginação', function () {
+            let responseMock = getResponseMock(1);
+
+            brUser.search(requestMock, responseMock, function (nextObject) {
+                should(nextObject).not.be.ok();
+                requestMock.query.should.have.property('name', /Nome/i);
+                requestMock.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
+                requestMock.query.should.not.have.property('page');
+                requestMock.query.should.not.have.property('limit');
+                responseMock.locals.should.containDeep({ 'pagination': { 'skip': 0, 'max': 10 } });
+            });
+        });
+    });
 });
 
 
@@ -175,7 +193,8 @@ function getResponseMock(countDocumentAmmount, findByIdObject) {
                         return desiredId;
                     }
                 }
-            }
+            },
+            '_UTIL': util
         }
     };
 };

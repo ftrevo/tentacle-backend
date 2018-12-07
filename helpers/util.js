@@ -12,16 +12,6 @@ const handleRequests = (stausCodeNumber, body, response) => {
     return response.status(stausCodeNumber).send(body);
 };
 
-const updateObject = (oldObject, newObject) => {
-    Object.entries(newObject).forEach((tuple) => {
-        if (typeof newObject[tuple[1]] === undefined) oldObject[tuple[0]] = undefined;
-        else if (newObject[tuple[0]] && typeof newObject[tuple[0]] === 'object') {
-            if (!oldObject[tuple[0]]) oldObject[tuple[0]] = tuple[1];
-            else updateObject(oldObject[tuple[0]], tuple[1]);
-        } else oldObject[tuple[0]] = tuple[1];
-    });
-};
-
 const clearObject = (requestParams, arrayParamsToRemove = []) => {
     arrayParamsToRemove.forEach(elementToRemove => {
         if (elementToRemove.includes('.')) {
@@ -67,6 +57,5 @@ module.exports = {
     'clearObject': clearObject,
     'handleRequests': handleRequests,
     'resolvePagination': resolvePagination,
-    'transformObjectToQuery': transformObjectToQuery,
-    'updateObject': updateObject
+    'transformObjectToQuery': transformObjectToQuery
 };
