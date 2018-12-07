@@ -30,7 +30,7 @@ const clearObject = (requestParams, arrayParamsToRemove = []) => {
             delete requestParams[elementToRemove];
         }
     });
-}
+};
 
 const transformObjectToQuery = (filter = {}) => {
     let mongodbFilter = {};
@@ -50,7 +50,7 @@ const transformObjectToQuery = (filter = {}) => {
     });
 
     return mongodbFilter;
-}
+};
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
