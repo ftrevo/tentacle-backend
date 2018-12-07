@@ -4,6 +4,10 @@
   "description": "POC Middleware Pattern",
   "main": "index.js",
   "scripts": {
+    "pretest": "npm install",
+    "test": "nyc --check-coverage --lines 80 --x models --x test --reporter=html --reporter=text mocha --opts --reporter spec ./test --recursive --timeout 10000 --exit",
+    "prestart": "npm install",
+    "start": "node ."
   },
   "author": "Felipe Trevisan",
   "license": "ISC",
@@ -13,9 +17,15 @@
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "helmet": "^3.15.0",
     "joi": "^13.6.0",
     "mongoose": "^5.2.17",
     "swagger-ui-express": "^4.0.1",
     "yamljs": "^0.3.0"
+  },
+  "devDependencies": {
+    "mocha": "^5.2.0",
+    "nyc": "^13.1.0",
+    "should": "^13.2.3"
   }
 }

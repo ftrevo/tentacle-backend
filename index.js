@@ -3,28 +3,32 @@ require('dotenv').config();
 // ----------------- Import de dependências ----------------- //
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
 const express = require('express');
-const YAML = require('yamljs');
+const helmet = require('helmet')
 const cors = require('cors');
 
 // --------------- Import de arquivos do core --------------- //
-const errorMapper = require('./helpers/errorMapper');
-const Util = require('./helpers/util');
+const errorMapper = require('./helpers/error-mapper');
+const util = require('./helpers/util');
 const routes = require('./routes');
 
-// Inicialização e configuração do app
-const swaggerYaml = YAML.load('./swagger.yaml');
+const swaggerYaml = require('yamljs').load('./swagger.yaml');
 
 // Conexão com o banco de dados
 require('./helpers/datasource');
 
+// Inicialização e configuração do app
 const app = express();
+
+app.use(helmet())
 app.use(cors());
 app.use(bodyParser.json({ limit: '5mb' }));
 
 //Middleware para definição do Locals
 app.all('*', (request, response, next) => {
-    response.locals._UTIL = Util;
+    response.locals._UTIL = util;
+    response.locals._MONGOOSE = mongoose;
     next();
 });
 

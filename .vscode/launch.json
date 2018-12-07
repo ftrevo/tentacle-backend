@@ -28,11 +28,10 @@
             "program": "${workspaceRoot}/node_modules/mocha/bin/_mocha",
             "stopOnEntry": false,
             "args": [
-                "tests/**/*.js",
+                "test/**/*.js",
                 "--timeout 10000",
                 "--exit"
             ],
-            "envFile": "${workspaceFolder}/.env.test",
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": null
         }
