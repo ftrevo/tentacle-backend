@@ -5,7 +5,8 @@ const joi = require('joi');
 const accessKeys = {
     'email': joi.string().email({ minDomainAtoms: 2 }).lowercase().trim(),
     'password': joi.string().min(5).trim(),
-    'token': joi.string().regex(/^[A-Za-z0-9-_]+\.[A-Za-z0-9-_]+\.[A-Za-z0-9-_.+/=]*$/).trim()
+    'refreshToken': joi.string().regex(
+        /^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\.[0-9A-F]{24}\.[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i).trim()
 };
 
 // ------------------- Funções Exportadas ------------------- //
@@ -15,7 +16,7 @@ const login = joi.object().options({ abortEarly: false, stripUnknown: true }).ke
 });
 
 const refreshToken = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'refreshToken': accessKeys.token.required()
+    'refreshToken': accessKeys.refreshToken.required()
 });
 
 // --------------------- Module Exports --------------------- //

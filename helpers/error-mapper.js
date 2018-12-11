@@ -69,7 +69,7 @@ const fieldMap = {
     'password': 'Senha',
     'createdAt': 'Criado em',
     'updatedAt': 'Atualizado em',
-    'token': 'Token'
+    'refreshToken': 'Refresh Token'
 };
 
 // --------------------- Module Exports --------------------- //

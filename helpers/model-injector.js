@@ -1,5 +1,6 @@
 // --------------- Import de arquivos do core --------------- //
 const user = require('../models/user');
+const token = require('../models/token');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -18,6 +19,7 @@ const injector = function (...modelNames) {
 function getModel(modelName) {
     switch (modelName.toLowerCase()) {
         case 'user': return user;
+        case 'token': return token;
     }
 };
 

@@ -12,6 +12,7 @@ const brAccess = require('./business-rule/br-access');
 
 // ------------------ Import de repositórios ---------------- //
 const repoUser = require('./repositories/repo-user');
+const repoToken = require('./repositories/repo-token');
 
 
 const privateRoute = passport.authenticate('jwt', { session: false });
@@ -34,9 +35,11 @@ const routes = function (app) {
     );
 
   app.route('/login')
-    .post(modelInjector('user'), validador('access', 'login', 'body'), brAccess.logIn, defMethods.requestHandler);
+    .post(modelInjector('user', 'token'), validador('access', 'login', 'body'),
+      brAccess.logIn, repoToken.saveOrUpdate, defMethods.requestHandler);
   app.route('/refresh-token')
-    .post(modelInjector('user'), validador('access', 'refreshToken', 'body'), brAccess.refreshToken, defMethods.requestHandler);
+    .post(modelInjector('user', 'token'), validador('access', 'refreshToken', 'body'),
+      brAccess.refreshToken, repoToken.saveOrUpdate, defMethods.requestHandler);
 };
 
 // --------------------- Module Exports --------------------- //
