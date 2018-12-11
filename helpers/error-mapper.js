@@ -21,6 +21,10 @@ const handleErrors = function (error, request, response, next) {
         return response.locals._UTIL.handleRequests(errorCode, { 'message': errorStack }, response);
     }
 
+    if(error.isAuthDenied){
+        return response.locals._UTIL.handleRequests(401, { 'message': ['Não autorizado'] }, response);
+    }
+
     if (error instanceof SyntaxError && error.type === 'entity.parse.failed') {
         return handleBodyParserParsingError(response);
     }
@@ -64,7 +68,8 @@ const fieldMap = {
     'phone': 'Telefone',
     'password': 'Senha',
     'createdAt': 'Criado em',
-    'updatedAt': 'Atualizado em'
+    'updatedAt': 'Atualizado em',
+    'token': 'Token'
 };
 
 // --------------------- Module Exports --------------------- //

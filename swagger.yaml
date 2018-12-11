@@ -10,7 +10,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/Usuario'
+                $ref: '#/components/schemas/User'
       responses:
         '201':
           $ref: '#/components/responses/201'
@@ -22,6 +22,8 @@ paths:
       tags:
         - User
       summary: Rota de listagem de usuários
+      security:
+        - authenticationUser: []
       parameters:
         - $ref: '#/components/parameters/nameParam'
         - in: query
@@ -81,7 +83,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Usuario'
+              $ref: '#/components/schemas/User'
       responses:
         '200':
           $ref: '#/components/responses/200Remove'
@@ -93,6 +95,58 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+  /login:
+    post:
+      tags:
+        - Access
+      summary: Rota de Autenticação
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+                  format: password
+      responses:
+        '200':
+          description: Token de login gerado
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          description: Senha incorreta
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+  /refresh-token:
+    post:
+      tags:
+        - Access
+      summary: Rota de atualização do token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+      responses:
+        '200':
+          description: Token de login atualizado
+        '400':
+          $ref: '#/components/responses/400'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
           
 components:
   securitySchemes:
@@ -100,6 +154,7 @@ components:
       type: apiKey
       name: Authorization
       in: header
+      description: Token JWT do usuário
   parameters:
     idParam:
       in: path
@@ -125,6 +180,20 @@ components:
       description: Nome
       schema:
         type: string
+    emailParam:
+      in: body
+      name: email
+      description: Email
+      schema:
+        type: string
+        format: email
+    passwordParam:
+      in: body
+      name: password
+      description: Password
+      schema:
+        type: string
+        format: password
   responses:
     '200Detail':
       description: Objeto detalhado
@@ -145,14 +214,16 @@ components:
     '500':
       description: Erro interno do servidor
   schemas:
-    Usuario:
+    User:
       type: object
       properties:
         name:
           type: string
         email:
           type: string
+          format: email
         phone:
           type: string
         password:
           type: string
+          format: password

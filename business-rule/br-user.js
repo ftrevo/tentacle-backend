@@ -71,7 +71,7 @@ const update = async function (request, response, next) {
         let resolvedPromisses = await Promise.all(promisseStack);
 
         if (!resolvedPromisses[3]) {
-            return next({ isBusiness: true, message: ['Usuário não encontrado'], isNotFound: true });
+            return next({ isBusiness: true, message: 'Usuário não encontrado', isNotFound: true });
         }
 
         let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);

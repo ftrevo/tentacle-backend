@@ -4,6 +4,7 @@ require('dotenv').config();
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const passport = require('passport');
 const express = require('express');
 const helmet = require('helmet')
 const cors = require('cors');
@@ -24,6 +25,10 @@ const app = express();
 app.use(helmet())
 app.use(cors());
 app.use(bodyParser.json({ limit: '5mb' }));
+
+//Passport Middleware
+app.use(passport.initialize());
+require('./helpers/authorizer')(passport);
 
 //Middleware para definição do Locals
 app.all('*', (request, response, next) => {

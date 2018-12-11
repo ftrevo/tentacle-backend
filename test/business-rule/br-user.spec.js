@@ -47,12 +47,7 @@ describe('Regra de negócio do Usuário', function () {
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isBusiness', true);
                 nextObject.should.have.property('isNotFound', true);
-                nextObject.should.have.property('message').with.lengthOf(1);
-                nextObject.message.should.containDeep(
-                    [
-                        'Usuário não encontrado',
-                    ]
-                );
+                nextObject.should.have.property('message', 'Usuário não encontrado');
             });
         });
 

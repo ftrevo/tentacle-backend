@@ -1,5 +1,5 @@
 // --------------- Import de arquivos do core --------------- //
-const user = require('../models/user').mongooseModel;
+const user = require('../models/user');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
