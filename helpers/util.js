@@ -8,6 +8,7 @@ const resolvePagination = (params) => {
     return { 'skip': page * limit, 'max': limit };
 };
 
+/* istanbul ignore next */
 const handleRequests = (stausCodeNumber, body, response) => {
     return response.status(stausCodeNumber).send(body);
 };
