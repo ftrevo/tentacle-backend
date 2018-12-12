@@ -1,11 +1,12 @@
+// ----------------- Import de dependências ----------------- //
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const validator = require('../../helpers/validator');
 
-describe('Validador do Usuário', function () {
+describe('# Validador do Usuário', function () {
 
-    describe('#Create', function () {
+    describe('## Create', function () {
 
         it('campos obrigatórios', function () {
             let request = {
@@ -78,7 +79,7 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#Id', function () {
+    describe('## Id', function () {
         it('campos obrigatórios', function () {
             let request = {
                 'params': {}
@@ -135,7 +136,7 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#Search', function () {
+    describe('## Search', function () {
         it('campos inválidos', function () {
             let request = {
                 'query': {
@@ -189,7 +190,7 @@ describe('Validador do Usuário', function () {
         });
     });
 
-    describe('#Update', function () {
+    describe('## Update', function () {
 
         it('ao menos um campo opcional é obrigatório', function () {
             let request = {

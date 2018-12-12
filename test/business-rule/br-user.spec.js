@@ -5,9 +5,9 @@ const should = require('should');
 const brUser = require('../../business-rule/br-user');
 const util = require('../../helpers/util');
 
-describe('Regra de negócio do Usuário', function () {
+describe('# Regra de negócio do Usuário', function () {
 
-    describe('#Save', function () {
+    describe('## Save', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
 
         it('nome/telefone/email já cadastrados', function () {
@@ -36,7 +36,7 @@ describe('Regra de negócio do Usuário', function () {
         });
     });
 
-    describe('#Update', function () {
+    describe('## Update', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
@@ -59,7 +59,7 @@ describe('Regra de negócio do Usuário', function () {
             });
         });
 
-        describe('#Campos já cadastrados', function () {
+        describe('### Campos já cadastrados', function () {
             it('nome/telefone/email', function () {
                 let responseMock = getResponseMock(1, requestMock.params);
 
@@ -131,7 +131,7 @@ describe('Regra de negócio do Usuário', function () {
         });
     });
 
-    describe('#Search', function () {
+    describe('## Search', function () {
         let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
 
         it('nome e paginação', function () {

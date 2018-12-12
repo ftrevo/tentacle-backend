@@ -4,9 +4,9 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const util = require('../../helpers/util');
 
-describe('Util', function () {
+describe('# Util', function () {
 
-    describe('#Resolve Pagination', function () {
+    describe('## Resolve Pagination', function () {
         it('gerar paginação e limpar campos', function () {
             let params = { 'page': 0, 'limit': 10 };
 
@@ -20,7 +20,7 @@ describe('Util', function () {
         });
     });
 
-    describe('#Clear Object', function () {
+    describe('## Clear Object', function () {
         it('limpar campos', function () {
             let params = { 'a': 'av', 'b': 'bv', 'c': { 'd': 'dv', 'e': { 'f': 'fv' } } };
 
