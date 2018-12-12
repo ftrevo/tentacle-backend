@@ -11,6 +11,7 @@ const cors = require('cors');
 
 // --------------- Import de arquivos do core --------------- //
 const errorMapper = require('./helpers/error-mapper');
+const authorizer = require('./helpers/authorizer');
 const util = require('./helpers/util');
 const routes = require('./routes');
 
@@ -28,7 +29,7 @@ app.use(bodyParser.json({ limit: '5mb' }));
 
 //Passport Middleware
 app.use(passport.initialize());
-require('./helpers/authorizer')(passport);
+authorizer.authorize(passport);
 
 //Middleware para definição do Locals
 app.all('*', (request, response, next) => {

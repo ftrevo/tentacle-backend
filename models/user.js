@@ -56,5 +56,9 @@ UserSchema.methods.comparePassword = function (candidatePassword) {
     return bcrypt.compare(candidatePassword, this.password);
 };
 
+UserSchema.methods.isUpdated = function (tokenDate) {
+    return this.updatedAt.toISOString() !== tokenDate;
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = mongoose.model('User', UserSchema);

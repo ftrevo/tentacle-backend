@@ -2,6 +2,7 @@
 const passportJwt = require('passport-jwt');
 
 // ------------------- Funções Exportadas ------------------- //
+/* istanbul ignore next */
 const authorize = function (passport) {
     let options = {};
 
@@ -12,19 +13,22 @@ const authorize = function (passport) {
     passport.use(new passportJwt.Strategy(options, validateUser));
 };
 
-const validateUser = async function (request, jwt_payload, next) {
+const validateUser = async function (request, jwt_payload, done) {
     try {
-        request.res.locals._USER = await request.res.locals._MODELS.user.findById(jwt_payload._id, { 'password': 0 }).lean().exec();
+        request.res.locals._USER = await request.res.locals._MODELS.user.findById(jwt_payload._id, { 'password': 0 }).exec();
 
-        if (!request.res.locals._USER) {
-            return next({ isAuthDenied: true });
+        if (!request.res.locals._USER || request.res.locals._USER.isUpdated(jwt_payload.updatedAt)) {
+            return done({ 'isAuthDenied': true });
         }
 
-        next();
+        done(null, request.res.locals._USER);
     } catch (error) {
-        next(error);
+        done(error);
     }
 };
 
 // --------------------- Module Exports --------------------- //
-module.exports = authorize;
+module.exports = {
+    'authorize': authorize,
+    'validateUser': validateUser
+};
