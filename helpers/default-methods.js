@@ -2,11 +2,12 @@
 const requestHandler = function (request, response, next) {
     response.locals._UTIL.handleRequests(
         response.locals.statusCode,
+        response,
         {
             'message': response.locals.message,
             'data': response.locals.data
-        },
-        response);
+        }
+    );
 };
 
 const route = function (request, response, next) {

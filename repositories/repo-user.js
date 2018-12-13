@@ -62,7 +62,7 @@ const findById = async function (request, response, next) {
         let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0 }, { lean: true });
 
         if (!foundObject) {
-            return next({ isDatabase: true, message: 'Usuário não encontrado', isNotFound: true });
+            return next({ 'isDatabase': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
         }
 
         response.locals.data = foundObject;

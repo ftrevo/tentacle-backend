@@ -12,7 +12,7 @@ const save = async function (request, response, next) {
         let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
 
         if (validationErrors && validationErrors.length > 0) {
-            return next({ isBusiness: true, message: validationErrors });
+            return next({ 'isBusiness': true, 'message': validationErrors });
         }
 
         next();
@@ -23,6 +23,10 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     try {
+        if (request.params._id !== response.locals._USER._id + '') {
+            return next({ 'isForbidden': true });
+        }
+
         let promisseStack = [];
 
         if (request.body.name) {
@@ -71,13 +75,13 @@ const update = async function (request, response, next) {
         let resolvedPromisses = await Promise.all(promisseStack);
 
         if (!resolvedPromisses[3]) {
-            return next({ isBusiness: true, message: 'Usuário não encontrado', isNotFound: true });
+            return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
         }
 
         let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
 
         if (validationErrors && validationErrors.length > 0) {
-            return next({ isBusiness: true, message: validationErrors });
+            return next({ 'isBusiness': true, 'message': validationErrors });
         }
 
         next();

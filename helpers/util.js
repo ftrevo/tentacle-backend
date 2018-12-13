@@ -9,7 +9,7 @@ const resolvePagination = (params) => {
 };
 
 /* istanbul ignore next */
-const handleRequests = (stausCodeNumber, body, response) => {
+const handleRequests = (stausCodeNumber, response, body) => {
     return response.status(stausCodeNumber).send(body);
 };
 

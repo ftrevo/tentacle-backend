@@ -49,7 +49,7 @@ app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerYaml));
 
 // Not Found Middleware
 app.use((request, response, next) => {
-    response.locals._UTIL.handleRequests(404, { 'message': 'Not Found.' }, response);
+    response.locals._UTIL.handleRequests(404, response);
 });
 
 //Inicialização do APP

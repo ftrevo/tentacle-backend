@@ -18,11 +18,15 @@ const handleErrors = function (error, request, response, next) {
             errorStack = error.details.map(getMessageFromDetail);
         }
 
-        return response.locals._UTIL.handleRequests(errorCode, { 'message': errorStack }, response);
+        return response.locals._UTIL.handleRequests(errorCode, response, { 'message': errorStack });
     }
 
     if(error.isAuthDenied){
-        return response.locals._UTIL.handleRequests(401, { 'message': ['Não autorizado'] }, response);
+        return response.locals._UTIL.handleRequests(401, response);
+    }
+
+    if(error.isForbidden){
+        return response.locals._UTIL.handleRequests(403, response);
     }
 
     if (error instanceof SyntaxError && error.type === 'entity.parse.failed') {
@@ -30,7 +34,7 @@ const handleErrors = function (error, request, response, next) {
     }
 
     console.log(error);
-    response.locals._UTIL.handleRequests(500, { 'message': error.message }, response);
+    response.locals._UTIL.handleRequests(500, response, { 'message': error.message });
 };
 
 // --------------------- Funções Locais --------------------- //

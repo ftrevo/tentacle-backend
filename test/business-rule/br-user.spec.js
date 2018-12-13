@@ -40,8 +40,17 @@ describe('# Regra de negócio do Usuário', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
+        it('não autorizado', function () {
+            let responseMock = getResponseMock(0);
+
+            brUser.update(requestMock, responseMock, function (nextObject) {
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isForbidden', true);
+            });
+        });
+
         it('usuário não encontrado', function () {
-            let responseMock = getResponseMock(0, undefined);
+            let responseMock = getResponseMock(0, undefined, requestMock.params._id);
 
             brUser.update(requestMock, responseMock, function (nextObject) {
                 should(nextObject).be.ok();
@@ -52,7 +61,7 @@ describe('# Regra de negócio do Usuário', function () {
         });
 
         it('dados OK', function () {
-            let responseMock = getResponseMock(0, requestMock.params);
+            let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id);
 
             brUser.update(requestMock, responseMock, function (nextObject) {
                 should(nextObject).not.be.ok();
@@ -61,7 +70,7 @@ describe('# Regra de negócio do Usuário', function () {
 
         describe('### Campos já cadastrados', function () {
             it('nome/telefone/email', function () {
-                let responseMock = getResponseMock(1, requestMock.params);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
 
                 brUser.update(requestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -80,7 +89,7 @@ describe('# Regra de negócio do Usuário', function () {
 
             it('somente nome', function () {
                 let innerRequestMock = { 'body': { 'name': 'Nome' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
 
                 brUser.update(innerRequestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -97,7 +106,7 @@ describe('# Regra de negócio do Usuário', function () {
 
             it('somente telefone', function () {
                 let innerRequestMock = { 'body': { 'phone': '81 981818181' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
 
                 brUser.update(innerRequestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -114,7 +123,7 @@ describe('# Regra de negócio do Usuário', function () {
 
             it('somente email', function () {
                 let innerRequestMock = { 'body': { 'email': 'emailtest@gmail.com' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
 
                 brUser.update(innerRequestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -170,7 +179,7 @@ function getRequestMock(requestParamName, name, phone, email) {
     return { [requestParamName]: mockedObject };
 };
 
-function getResponseMock(countDocumentAmmount, findByIdObject) {
+function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId) {
     return {
         status: () => ({
             json: obj => obj
@@ -189,7 +198,10 @@ function getResponseMock(countDocumentAmmount, findByIdObject) {
                     }
                 }
             },
-            '_UTIL': util
+            '_UTIL': util,
+            '_USER': {
+                '_id': loogedUserId
+            }
         }
     };
 };

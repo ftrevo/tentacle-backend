@@ -104,6 +104,8 @@ paths:
       tags:
         - User
       summary: Rota de detalhamento de usuário
+      security:
+        - authenticationUser: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -119,11 +121,11 @@ paths:
       tags:
         - User
       summary: Rota de remoção de usuário
+      security:
+        - authenticationUser: []
       responses:
         '200':
           $ref: '#/components/responses/200Remove'
-        '400':
-          $ref: '#/components/responses/400'
         '403':
           $ref: '#/components/responses/403'
         '500':
@@ -132,6 +134,8 @@ paths:
       tags:
         - User
       summary: Rota de alteração de usuário
+      security:
+        - authenticationUser: []
       requestBody:
         required: true
         content:
