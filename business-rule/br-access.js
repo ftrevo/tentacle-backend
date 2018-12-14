@@ -29,6 +29,7 @@ const logIn = async function (request, response, next) {
 
         next();
     } catch (error) {
+        /* istanbul ignore next */
         next(error);
     }
 };
@@ -56,6 +57,7 @@ const refreshToken = async function (request, response, next) {
 
         next();
     } catch (error) {
+        /* istanbul ignore next */
         next(error);
     }
 };

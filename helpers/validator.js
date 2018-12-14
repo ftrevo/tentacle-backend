@@ -17,6 +17,7 @@ const validate = function (schemaName, functionValidation, requestObject) {
             }
             next();
         } catch (error) {
+            /* istanbul ignore next */
             return next(error);
         }
     };

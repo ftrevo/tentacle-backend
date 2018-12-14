@@ -17,6 +17,7 @@ const save = async function (request, response, next) {
 
         next();
     } catch (error) {
+        /* istanbul ignore next */
         next(error);
     }
 };
@@ -86,6 +87,7 @@ const update = async function (request, response, next) {
 
         next();
     } catch (error) {
+        /* istanbul ignore next */
         next(error);
     }
 };
@@ -97,6 +99,20 @@ const search = async function (request, response, next) {
         request.query = response.locals._UTIL.transformObjectToQuery(request.query);
         next();
     } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
+const remove = async function (request, response, next) {
+    try {
+        if (request.params._id !== response.locals._USER._id + '') {
+            return next({ 'isForbidden': true });
+        }
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
         next(error);
     }
 };
@@ -124,5 +140,6 @@ function validateDataAlreadyRegistered(resolvedPromisses) {
 module.exports = {
     'save': save,
     'update': update,
+    'remove': remove,
     'search': search
 };

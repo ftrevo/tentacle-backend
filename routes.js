@@ -28,7 +28,7 @@ const routes = function (app) {
 
   app.route('/users/:_id')
     .get(modelInjector('user'), privateRoute, validador('user', '_id', 'params'), repoUser.findById, defMethods.requestHandler)
-    .delete(modelInjector('user'), privateRoute, validador('user', '_id', 'params'), repoUser.remove, defMethods.requestHandler)
+    .delete(modelInjector('user'), privateRoute, validador('user', '_id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
       modelInjector('user'), privateRoute, validador('user', '_id', 'params'), validador('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler
