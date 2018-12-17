@@ -4,6 +4,7 @@ const joi = require('joi');
 // --------------- Import de arquivos do core --------------- //
 const userValidation = require('../models/validation/val-user');
 const accessValidation = require('../models/validation/val-access');
+const stateValidation = require('../models/validation/val-state');
 
 // ------------------- Funções Exportadas ------------------- //
 const validate = function (schemaName, functionValidation, requestObject) {
@@ -27,14 +28,17 @@ const validate = function (schemaName, functionValidation, requestObject) {
 const validationMethods = {
     'user': {
         'create': userValidation.create,
-        '_id': userValidation.id,
+        'id': userValidation.id,
         'update': userValidation.update,
         'search': userValidation.search
     },
     'access': {
         'login': accessValidation.login,
         'refreshToken': accessValidation.refreshToken
-    }
+    },
+    'state': {
+        'id': stateValidation.id
+    },
 };
 
 // --------------------- Module Exports --------------------- //

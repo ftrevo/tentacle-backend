@@ -13,6 +13,7 @@ const brAccess = require('./business-rule/br-access');
 // ------------------ Import de repositórios ---------------- //
 const repoUser = require('./repositories/repo-user');
 const repoToken = require('./repositories/repo-token');
+const repoState = require('./repositories/repo-state');
 
 
 const privateRoute = passport.authenticate('jwt', { session: false });
@@ -22,15 +23,18 @@ const routes = function (app) {
 
   app.route('/').get(defMethods.route, defMethods.requestHandler);
 
+  app.route('/states').get(modelInjector('state'), repoState.search, defMethods.requestHandler);
+  app.route('/states/:_id/cities').get(modelInjector('state'), validador('state', 'id', 'params'), repoState.findById, defMethods.requestHandler);
+
   app.route('/users')
     .get(modelInjector('user'), privateRoute, validador('user', 'search', 'query'), brUser.search, repoUser.search, defMethods.requestHandler)
     .post(modelInjector('user'), validador('user', 'create', 'body'), brUser.save, repoUser.save, defMethods.requestHandler);
 
   app.route('/users/:_id')
-    .get(modelInjector('user'), privateRoute, validador('user', '_id', 'params'), repoUser.findById, defMethods.requestHandler)
-    .delete(modelInjector('user'), privateRoute, validador('user', '_id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
+    .get(modelInjector('user'), privateRoute, validador('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
+    .delete(modelInjector('user'), privateRoute, validador('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('user'), privateRoute, validador('user', '_id', 'params'), validador('user', 'update', 'body'),
+      modelInjector('user'), privateRoute, validador('user', 'id', 'params'), validador('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler
     );
 

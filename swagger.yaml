@@ -153,6 +153,33 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+
+  /states:
+    get:
+      tags:
+        - State
+      summary: Rota de listagem de estados
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'
+  /states/{id}/cities:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - State
+      summary: Rota de detalhamento de estado
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
           
 components:
   securitySchemes:

@@ -85,7 +85,7 @@ describe('# Validador do Usuário', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('user', '_id', 'params');
+            let idValidatorFunction = validator('user', 'id', 'params');
 
             idValidatorFunction(request, null, function (nextObject) {
                 should(nextObject).be.ok();
@@ -104,7 +104,7 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let idValidatorFunction = validator('user', '_id', 'params');
+            let idValidatorFunction = validator('user', 'id', 'params');
 
             idValidatorFunction(request, null, function (nextObject) {
                 should(nextObject).be.ok();
@@ -127,7 +127,7 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let idValidatorFunction = validator('user', '_id', 'params');
+            let idValidatorFunction = validator('user', 'id', 'params');
 
             idValidatorFunction(request, null, function (nextObject) {
                 should(nextObject).not.be.ok();
