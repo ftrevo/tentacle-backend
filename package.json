@@ -1,7 +1,11 @@
 {
-  "name": "poc-middleware-pattern",
+  "name": "tentacle-backend",
   "version": "1.0.0",
-  "description": "POC Middleware Pattern",
+  "description": "Backend do projeto Tentacle",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ftrevo/tentacle-backend"
+  },
   "main": "index.js",
   "scripts": {
     "pretest": "npm install",
@@ -10,7 +14,7 @@
     "start": "node ."
   },
   "author": "Felipe Trevisan",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
