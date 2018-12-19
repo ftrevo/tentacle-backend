@@ -28,13 +28,13 @@ const routes = function (app) {
 
   app.route('/users')
     .get(modelInjector('user'), privateRoute, validador('user', 'search', 'query'), brUser.search, repoUser.search, defMethods.requestHandler)
-    .post(modelInjector('user'), validador('user', 'create', 'body'), brUser.save, repoUser.save, defMethods.requestHandler);
+    .post(modelInjector('user', 'state'), validador('user', 'create', 'body'), brUser.save, repoUser.save, defMethods.requestHandler);
 
   app.route('/users/:_id')
     .get(modelInjector('user'), privateRoute, validador('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
     .delete(modelInjector('user'), privateRoute, validador('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('user'), privateRoute, validador('user', 'id', 'params'), validador('user', 'update', 'body'),
+      modelInjector('user', 'state'), privateRoute, validador('user', 'id', 'params'), validador('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler
     );
 
