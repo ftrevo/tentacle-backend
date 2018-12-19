@@ -20,6 +20,14 @@ const UserSchema = new mongoose.Schema({
     },
     password: {
         type: String
+    },
+    state: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'State',
+    },
+    city: {
+        type: String,
+        trim: true
     }
 }, { versionKey: false, timestamps: true });
 

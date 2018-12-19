@@ -8,6 +8,8 @@ const userKeys = {
     'email': joi.string().email({ minDomainAtoms: 2 }).lowercase().trim(),
     'phone': joi.string().trim().regex(/^\d{2} \d{8,9}$/),
     'password': joi.string().min(5).trim(),
+    'state': joi.string().regex(/^[0-9a-fA-F]{24}$/),
+    'city': joi.string().trim(),
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
     'page': joi.number().default(0),
@@ -19,21 +21,27 @@ const create = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'name': userKeys.name.required(),
     'email': userKeys.email.required(),
     'phone': userKeys.phone.required(),
-    'password': userKeys.password.required()
+    'password': userKeys.password.required(),
+    'state': userKeys.state.required(),
+    'city': userKeys.city.required()
 });
 
 const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     'name': userKeys.name.optional(),
     'email': userKeys.email.optional(),
     'phone': userKeys.phone.optional(),
-    'password': userKeys.password.optional()
-}).or('name', 'email', 'phone', 'password');
+    'password': userKeys.password.optional(),
+    'state': userKeys.state.optional(),
+    'city': userKeys.city.optional(),
+}).or('name', 'email', 'phone', 'password', 'state', 'city');
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': userKeys._id.optional(),
     'name': userKeys.name.optional(),
     'email': userKeys.email.optional(),
     'phone': userKeys.phone.optional(),
+    'state': userKeys.state.optional(),
+    'city': userKeys.city.optional(),
     'page': userKeys.page,
     'limit': userKeys.limit
 });

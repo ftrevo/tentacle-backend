@@ -10,16 +10,15 @@ describe('# Regra de negócio do Usuário', function () {
     describe('## Save', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
 
-        it('nome/telefone/email já cadastrados', function () {
-            let responseMock = getResponseMock(1);
+        it('telefone/email já cadastrados', function () {
+            let responseMock = getResponseMock(1, undefined, undefined, 1);
 
             brUser.save(requestMock, responseMock, function (nextObject) {
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message').with.lengthOf(3);
+                nextObject.should.have.property('message').with.lengthOf(2);
                 nextObject.message.should.containDeep(
                     [
-                        'Nome já cadastrado',
                         'Telefone já cadastrado',
                         'E-mail já cadastrado'
                     ]
@@ -27,8 +26,23 @@ describe('# Regra de negócio do Usuário', function () {
             });
         });
 
+        it('estado/cidade incorretos', function () {
+            let responseMock = getResponseMock(0, undefined, undefined, 0);
+
+            brUser.save(requestMock, responseMock, function (nextObject) {
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isBusiness', true);
+                nextObject.should.have.property('message').with.lengthOf(1);
+                nextObject.message.should.containDeep(
+                    [
+                        'Dados inválidos para o campo Estado/Cidade'
+                    ]
+                );
+            });
+        });
+
         it('dados OK', function () {
-            let responseMock = getResponseMock(0);
+            let responseMock = getResponseMock(0, undefined, undefined, 1);
 
             brUser.save(requestMock, responseMock, function (nextObject) {
                 should(nextObject).not.be.ok();
@@ -69,17 +83,16 @@ describe('# Regra de negócio do Usuário', function () {
         });
 
         describe('### Campos já cadastrados', function () {
-            it('nome/telefone/email', function () {
-                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
+            it('telefone/email', function () {
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
                 brUser.update(requestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
                     should(nextObject.isNotFound).not.be.ok();
                     nextObject.should.have.property('isBusiness', true);
-                    nextObject.should.have.property('message').with.lengthOf(3);
+                    nextObject.should.have.property('message').with.lengthOf(2);
                     nextObject.message.should.containDeepOrdered(
                         [
-                            'Nome já cadastrado',
                             'Telefone já cadastrado',
                             'E-mail já cadastrado'
                         ]
@@ -87,26 +100,9 @@ describe('# Regra de negócio do Usuário', function () {
                 });
             });
 
-            it('somente nome', function () {
-                let innerRequestMock = { 'body': { 'name': 'Nome' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
-
-                brUser.update(innerRequestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    should(nextObject.isNotFound).not.be.ok();
-                    nextObject.should.have.property('isBusiness', true);
-                    nextObject.should.have.property('message').with.lengthOf(1);
-                    nextObject.message.should.containDeepOrdered(
-                        [
-                            'Nome já cadastrado'
-                        ]
-                    );
-                });
-            });
-
             it('somente telefone', function () {
                 let innerRequestMock = { 'body': { 'phone': '81 981818181' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
                 brUser.update(innerRequestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -123,7 +119,7 @@ describe('# Regra de negócio do Usuário', function () {
 
             it('somente email', function () {
                 let innerRequestMock = { 'body': { 'email': 'emailtest@gmail.com' }, 'params': requestMock.params };
-                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id);
+                let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
                 brUser.update(innerRequestMock, responseMock, function (nextObject) {
                     should(nextObject).be.ok();
@@ -180,8 +176,6 @@ describe('# Regra de negócio do Usuário', function () {
     });
 });
 
-
-
 // --------------------- Funções Locais --------------------- //
 function getRequestMock(requestParamName, name, phone, email) {
     let mockedObject = {};
@@ -201,7 +195,7 @@ function getRequestMock(requestParamName, name, phone, email) {
     return { [requestParamName]: mockedObject };
 };
 
-function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId) {
+function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId, stateCountDocumentAmmount) {
     return {
         status: () => ({
             json: obj => obj
@@ -211,6 +205,9 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId) {
                 'user': {
                     'countDocuments': getExecObject(countDocumentAmmount),
                     'findById': getExecObject(findByIdObject)
+                },
+                'state': {
+                    'countDocuments': getExecObject(stateCountDocumentAmmount)
                 }
             },
             '_MONGOOSE': {

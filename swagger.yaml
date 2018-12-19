@@ -262,3 +262,7 @@ components:
         password:
           type: string
           format: password
+        state:
+          type: string
+        city:
+          type: string

@@ -1,5 +1,9 @@
 // ------------------- Funções Exportadas ------------------- //
 const requestHandler = function (request, response, next) {
+    if (response.locals.message && !Array.isArray(response.locals.message)) {
+        response.locals.message = [response.locals.message];
+    }
+
     response.locals._UTIL.handleRequests(
         response.locals.statusCode,
         response,

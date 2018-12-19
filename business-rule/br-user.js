@@ -2,14 +2,14 @@
 const save = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.user.countDocuments({ 'name': request.body.name }).exec(),
             response.locals._MODELS.user.countDocuments({ 'phone': request.body.phone }).exec(),
-            response.locals._MODELS.user.countDocuments({ 'email': request.body.email }).exec()
+            response.locals._MODELS.user.countDocuments({ 'email': request.body.email }).exec(),
+            response.locals._MODELS.state.countDocuments({ '_id': request.body.state, 'cities': { '$in': [request.body.city] } }).exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
+        let validationErrors = validateDataFromUser(resolvedPromisses);
 
         if (validationErrors && validationErrors.length > 0) {
             return next({ 'isBusiness': true, 'message': validationErrors });
@@ -29,19 +29,6 @@ const update = async function (request, response, next) {
         }
 
         let promisseStack = [];
-
-        if (request.body.name) {
-            promisseStack.push(
-                response.locals._MODELS.user.countDocuments(
-                    {
-                        '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                        'name': request.body.name
-                    }
-                ).exec()
-            );
-        } else {
-            promisseStack.push(0);
-        }
 
         if (request.body.phone) {
             promisseStack.push(
@@ -69,6 +56,14 @@ const update = async function (request, response, next) {
             promisseStack.push(0);
         }
 
+        if (request.body.state) {
+            promisseStack.push(
+                response.locals._MODELS.state.countDocuments({ '_id': request.body.state, 'cities': { '$in': [request.body.city] } }).exec()
+            );
+        } else {
+            promisseStack.push(1);
+        }
+
         promisseStack.push(
             response.locals._MODELS.user.findById(request.params._id).exec()
         );
@@ -79,7 +74,7 @@ const update = async function (request, response, next) {
             return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
         }
 
-        let validationErrors = validateDataAlreadyRegistered(resolvedPromisses);
+        let validationErrors = validateDataFromUser(resolvedPromisses);
 
         if (validationErrors && validationErrors.length > 0) {
             return next({ 'isBusiness': true, 'message': validationErrors });
@@ -118,19 +113,19 @@ const remove = async function (request, response, next) {
 };
 
 // --------------------- Funções Locais --------------------- //
-function validateDataAlreadyRegistered(resolvedPromisses) {
+function validateDataFromUser(resolvedPromisses) {
     let validationErrors = [];
 
     if (resolvedPromisses[0] > 0) {
-        validationErrors.push('Nome já cadastrado');
-    }
-
-    if (resolvedPromisses[1] > 0) {
         validationErrors.push('Telefone já cadastrado');
     }
 
-    if (resolvedPromisses[2] > 0) {
+    if (resolvedPromisses[1] > 0) {
         validationErrors.push('E-mail já cadastrado');
+    }
+
+    if (resolvedPromisses[2] !== 1) {
+        validationErrors.push('Dados inválidos para o campo Estado/Cidade');
     }
 
     return validationErrors;
