@@ -4,6 +4,7 @@ const save = async function (request, response, next) {
         let toBeIncluded = new response.locals._MODELS.user(request.body);
 
         await toBeIncluded.save();
+        await response.locals._MODELS.user.populate(toBeIncluded, { 'path': 'state', 'select': 'name initials' });
 
         response.locals.message = 'Usuário salvo no banco.';
         response.locals.statusCode = 201;
@@ -20,7 +21,16 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     try {
-        let updated = await response.locals._MODELS.user.findOneAndUpdate({ '_id': request.params._id }, request.body, { 'new': true });
+        let updated = await response.locals._MODELS.user.findOneAndUpdate(
+            { '_id': request.params._id },
+            request.body,
+            { 'new': true }
+        ).populate(
+            {
+                'path': 'state',
+                'select': 'name initials'
+            }
+        );
 
         response.locals.message = 'Usuário atualizado no banco.';
         response.locals.statusCode = 200;
@@ -41,7 +51,9 @@ const search = async function (request, response, next) {
             response.locals._MODELS.user.find(request.query, { 'password': 0 })
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'name': 1 }).exec(),
+                .sort({ 'name': 1 })
+                .populate('state', 'name initials')
+                .exec(),
 
             response.locals._MODELS.user.find(request.query).countDocuments().exec()
         ];
@@ -59,7 +71,8 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0 }, { lean: true });
+        let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0 }, { lean: true })
+            .populate('state', 'name initials');
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
