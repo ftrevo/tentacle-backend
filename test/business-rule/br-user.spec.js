@@ -74,8 +74,31 @@ describe('# Regra de negócio do Usuário', function () {
             });
         });
 
+        it('estado/cidade incorretos', function () {
+            let userRequest = requestMock;
+            userRequest.body.state = '1a2b3c4d5e6f1a2b3c4d5e6f';
+            userRequest.body.city = 'Random City';
+
+            let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id, 0);
+
+            brUser.update(requestMock, responseMock, function (nextObject) {
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isBusiness', true);
+                nextObject.should.have.property('message').with.lengthOf(1);
+                nextObject.message.should.containDeep(
+                    [
+                        'Dados inválidos para o campo Estado/Cidade'
+                    ]
+                );
+            });
+        });
+
         it('dados OK', function () {
-            let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id);
+            let userRequest = requestMock;
+            userRequest.body.state = '1a2b3c4d5e6f1a2b3c4d5e6f';
+            userRequest.body.city = 'Random City';
+
+            let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id, 1);
 
             brUser.update(requestMock, responseMock, function (nextObject) {
                 should(nextObject).not.be.ok();
