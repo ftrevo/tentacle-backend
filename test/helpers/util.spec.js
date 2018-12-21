@@ -32,5 +32,4 @@ describe('# Util', function () {
             params.c.should.not.have.property('d');
         });
     });
-
 });

@@ -7,24 +7,24 @@ const validator = require('../../helpers/validator');
 describe('# Validador do Estado', function () {
 
     describe('## Id', function () {
-        it('campos obrigatórios', function () {
+        it('campos obrigatórios', async function () {
             let request = {
                 'params': {}
             };
 
             let idValidatorFunction = validator('state', 'id', 'params');
 
-            idValidatorFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(1);
-                nextObject.details.should.containDeep([
-                    { 'message': '"_id" is required', 'type': 'any.required' }
-                ]);
-            });
+            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"_id" is required', 'type': 'any.required' }
+            ]);
         });
 
-        it('campo inválido', function () {
+        it('campo inválido', async function () {
             let request = {
                 'params': {
                     '_id': 'invalidId'
@@ -33,20 +33,20 @@ describe('# Validador do Estado', function () {
 
             let idValidatorFunction = validator('state', 'id', 'params');
 
-            idValidatorFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(1);
-                nextObject.details.should.containDeep([
-                    {
-                        'message': '"_id" with value "invalidId" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
-                        'type': 'string.regex.base'
-                    }
-                ]);
-            });
+            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                {
+                    'message': '"_id" with value "invalidId" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
+                    'type': 'string.regex.base'
+                }
+            ]);
         });
 
-        it('limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', async function () {
             let request = {
                 'params': {
                     'name': 'Jhon Doe',
@@ -56,10 +56,10 @@ describe('# Validador do Estado', function () {
 
             let idValidatorFunction = validator('state', 'id', 'params');
 
-            idValidatorFunction(request, null, function (nextObject) {
-                should(nextObject).not.be.ok();
-                request.params.should.have.properties(['name', '_id']);
-            });
+            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.params.should.have.properties(['name', '_id']);
         });
     });
 });
