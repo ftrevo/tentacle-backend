@@ -20,41 +20,41 @@ describe('# Regra de negócio de Acesso', function () {
     describe('## Login', function () {
         let requestMock = getRequestMock('body', '1234', 'emailtest@gmail.com');
 
-        it('usuário não encontrado', function () {
+        it('usuário não encontrado', async function () {
             let responseMock = getResponseMock();
 
-            brAccess.logIn(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message', 'Usuário não encontrado');
-            });
+            let nextObject = await brAccess.logIn(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message', 'Usuário não encontrado');
         });
 
-        it('senha incorreta', function () {
+        it('senha incorreta', async function () {
             let userMock = getUserMock(false);
             let responseMock = getResponseMock(userMock);
 
-            brAccess.logIn(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isAuthDenied', true);
-            });
+            let nextObject = await brAccess.logIn(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isAuthDenied', true);
         });
 
-        it('tokens gerados', function () {
+        it('tokens gerados', async function () {
             let userMock = getUserMock(true);
             let responseMock = getResponseMock(userMock);
 
-            brAccess.logIn(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-                responseMock.locals.should.have.property('statusCode', 200);
-                responseMock.locals.should.have.property('message', 'Login realizado');
-                responseMock.locals.should.have.property('userId', 'randomId');
-                responseMock.locals.should.have.property('data');
-                responseMock.locals.data.should.have.property('tokenType', 'JWT');
-                responseMock.locals.data.should.have.property('accessToken');
-                responseMock.locals.data.should.have.property('refreshToken');
-                responseMock.locals.data.refreshToken.should.be.a.String().and.match(/\.randomId\./);
-            });
+            let nextObject = await brAccess.logIn(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            responseMock.locals.should.have.property('statusCode', 200);
+            responseMock.locals.should.have.property('message', 'Login realizado');
+            responseMock.locals.should.have.property('userId', 'randomId');
+            responseMock.locals.should.have.property('data');
+            responseMock.locals.data.should.have.property('tokenType', 'JWT');
+            responseMock.locals.data.should.have.property('accessToken');
+            responseMock.locals.data.should.have.property('refreshToken');
+            responseMock.locals.data.refreshToken.should.be.a.String().and.match(/\.randomId\./);
         });
     });
 
@@ -64,53 +64,53 @@ describe('# Regra de negócio de Acesso', function () {
         );
 
         describe('### Usuário não encontrado', function () {
-            it('- user', function () {
+            it('- user', async function () {
                 let responseMock = getResponseMock();
 
-                brAccess.refreshToken(requestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    nextObject.should.have.property('isAuthDenied', true);
-                });
+                let nextObject = await brAccess.refreshToken(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isAuthDenied', true);
             });
 
-            it('- token', function () {
+            it('- token', async function () {
                 let userMock = getUserMock(true);
                 let responseMock = getResponseMock(userMock);
 
-                brAccess.refreshToken(requestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    nextObject.should.have.property('isAuthDenied', true);
-                });
+                let nextObject = await brAccess.refreshToken(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isAuthDenied', true);
             });
 
-            it('- token expirado', function () {
+            it('- token expirado', async function () {
                 let userMock = getUserMock();
                 let tokenMock = getTokenMock(true);
                 let responseMock = getResponseMock(undefined, userMock, tokenMock);
 
-                brAccess.refreshToken(requestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    nextObject.should.have.property('isAuthDenied', true);
-                });
+                let nextObject = await brAccess.refreshToken(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isAuthDenied', true);
             });
         });
 
-        it('tokens gerados', function () {
+        it('tokens gerados', async function () {
             let userMock = getUserMock(true);
             let tokenMock = getTokenMock(false);
             let responseMock = getResponseMock(undefined, userMock, tokenMock);
 
-            brAccess.refreshToken(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-                responseMock.locals.should.have.property('statusCode', 200);
-                responseMock.locals.should.have.property('message', 'Refresh Token realizado');
-                responseMock.locals.should.have.property('userId', 'randomId');
-                responseMock.locals.should.have.property('data');
-                responseMock.locals.data.should.have.property('tokenType', 'JWT');
-                responseMock.locals.data.should.have.property('accessToken');
-                responseMock.locals.data.should.have.property('refreshToken');
-                responseMock.locals.data.refreshToken.should.be.a.String().and.match(/\.randomId\./);
-            });
+            let nextObject = await brAccess.refreshToken(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            responseMock.locals.should.have.property('statusCode', 200);
+            responseMock.locals.should.have.property('message', 'Refresh Token realizado');
+            responseMock.locals.should.have.property('userId', 'randomId');
+            responseMock.locals.should.have.property('data');
+            responseMock.locals.data.should.have.property('tokenType', 'JWT');
+            responseMock.locals.data.should.have.property('accessToken');
+            responseMock.locals.data.should.have.property('refreshToken');
+            responseMock.locals.data.refreshToken.should.be.a.String().and.match(/\.randomId\./);
         });
     });
 });

@@ -21,7 +21,7 @@ const validateUser = async function (request, jwt_payload, done) {
             return done({ 'isAuthDenied': true });
         }
 
-        done(null, request.res.locals._USER);
+        return done(null, request.res.locals._USER);
     } catch (error) {
         /* istanbul ignore next */
         done(error);

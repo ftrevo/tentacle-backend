@@ -8,25 +8,25 @@ describe('# Validador de Acesso', function () {
 
     describe('## Login', function () {
 
-        it('campos obrigatórios', function () {
+        it('campos obrigatórios', async function () {
             let request = {
                 'body': {}
             };
 
             let loginValidationFunction = validator('access', 'login', 'body');
 
-            loginValidationFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(2);
-                nextObject.details.should.containDeep([
-                    { 'message': '"email" is required', 'type': 'any.required' },
-                    { 'message': '"password" is required', 'type': 'any.required' }
-                ]);
-            });
+            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(2);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" is required', 'type': 'any.required' },
+                { 'message': '"password" is required', 'type': 'any.required' }
+            ]);
         });
 
-        it('campos inválidos', function () {
+        it('campos inválidos', async function () {
             let request = {
                 'body': {
                     'email': 'invalidEmail',
@@ -36,18 +36,18 @@ describe('# Validador de Acesso', function () {
 
             let loginValidationFunction = validator('access', 'login', 'body');
 
-            loginValidationFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(2);
-                nextObject.details.should.containDeep([
-                    { 'message': '"email" must be a valid email', 'type': 'string.email' },
-                    { 'message': '"password" length must be at least 5 characters long', 'type': 'string.min' }
-                ]);
-            });
+            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(2);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" must be a valid email', 'type': 'string.email' },
+                { 'message': '"password" length must be at least 5 characters long', 'type': 'string.min' }
+            ]);
         });
 
-        it('limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', async function () {
             let request = {
                 'body': {
                     'name': 'Should be removed',
@@ -63,35 +63,35 @@ describe('# Validador de Acesso', function () {
 
             let loginValidationFunction = validator('access', 'login', 'body');
 
-            loginValidationFunction(request, null, function (nextObject) {
-                should(nextObject).not.be.ok();
-                request.body.should.have.properties(['email', 'password']);
-                request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField', 'name', 'phone']);
-            });
+            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.body.should.have.properties(['email', 'password']);
+            request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField', 'name', 'phone']);
         });
     });
 
 
     describe('## Refresh Token', function () {
 
-        it('campos obrigatórios', function () {
+        it('campos obrigatórios', async function () {
             let request = {
                 'body': {}
             };
 
             let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
 
-            refreshTokenValidationFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(1);
-                nextObject.details.should.containDeep([
-                    { 'message': '"refreshToken" is required', 'type': 'any.required' }
-                ]);
-            });
+            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"refreshToken" is required', 'type': 'any.required' }
+            ]);
         });
 
-        it('campos inválidos', function () {
+        it('campos inválidos', async function () {
             let request = {
                 'body': {
                     'refreshToken': 'invalidToken'
@@ -100,22 +100,22 @@ describe('# Validador de Acesso', function () {
 
             let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
 
-            refreshTokenValidationFunction(request, null, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isJoi', true);
-                nextObject.should.have.property('details').with.lengthOf(1);
-                nextObject.details.should.containDeep([
-                    {
-                        'message': '"refreshToken" with value "invalidToken" fails to match the required pattern: ' +
-                            '/^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\\.[0-9A-F]{24}' +
-                            '\\.[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i',
-                        'type': 'string.regex.base'
-                    }
-                ]);
-            });
+            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                {
+                    'message': '"refreshToken" with value "invalidToken" fails to match the required pattern: ' +
+                        '/^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\\.[0-9A-F]{24}' +
+                        '\\.[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i',
+                    'type': 'string.regex.base'
+                }
+            ]);
         });
 
-        it('limpeza de campos e dados OK', function () {
+        it('limpeza de campos e dados OK', async function () {
             let request = {
                 'body': {
                     'name': 'Should be removed',
@@ -126,11 +126,11 @@ describe('# Validador de Acesso', function () {
 
             let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
 
-            refreshTokenValidationFunction(request, null, function (nextObject) {
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('refreshToken');
-                request.body.should.not.have.any.properties(['name', 'email']);
-            });
+            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.body.should.have.property('refreshToken');
+            request.body.should.not.have.any.properties(['name', 'email']);
         });
     });
 });

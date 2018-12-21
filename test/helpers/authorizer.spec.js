@@ -12,35 +12,35 @@ describe('# Authorizer', function () {
         };
 
         describe('### Não autorizado', function () {
-            it('- usuário não encontrado', function () {
+            it('- usuário não encontrado', async function () {
                 let request = { 'res': getResponseMock() };
 
-                authorizer.validateUser(request, jwtPayload, function (error, validatedUser) {
-                    should(error).be.ok();
-                    should(validatedUser).not.be.ok();
-                    error.should.have.property('isAuthDenied', true);
-                });
+                let doneObject = await authorizer.validateUser(request, jwtPayload, doneFunction);
+
+                should(doneObject.error).be.ok();
+                should(doneObject.validatedUser).not.be.ok();
+                doneObject.error.should.have.property('isAuthDenied', true);
             });
 
-            it('- usuário desatualizado', function () {
+            it('- usuário desatualizado', async function () {
                 let request = { 'res': getResponseMock(getMockedUser(true)) };
 
-                authorizer.validateUser(request, jwtPayload, function (error, validatedUser) {
-                    should(error).be.ok();
-                    should(validatedUser).not.be.ok();
-                    error.should.have.property('isAuthDenied', true);
-                });
+                let doneObject = await authorizer.validateUser(request, jwtPayload, doneFunction);
+
+                should(doneObject.error).be.ok();
+                should(doneObject.validatedUser).not.be.ok();
+                doneObject.error.should.have.property('isAuthDenied', true);
             });
         });
 
-        it(' autorizado', function () {
+        it(' autorizado', async function () {
             let request = { 'res': getResponseMock(getMockedUser(false)) };
 
-            authorizer.validateUser(request, jwtPayload, function (error, validatedUser) {
-                should(error).not.be.ok();
-                should(validatedUser).be.ok();
-                validatedUser.should.have.property('_id', 'mockedUserId');
-            });
+            let doneObject = await authorizer.validateUser(request, jwtPayload, doneFunction);
+
+            should(doneObject.error).not.be.ok();
+            should(doneObject.validatedUser).be.ok();
+            doneObject.validatedUser.should.have.property('_id', 'mockedUserId');
         });
     });
 });
@@ -77,5 +77,12 @@ function getMockedUser(isUpdatedResponse) {
         'isUpdated': function () {
             return isUpdatedResponse;
         }
+    };
+};
+
+function doneFunction(error, validatedUser) {
+    return {
+        'error': error,
+        'validatedUser': validatedUser
     };
 };

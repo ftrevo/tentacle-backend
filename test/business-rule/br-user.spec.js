@@ -10,43 +10,43 @@ describe('# Regra de negócio do Usuário', function () {
     describe('## Save', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
 
-        it('telefone/email já cadastrados', function () {
+        it('telefone/email já cadastrados', async function () {
             let responseMock = getResponseMock(1, undefined, undefined, 1);
 
-            brUser.save(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message').with.lengthOf(2);
-                nextObject.message.should.containDeep(
-                    [
-                        'Telefone já cadastrado',
-                        'E-mail já cadastrado'
-                    ]
-                );
-            });
+            let nextObject = await brUser.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(2);
+            nextObject.message.should.containDeep(
+                [
+                    'Telefone já cadastrado',
+                    'E-mail já cadastrado'
+                ]
+            );
         });
 
-        it('estado/cidade incorretos', function () {
+        it('estado/cidade incorretos', async function () {
             let responseMock = getResponseMock(0, undefined, undefined, 0);
 
-            brUser.save(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message').with.lengthOf(1);
-                nextObject.message.should.containDeep(
-                    [
-                        'Dados inválidos para o campo Estado/Cidade'
-                    ]
-                );
-            });
+            let nextObject = await brUser.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep(
+                [
+                    'Dados inválidos para o campo Estado/Cidade'
+                ]
+            );
         });
 
-        it('dados OK', function () {
+        it('dados OK', async function () {
             let responseMock = getResponseMock(0, undefined, undefined, 1);
 
-            brUser.save(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-            });
+            let nextObject = await brUser.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
         });
     });
 
@@ -54,107 +54,107 @@ describe('# Regra de negócio do Usuário', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
-        it('não autorizado', function () {
+        it('não autorizado', async function () {
             let responseMock = getResponseMock(0);
 
-            brUser.update(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isForbidden', true);
-            });
+            let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isForbidden', true);
         });
 
-        it('usuário não encontrado', function () {
+        it('usuário não encontrado', async function () {
             let responseMock = getResponseMock(0, undefined, requestMock.params._id);
 
-            brUser.update(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('isNotFound', true);
-                nextObject.should.have.property('message', 'Usuário não encontrado');
-            });
+            let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('isNotFound', true);
+            nextObject.should.have.property('message', 'Usuário não encontrado');
         });
 
-        it('estado/cidade incorretos', function () {
+        it('estado/cidade incorretos', async function () {
             let userRequest = requestMock;
             userRequest.body.state = '1a2b3c4d5e6f1a2b3c4d5e6f';
             userRequest.body.city = 'Random City';
 
             let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id, 0);
 
-            brUser.update(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message').with.lengthOf(1);
-                nextObject.message.should.containDeep(
-                    [
-                        'Dados inválidos para o campo Estado/Cidade'
-                    ]
-                );
-            });
+            let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep(
+                [
+                    'Dados inválidos para o campo Estado/Cidade'
+                ]
+            );
         });
 
-        it('dados OK', function () {
+        it('dados OK', async function () {
             let userRequest = requestMock;
             userRequest.body.state = '1a2b3c4d5e6f1a2b3c4d5e6f';
             userRequest.body.city = 'Random City';
 
             let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id, 1);
 
-            brUser.update(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-            });
+            let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
         });
 
         describe('### Campos já cadastrados', function () {
-            it('telefone/email', function () {
+            it('telefone/email', async function () {
                 let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
-                brUser.update(requestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    should(nextObject.isNotFound).not.be.ok();
-                    nextObject.should.have.property('isBusiness', true);
-                    nextObject.should.have.property('message').with.lengthOf(2);
-                    nextObject.message.should.containDeepOrdered(
-                        [
-                            'Telefone já cadastrado',
-                            'E-mail já cadastrado'
-                        ]
-                    );
-                });
+                let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                should(nextObject.isNotFound).not.be.ok();
+                nextObject.should.have.property('isBusiness', true);
+                nextObject.should.have.property('message').with.lengthOf(2);
+                nextObject.message.should.containDeepOrdered(
+                    [
+                        'Telefone já cadastrado',
+                        'E-mail já cadastrado'
+                    ]
+                );
             });
 
-            it('somente telefone', function () {
+            it('somente telefone', async function () {
                 let innerRequestMock = { 'body': { 'phone': '81 981818181' }, 'params': requestMock.params };
                 let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
-                brUser.update(innerRequestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    should(nextObject.isNotFound).not.be.ok();
-                    nextObject.should.have.property('isBusiness', true);
-                    nextObject.should.have.property('message').with.lengthOf(1);
-                    nextObject.message.should.containDeepOrdered(
-                        [
-                            'Telefone já cadastrado'
-                        ]
-                    );
-                });
+                let nextObject = await brUser.update(innerRequestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                should(nextObject.isNotFound).not.be.ok();
+                nextObject.should.have.property('isBusiness', true);
+                nextObject.should.have.property('message').with.lengthOf(1);
+                nextObject.message.should.containDeepOrdered(
+                    [
+                        'Telefone já cadastrado'
+                    ]
+                );
             });
 
-            it('somente email', function () {
+            it('somente email', async function () {
                 let innerRequestMock = { 'body': { 'email': 'emailtest@gmail.com' }, 'params': requestMock.params };
                 let responseMock = getResponseMock(1, requestMock.params, requestMock.params._id, 1);
 
-                brUser.update(innerRequestMock, responseMock, function (nextObject) {
-                    should(nextObject).be.ok();
-                    should(nextObject.isNotFound).not.be.ok();
-                    nextObject.should.have.property('isBusiness', true);
-                    nextObject.should.have.property('message').with.lengthOf(1);
-                    nextObject.message.should.containDeepOrdered(
-                        [
-                            'E-mail já cadastrado'
-                        ]
-                    );
-                });
+                let nextObject = await brUser.update(innerRequestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                should(nextObject.isNotFound).not.be.ok();
+                nextObject.should.have.property('isBusiness', true);
+                nextObject.should.have.property('message').with.lengthOf(1);
+                nextObject.message.should.containDeepOrdered(
+                    [
+                        'E-mail já cadastrado'
+                    ]
+                );
             });
         });
     });
@@ -163,38 +163,38 @@ describe('# Regra de negócio do Usuário', function () {
         let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
-        it('não autorizado', function () {
+        it('não autorizado', async function () {
             let responseMock = getResponseMock(0);
 
-            brUser.remove(requestMock, responseMock, function (nextObject) {
-                should(nextObject).be.ok();
-                nextObject.should.have.property('isForbidden', true);
-            });
+            let nextObject = await brUser.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isForbidden', true);
         });
 
-        it('dados OK', function () {
+        it('dados OK', async function () {
             let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id);
 
-            brUser.remove(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-            });
+            let nextObject = await brUser.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
         });
     });
 
     describe('## Search', function () {
         let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
 
-        it('nome e paginação', function () {
+        it('nome e paginação', async function () {
             let responseMock = getResponseMock(1);
 
-            brUser.search(requestMock, responseMock, function (nextObject) {
-                should(nextObject).not.be.ok();
-                requestMock.query.should.have.property('name', /Nome/i);
-                requestMock.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
-                requestMock.query.should.not.have.property('page');
-                requestMock.query.should.not.have.property('limit');
-                responseMock.locals.should.containDeep({ 'pagination': { 'skip': 0, 'max': 10 } });
-            });
+            let nextObject = await brUser.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.query.should.have.property('name', /Nome/i);
+            requestMock.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
+            requestMock.query.should.not.have.property('page');
+            requestMock.query.should.not.have.property('limit');
+            responseMock.locals.should.containDeep({ 'pagination': { 'skip': 0, 'max': 10 } });
         });
     });
 });
