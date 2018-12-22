@@ -1,6 +1,6 @@
 openapi: 3.0.0
-paths:
 
+paths:
   /login:
     post:
       tags:
@@ -54,6 +54,31 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /states:
+    get:
+      tags:
+        - State
+      summary: Rota de listagem de estados
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '500':
+          $ref: '#/components/responses/500'
+  /states/{id}/cities:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - State
+      summary: Rota de detalhamento de estado
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
   /users:
     post:
       tags:
@@ -93,8 +118,8 @@ paths:
           $ref: '#/components/responses/200List'
         '400':
           $ref: '#/components/responses/400'
-        '403':
-          $ref: '#/components/responses/403'
+        '401':
+          $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
   /users/{id}:
@@ -111,8 +136,8 @@ paths:
           $ref: '#/components/responses/200Detail'
         '400':
           $ref: '#/components/responses/400'
-        '403':
-          $ref: '#/components/responses/403'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
         '500':
@@ -126,8 +151,8 @@ paths:
       responses:
         '200':
           $ref: '#/components/responses/200Remove'
-        '403':
-          $ref: '#/components/responses/403'
+        '401':
+          $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
     patch:
@@ -147,35 +172,109 @@ paths:
           $ref: '#/components/responses/200Remove'
         '400':
           $ref: '#/components/responses/400'
-        '403':
-          $ref: '#/components/responses/403'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
 
-  /states:
+  /games:
+    post:
+      tags:
+        - Game
+      summary: Rota de criação de jogos
+      security:
+        - authenticationUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/Game'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
     get:
       tags:
-        - State
-      summary: Rota de listagem de estados
+        - Game
+      summary: Rota de listagem de jogos
+      security:
+        - authenticationUser: []
+      parameters:
+        - in: query
+          name: title
+          schema:
+            type: string
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
       responses:
         '200':
           $ref: '#/components/responses/200List'
-        '403':
-          $ref: '#/components/responses/403'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
-  /states/{id}/cities:
+  /games/{id}:
     parameters:
       - $ref: '#/components/parameters/idParam'
     get:
       tags:
-        - State
-      summary: Rota de detalhamento de estado
+        - Game
+      summary: Rota de detalhamento de jogos
+      security:
+        - authenticationUser: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+    delete:
+      tags:
+        - Game
+      summary: Rota de remoção de jogos
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Remove'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+    patch:
+      tags:
+        - Game
+      summary: Rota de alteração de jogos
+      security:
+        - authenticationUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Game'
+      responses:
+        '200':
+          $ref: '#/components/responses/200Remove'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
         '500':
@@ -265,4 +364,9 @@ components:
         state:
           type: string
         city:
+          type: string
+    Game:
+      type: object
+      properties:
+        title:
           type: string
