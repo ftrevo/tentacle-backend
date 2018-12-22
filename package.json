@@ -9,7 +9,7 @@
   "main": "index.js",
   "scripts": {
     "pretest": "npm install",
-    "test": "nyc --check-coverage --lines 80 --x models --x test --reporter=html --reporter=text mocha --opts --reporter ./test --recursive --timeout 10000 --exit",
+    "test": "nyc --check-coverage --lines 80 --reporter=html --reporter=text mocha --opts --reporter ./test --recursive --timeout 10000 --exit",
     "prestart": "npm install",
     "start": "node ."
   },

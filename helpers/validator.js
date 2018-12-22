@@ -2,9 +2,10 @@
 const joi = require('joi');
 
 // --------------- Import de arquivos do core --------------- //
-const userValidation = require('../models/validation/val-user');
-const accessValidation = require('../models/validation/val-access');
-const stateValidation = require('../models/validation/val-state');
+const valUser = require('../models/validation/val-user');
+const valAccess = require('../models/validation/val-access');
+const valState = require('../models/validation/val-state');
+const valGame = require('../models/validation/val-game');
 
 // ------------------- Funções Exportadas ------------------- //
 const validate = function (schemaName, functionValidation, requestObject) {
@@ -27,18 +28,24 @@ const validate = function (schemaName, functionValidation, requestObject) {
 // --------------------- Objetos Locais --------------------- //
 const validationMethods = {
     'user': {
-        'create': userValidation.create,
-        'id': userValidation.id,
-        'update': userValidation.update,
-        'search': userValidation.search
+        'create': valUser.create,
+        'id': valUser.id,
+        'update': valUser.update,
+        'search': valUser.search
     },
     'access': {
-        'login': accessValidation.login,
-        'refreshToken': accessValidation.refreshToken
+        'login': valAccess.login,
+        'refreshToken': valAccess.refreshToken
     },
     'state': {
-        'id': stateValidation.id
+        'id': valState.id
     },
+    'game': {
+        'create': valGame.create,
+        'id': valGame.id,
+        'update': valGame.update,
+        'search': valGame.search
+    }
 };
 
 // --------------------- Module Exports --------------------- //

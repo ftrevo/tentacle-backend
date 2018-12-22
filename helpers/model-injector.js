@@ -2,6 +2,7 @@
 const user = require('../models/user');
 const token = require('../models/token');
 const state = require('../models/state');
+const game = require('../models/game');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -12,7 +13,7 @@ const injector = function (...modelNames) {
             response.locals._MODELS[modelName] = getModel(modelName);
         }
 
-        next();
+        return next();
     };
 };
 
@@ -22,6 +23,7 @@ function getModel(modelName) {
         case 'user': return user;
         case 'token': return token;
         case 'state': return state;
+        case 'game': return game;
     }
 };
 

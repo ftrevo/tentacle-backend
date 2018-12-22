@@ -32,4 +32,25 @@ describe('# Util', function () {
             params.c.should.not.have.property('d');
         });
     });
+
+    describe('## Transform Object to Query', function () {
+        it('criar query criando campos string com regex', function () {
+            let params = {
+                'stringQuery': 'a',
+                'numberInStringQuery': '1',
+                'objectIdQuery': '5c1e6114453ece297e16a6b7',
+                'dateQuery': '2018-12-22T16:52:57.486Z',
+                'numberQuery': 1
+            };
+
+            let transformedQuery = util.transformObjectToQuery(params);
+
+            should(transformedQuery).be.ok();
+            transformedQuery.should.have.property('dateQuery', params.dateQuery);
+            transformedQuery.should.have.property('numberQuery', params.numberQuery);
+            transformedQuery.should.have.property('objectIdQuery', params.objectIdQuery);
+            transformedQuery.should.have.property('stringQuery', /a/i);
+            transformedQuery.should.have.property('numberInStringQuery', /1/i);
+        });
+    });
 });

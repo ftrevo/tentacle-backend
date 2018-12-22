@@ -75,7 +75,10 @@ const fieldMap = {
     'updatedAt': 'Atualizado em',
     'refreshToken': 'Refresh Token',
     'state': 'Estado',
-    'city': 'Cidade'
+    'city': 'Cidade',
+    'title': 'Título',
+    'createdBy': 'Criado por',
+    'updatedBy': 'Atualizado por'
 };
 
 // --------------------- Module Exports --------------------- //

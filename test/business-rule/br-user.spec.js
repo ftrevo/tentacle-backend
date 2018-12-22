@@ -218,7 +218,7 @@ function getRequestMock(requestParamName, name, phone, email) {
     return { [requestParamName]: mockedObject };
 };
 
-function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId, stateCountDocumentAmmount) {
+function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, stateCountDocumentAmmount) {
     return {
         status: () => ({
             json: obj => obj
@@ -242,7 +242,7 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loogedUserId, sta
             },
             '_UTIL': util,
             '_USER': {
-                '_id': loogedUserId
+                '_id': loggedUserId
             }
         }
     };
