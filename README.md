@@ -18,5 +18,6 @@ TOKEN_EXP_TIME=1 hrs
 REFRESH_EXP_TIME=2 hrs
 ```
 #### TODO's
-* CRUD de "jogos"
+* CRUD de "mídias"
+* Alteração na remoção de jogos para possibilitar apenas se não houverem mídias registradas ao jogo
 * Fluxos de negócio de empréstimo
