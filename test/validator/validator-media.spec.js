@@ -29,7 +29,7 @@ describe('# Validador de Mídia de Jogos', function () {
         it('dados inválidos', async function () {
             let request = {
                 'body': {
-                    'platform': 'PS4',
+                    'platform': 'invalidPlatform',
                     'game': 'invalidGame'
                 }
             };
@@ -40,11 +40,15 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.should.have.property('details').with.lengthOf(2);
             nextObject.details.should.containDeep([
                 {
                     'message': '"game" with value "invalidGame" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
                     'type': 'string.regex.base'
+                },
+                {
+                    'message': '"platform" must be one of [PS4, PS3, XBOX ONE, XBOX 360, NINTENDO SWITCH, NINTENDO 3DS]',
+                    'type': 'any.allowOnly'
                 }
             ]);
         });
@@ -86,6 +90,7 @@ describe('# Validador de Mídia de Jogos', function () {
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'PS4');
+                request.body.should.have.property('game', '1a2b3c4d5e6f1a2b3c4d5e6f');
             });
 
             it('- PS3', async function () {
@@ -302,15 +307,17 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.should.have.property('details').with.lengthOf(2);
             nextObject.details.should.containDeep([
-                { 'message': '"value" must contain at least one of [platform, game]', 'type': 'object.missing' }
+                { 'message': '"platform" is required', 'type': 'any.required' },
+                { 'message': '"game" is required', 'type': 'any.required' }
             ]);
         });
 
         it('dados inválidos', async function () {
             let request = {
                 'body': {
+                    'platform': 'invalidPlatform',
                     'game': 'invalidGame'
                 }
             };
@@ -321,11 +328,15 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.should.have.property('details').with.lengthOf(2);
             nextObject.details.should.containDeep([
                 {
                     'message': '"game" with value "invalidGame" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
                     'type': 'string.regex.base'
+                },
+                {
+                    'message': '"platform" must be one of [PS4, PS3, XBOX ONE, XBOX 360, NINTENDO SWITCH, NINTENDO 3DS]',
+                    'type': 'any.allowOnly'
                 }
             ]);
         });
@@ -356,7 +367,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- PS4', async function () {
                 let request = {
                     'body': {
-                        'platform': 'PS4'
+                        'platform': 'PS4',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 
@@ -371,7 +383,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- PS3', async function () {
                 let request = {
                     'body': {
-                        'platform': 'PS3'
+                        'platform': 'PS3',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 
@@ -386,7 +399,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- XBOX ONE', async function () {
                 let request = {
                     'body': {
-                        'platform': 'XBOX ONE'
+                        'platform': 'XBOX ONE',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 
@@ -401,7 +415,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- XBOX 360', async function () {
                 let request = {
                     'body': {
-                        'platform': 'XBOX 360'
+                        'platform': 'XBOX 360',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 
@@ -416,7 +431,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- NINTENDO SWITCH', async function () {
                 let request = {
                     'body': {
-                        'platform': 'NINTENDO SWITCH'
+                        'platform': 'NINTENDO SWITCH',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 
@@ -431,7 +447,8 @@ describe('# Validador de Mídia de Jogos', function () {
             it('- NINTENDO 3DS', async function () {
                 let request = {
                     'body': {
-                        'platform': 'NINTENDO 3DS'
+                        'platform': 'NINTENDO 3DS',
+                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
                     }
                 };
 

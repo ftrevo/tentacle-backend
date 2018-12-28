@@ -20,9 +20,9 @@ const create = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 });
 
 const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'platform': keys.platform.optional(),
-    'game': keys.game.optional()
-}).or('platform', 'game');
+    'platform': keys.platform.required(),
+    'game': keys.game.required()
+});
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),

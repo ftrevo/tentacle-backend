@@ -33,6 +33,7 @@ const update = async function (request, response, next) {
             response.locals._MODELS.media.countDocuments(
                 {
                     '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
+                    'game': request.body.game,
                     'platform': request.body.platform,
                     'owner': response.locals._USER._id
                 }
