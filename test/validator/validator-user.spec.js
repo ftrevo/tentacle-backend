@@ -222,7 +222,7 @@ describe('# Validador do Usuário', function () {
             nextObject.should.have.property('isJoi', true);
             nextObject.should.have.property('details').with.lengthOf(1);
             nextObject.details.should.containDeep([
-                { 'message': '"value" must contain at least one of [name, email, phone, password, state, city]', 'type': "object.missing" }
+                { 'message': '"value" must contain at least one of [name, email, phone, password, state, city]', 'type': 'object.missing' }
             ]);
         });
 

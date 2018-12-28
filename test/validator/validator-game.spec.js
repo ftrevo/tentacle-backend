@@ -4,7 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const validator = require('../../helpers/validator');
 
-describe('# Validador do Jogos', function () {
+describe('# Validador de Jogos', function () {
 
     describe('## Create', function () {
 
@@ -156,12 +156,29 @@ describe('# Validador do Jogos', function () {
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.query.should.have.properties(['_id', 'title', 'title', 'updatedBy', 'page', 'limit']);
+            request.query.should.have.properties(['_id', 'title', 'createdBy', 'updatedBy', 'page', 'limit']);
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
         });
     });
 
     describe('## Update', function () {
+
+        it('campos obrigatórios', async function () {
+            let request = {
+                'body': {}
+            };
+
+            let createValidatorFunction = validator('game', 'update', 'body');
+
+            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"value" must contain at least one of [title]', 'type': 'object.missing' }
+            ]);
+        });
 
         it('limpeza de campos e dados OK', async function () {
             let request = {
@@ -176,7 +193,7 @@ describe('# Validador do Jogos', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('game', 'create', 'body');
+            let updateValidatorFunction = validator('game', 'update', 'body');
 
             let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 

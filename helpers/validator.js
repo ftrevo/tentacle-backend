@@ -2,9 +2,10 @@
 const joi = require('joi');
 
 // --------------- Import de arquivos do core --------------- //
-const valUser = require('../models/validation/val-user');
 const valAccess = require('../models/validation/val-access');
 const valState = require('../models/validation/val-state');
+const valMedia = require('../models/validation/val-media');
+const valUser = require('../models/validation/val-user');
 const valGame = require('../models/validation/val-game');
 
 // ------------------- Funções Exportadas ------------------- //
@@ -45,6 +46,12 @@ const validationMethods = {
         'id': valGame.id,
         'update': valGame.update,
         'search': valGame.search
+    },
+    'media': {
+        'create': valMedia.create,
+        'id': valMedia.id,
+        'update': valMedia.update,
+        'search': valMedia.search
     }
 };
 
