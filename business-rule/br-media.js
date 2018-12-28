@@ -4,6 +4,7 @@ const save = async function (request, response, next) {
         let promisseStack = [
             response.locals._MODELS.media.countDocuments({
                 'platform': request.body.platform,
+                'game': request.body.game,
                 'owner': response.locals._USER._id
             }).exec()
         ];
