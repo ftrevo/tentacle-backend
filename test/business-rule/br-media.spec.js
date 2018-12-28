@@ -15,7 +15,7 @@ describe('# Regra de negócio de Jogo', function () {
                     'platform': 'PS4'
                 }
             };
-            let responseMock = getResponseMock(1);
+            let responseMock = getResponseMock(1, undefined, undefined, 1);
 
             let nextObject = await brMedia.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -30,6 +30,28 @@ describe('# Regra de negócio de Jogo', function () {
             );
         });
 
+        it('jogo não encontrado', async function () {
+            let requestMock = {
+                'body': {
+                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'platform': 'PS4'
+                }
+            };
+            let responseMock = getResponseMock(0, undefined, undefined, 0);
+
+            let nextObject = await brMedia.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            should(requestMock.body.owner).not.be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep(
+                [
+                    'Jogo não encontrado'
+                ]
+            );
+        });
+
         it('dados OK', async function () {
             let requestMock = {
                 'body': {
@@ -37,7 +59,7 @@ describe('# Regra de negócio de Jogo', function () {
                     'platform': 'PS4'
                 }
             };
-            let responseMock = getResponseMock(0, undefined, 1);
+            let responseMock = getResponseMock(0, undefined, 1, 1);
 
             let nextObject = await brMedia.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -48,7 +70,7 @@ describe('# Regra de negócio de Jogo', function () {
 
     describe('## Update', function () {
 
-        it('jogo não encontrado', async function () {
+        it('mídia não encontrada', async function () {
             let requestMock = {
                 'body': {
                     'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
@@ -56,7 +78,7 @@ describe('# Regra de negócio de Jogo', function () {
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
-            let responseMock = getResponseMock(0, undefined, 1);
+            let responseMock = getResponseMock(0, undefined, 1, 1);
 
             let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -65,6 +87,31 @@ describe('# Regra de negócio de Jogo', function () {
             nextObject.should.have.property('isBusiness', true);
             nextObject.should.have.property('isNotFound', true);
             nextObject.should.have.property('message', 'Mídia não encontrada');
+        });
+
+        it('jogo não encontrado', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = {
+                'body': {
+                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'platform': 'PS4'
+                },
+                'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
+            };
+            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, 0);
+
+            let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            should(requestMock.body.owner).not.be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep(
+                [
+                    'Jogo não encontrado'
+                ]
+            );
         });
 
         it('outro dono', async function () {
@@ -77,7 +124,7 @@ describe('# Regra de negócio de Jogo', function () {
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
-            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, '123456789012123456789012');
+            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, '123456789012123456789012', 1);
 
             let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -95,7 +142,7 @@ describe('# Regra de negócio de Jogo', function () {
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
-            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId);
+            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, 1);
 
             let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -113,7 +160,7 @@ describe('# Regra de negócio de Jogo', function () {
                     },
                     'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
                 };
-                let responseMock = getResponseMock(1, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId);
+                let responseMock = getResponseMock(1, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, 1);
 
                 let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -159,7 +206,7 @@ describe('# Regra de negócio de Jogo', function () {
 });
 
 // --------------------- Funções Locais --------------------- //
-function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId) {
+function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount) {
     return {
         status: () => ({
             json: obj => obj
@@ -167,8 +214,11 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId) {
         locals: {
             '_MODELS': {
                 'media': {
-                    'countDocuments': getExecObject(countDocumentAmmount),
+                    'countDocuments': getExecObject(countMediaDocAmmount),
                     'findById': getExecObject(findByIdObject)
+                },
+                'game': {
+                    'countDocuments': getExecObject(countGameDocAmmount),
                 }
             },
             '_MONGOOSE': {

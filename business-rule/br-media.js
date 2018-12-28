@@ -6,7 +6,9 @@ const save = async function (request, response, next) {
                 'platform': request.body.platform,
                 'game': request.body.game,
                 'owner': response.locals._USER._id
-            }).exec()
+            }).exec(),
+
+            response.locals._MODELS.game.countDocuments({ '_id': request.body.game }).exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
@@ -28,9 +30,7 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     try {
-        let promisseStack = [];
-
-        promisseStack.push(
+        let promisseStack = [
             response.locals._MODELS.media.countDocuments(
                 {
                     '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
@@ -38,18 +38,18 @@ const update = async function (request, response, next) {
                     'platform': request.body.platform,
                     'owner': response.locals._USER._id
                 }
-            ).exec()
-        );
+            ).exec(),
 
-        promisseStack.push(
+            response.locals._MODELS.game.countDocuments({ '_id': request.body.game }).exec(),
+
             response.locals._MODELS.media.findById(request.params._id).exec()
-        );
+        ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        if (!resolvedPromisses[1]) {
+        if (!resolvedPromisses[2]) {
             return next({ 'isBusiness': true, 'message': 'Mídia não encontrada', 'isNotFound': true });
-        } else if (resolvedPromisses[1].owner + '' !== response.locals._USER._id + '') {
+        } else if (resolvedPromisses[2].owner + '' !== response.locals._USER._id + '') {
             return next({ 'isForbidden': true });
         }
 
@@ -85,6 +85,11 @@ function validateData(resolvedPromisses) {
     if (resolvedPromisses[0] > 0) {
         validationErrors.push('Mídia já cadastrada');
     }
+
+    if (resolvedPromisses[1] === 0) {
+        validationErrors.push('Jogo não encontrado');
+    }
+
 
     return validationErrors;
 };
