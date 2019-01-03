@@ -78,7 +78,11 @@ const fieldMap = {
     'city': 'Cidade',
     'title': 'Título',
     'createdBy': 'Criado por',
-    'updatedBy': 'Atualizado por'
+    'updatedBy': 'Atualizado por',
+    'owner': 'Dono',
+    'game': 'Jogo',
+    'title': 'Título',
+    'platform': 'Plataforma'
 };
 
 // --------------------- Module Exports --------------------- //

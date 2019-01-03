@@ -8,12 +8,14 @@ const validador = require('./helpers/validator');
 
 // --------------- Import de regras de negócio -------------- //
 const brAccess = require('./business-rule/br-access');
+const brMedia = require('./business-rule/br-media');
 const brUser = require('./business-rule/br-user');
 const brGame = require('./business-rule/br-game');
 
 // ------------------ Import de repositórios ---------------- //
 const repoToken = require('./repositories/repo-token');
 const repoState = require('./repositories/repo-state');
+const repoMedia = require('./repositories/repo-media');
 const repoUser = require('./repositories/repo-user');
 const repoGame = require('./repositories/repo-game');
 
@@ -50,8 +52,8 @@ const routes = function (app) {
       brUser.update, repoUser.update, defMethods.requestHandler
     );
 
-  
-    app.route('/games')
+
+  app.route('/games')
     .get(modelInjector('game', 'user'), privateRoute, validador('game', 'search', 'query'), brGame.search, repoGame.search, defMethods.requestHandler)
     .post(modelInjector('game', 'user'), privateRoute, validador('game', 'create', 'body'), brGame.save, repoGame.save, defMethods.requestHandler);
 
@@ -61,6 +63,19 @@ const routes = function (app) {
     .patch(
       modelInjector('game', 'user'), privateRoute, validador('game', 'id', 'params'), validador('game', 'update', 'body'),
       brGame.update, repoGame.update, defMethods.requestHandler
+    );
+
+
+  app.route('/media')
+    .get(modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'search', 'query'), brMedia.search, repoMedia.search, defMethods.requestHandler)
+    .post(modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'create', 'body'), brMedia.save, repoMedia.save, defMethods.requestHandler);
+
+  app.route('/media/:_id')
+    .get(modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'id', 'params'), repoMedia.findById, defMethods.requestHandler)
+    .delete(modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'id', 'params'), repoMedia.remove, defMethods.requestHandler)
+    .patch(
+      modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'id', 'params'), validador('media', 'update', 'body'),
+      brMedia.update, repoMedia.update, defMethods.requestHandler
     );
 };
 
