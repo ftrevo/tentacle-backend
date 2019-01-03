@@ -50,10 +50,23 @@ const transformObjectToQuery = (filter = {}) => {
     return mongodbFilter;
 };
 
+const setLocalsData = (response, statusCode, data, message) => {
+    response.locals.statusCode = statusCode;
+
+    if (data) {
+        response.locals.data = data;
+    }
+
+    if (message) {
+        response.locals.message = message;
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'clearObject': clearObject,
     'handleRequests': handleRequests,
     'resolvePagination': resolvePagination,
+    'setLocalsData': setLocalsData,
     'transformObjectToQuery': transformObjectToQuery
 };

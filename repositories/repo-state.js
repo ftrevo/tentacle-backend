@@ -3,8 +3,11 @@ const search = async function (request, response, next) {
     try {
         let stateList = await response.locals._MODELS.state.find({}, { 'cities': 0 }).sort({ 'name': 1 }).exec();
 
-        response.locals.statusCode = 200;
-        response.locals.data = { 'list': stateList };
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            { 'list': stateList }
+        );
 
         next();
     } catch (error) {
@@ -20,11 +23,12 @@ const findById = async function (request, response, next) {
             return next({ 'isDatabase': true, 'message': 'Estado não encontrado', 'isNotFound': true });
         }
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Estado encontrado';
-        response.locals.statusCode = 200;
-
-        response.location(`/states/${request.params._id}/cities`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            foundObject,
+            'Estado encontrado'
+        );
 
         next();
     } catch (error) {

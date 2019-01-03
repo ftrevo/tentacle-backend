@@ -11,11 +11,12 @@ const save = async function (request, response, next) {
             ]
         );
 
-        response.locals.message = 'Mídia salva no banco.';
-        response.locals.statusCode = 201;
-
-        response.locals.data = toBeIncluded.toObject();
-        response.location(`/media/${response.locals.data._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            201,
+            toBeIncluded.toObject(),
+            'Mídia salva'
+        );
 
         next();
     } catch (error) {
@@ -34,11 +35,12 @@ const update = async function (request, response, next) {
             { 'path': 'game', 'select': 'title' }
         ]);
 
-        response.locals.message = 'Mídia atualizada no banco.';
-        response.locals.statusCode = 200;
-
-        response.locals.data = updated.toObject();
-        response.location(`/media/${response.locals.data._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            updated.toObject(),
+            'Mídia atualizada'
+        );
 
         next();
     } catch (error) {
@@ -64,8 +66,11 @@ const search = async function (request, response, next) {
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        response.locals.statusCode = 200;
-        response.locals.data = { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] };
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
+        );
 
         next();
     } catch (error) {
@@ -85,11 +90,12 @@ const findById = async function (request, response, next) {
             return next({ 'isDatabase': true, 'message': 'Mídia não encontrada', 'isNotFound': true });
         }
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Mídia encontrada';
-        response.locals.statusCode = 200;
-
-        response.location(`/media/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            foundObject,
+            'Mídia encontrada'
+        );
 
         next();
     } catch (error) {
@@ -99,12 +105,14 @@ const findById = async function (request, response, next) {
 
 const remove = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.media.findByIdAndDelete(request.params._id);
+        let removedObject = await response.locals._MODELS.media.findByIdAndDelete(request.params._id);
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Mídia removida';
-        response.locals.statusCode = 200;
-        response.location(`/media/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            removedObject,
+            'Mídia removida'
+        );
 
         next();
     } catch (error) {

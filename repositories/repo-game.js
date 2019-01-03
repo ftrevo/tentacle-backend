@@ -6,11 +6,12 @@ const save = async function (request, response, next) {
         await toBeIncluded.save();
         await response.locals._MODELS.game.populate(toBeIncluded, { 'path': 'createdBy', 'select': 'name' });
 
-        response.locals.message = 'Jogo salvo no banco.';
-        response.locals.statusCode = 201;
-
-        response.locals.data = toBeIncluded.toObject();
-        response.location(`/games/${response.locals.data._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            201,
+            toBeIncluded.toObject(),
+            'Jogo salvo'
+        );
 
         next();
     } catch (error) {
@@ -29,11 +30,12 @@ const update = async function (request, response, next) {
             { 'path': 'updatedBy', 'select': 'name' }
         ]);
 
-        response.locals.message = 'Jogo atualizado no banco.';
-        response.locals.statusCode = 200;
-
-        response.locals.data = updated.toObject();
-        response.location(`/games/${response.locals.data._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            updated.toObject(),
+            'Jogo atualizado'
+        );
 
         next();
     } catch (error) {
@@ -59,8 +61,11 @@ const search = async function (request, response, next) {
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        response.locals.statusCode = 200;
-        response.locals.data = { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] };
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
+        );
 
         next();
     } catch (error) {
@@ -80,11 +85,12 @@ const findById = async function (request, response, next) {
             return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
         }
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Jogo encontrado';
-        response.locals.statusCode = 200;
-
-        response.location(`/games/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            foundObject,
+            'Jogo encontrado'
+        );
 
         next();
     } catch (error) {
@@ -94,12 +100,14 @@ const findById = async function (request, response, next) {
 
 const remove = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.game.findByIdAndDelete(request.params._id);
+        let removedObject = await response.locals._MODELS.game.findByIdAndDelete(request.params._id);
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Jogo removido';
-        response.locals.statusCode = 200;
-        response.location(`/games/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            removedObject,
+            'Jogo removido'
+        );
 
         next();
     } catch (error) {

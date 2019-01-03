@@ -90,7 +90,6 @@ function validateData(resolvedPromisses) {
         validationErrors.push('Jogo não encontrado');
     }
 
-
     return validationErrors;
 };
 // --------------------- Module Exports --------------------- //
