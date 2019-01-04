@@ -6,12 +6,14 @@ const save = async function (request, response, next) {
         await toBeIncluded.save();
         await response.locals._MODELS.user.populate(toBeIncluded, { 'path': 'state', 'select': 'name initials' });
 
-        response.locals.message = 'Usuário salvo no banco.';
-        response.locals.statusCode = 201;
+        response.locals._UTIL.setLocalsData(
+            response,
+            201,
+            toBeIncluded.toObject(),
+            'Usuário salvo'
+        );
 
-        response.locals.data = toBeIncluded.toObject();
         response.locals._UTIL.clearObject(response.locals.data, ['password']);
-        response.location(`/users/${response.locals.data._id}`);
 
         next();
     } catch (error) {
@@ -32,12 +34,14 @@ const update = async function (request, response, next) {
             }
         );
 
-        response.locals.message = 'Usuário atualizado no banco.';
-        response.locals.statusCode = 200;
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            updated.toObject(),
+            'Usuário atualizado'
+        );
 
-        response.locals.data = updated.toObject();
         response.locals._UTIL.clearObject(response.locals.data, ['password']);
-        response.location(`/users/${response.locals.data._id}`);
 
         next();
     } catch (error) {
@@ -60,8 +64,11 @@ const search = async function (request, response, next) {
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        response.locals.statusCode = 200;
-        response.locals.data = { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] };
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
+        );
 
         next();
     } catch (error) {
@@ -78,11 +85,12 @@ const findById = async function (request, response, next) {
             return next({ 'isDatabase': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
         }
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Usuário encontrado';
-        response.locals.statusCode = 200;
-
-        response.location(`/users/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            foundObject,
+            'Usuário encontrado'
+        );
 
         next();
     } catch (error) {
@@ -92,12 +100,14 @@ const findById = async function (request, response, next) {
 
 const remove = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.user.findByIdAndDelete(request.params._id, { 'select': { 'password': 0 } });
+        let removedObject = await response.locals._MODELS.user.findByIdAndDelete(request.params._id, { 'select': { 'password': 0 } });
 
-        response.locals.data = foundObject;
-        response.locals.message = 'Usuário removido';
-        response.locals.statusCode = 200;
-        response.location(`/users/${request.params._id}`);
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            removedObject,
+            'Usuário removido'
+        );
 
         next();
     } catch (error) {

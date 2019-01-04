@@ -1,16 +1,21 @@
 // ------------------- Funções Exportadas ------------------- //
 const save = async function (request, response, next) {
     try {
-        let toBeIncluded = new response.locals._MODELS.game(request.body);
+        let toBeIncluded = new response.locals._MODELS.media(request.body);
 
         await toBeIncluded.save();
-        await response.locals._MODELS.game.populate(toBeIncluded, { 'path': 'createdBy', 'select': 'name' });
+        await response.locals._MODELS.media.populate(toBeIncluded,
+            [
+                { 'path': 'owner', 'select': 'name' },
+                { 'path': 'game', 'select': 'title' }
+            ]
+        );
 
         response.locals._UTIL.setLocalsData(
             response,
             201,
             toBeIncluded.toObject(),
-            'Jogo salvo'
+            'Mídia salva'
         );
 
         next();
@@ -21,20 +26,20 @@ const save = async function (request, response, next) {
 
 const update = async function (request, response, next) {
     try {
-        let updated = await response.locals._MODELS.game.findOneAndUpdate(
+        let updated = await response.locals._MODELS.media.findOneAndUpdate(
             { '_id': request.params._id },
             request.body,
             { 'new': true }
         ).populate([
-            { 'path': 'createdBy', 'select': 'name' },
-            { 'path': 'updatedBy', 'select': 'name' }
+            { 'path': 'owner', 'select': 'name' },
+            { 'path': 'game', 'select': 'title' }
         ]);
 
         response.locals._UTIL.setLocalsData(
             response,
             200,
             updated.toObject(),
-            'Jogo atualizado'
+            'Mídia atualizada'
         );
 
         next();
@@ -46,17 +51,17 @@ const update = async function (request, response, next) {
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.game.find(request.query)
+            response.locals._MODELS.media.find(request.query)
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'title': 1 })
+                .sort({ 'owner': 1 })
                 .populate([
-                    { 'path': 'createdBy', 'select': 'name' },
-                    { 'path': 'updatedBy', 'select': 'name' }
+                    { 'path': 'owner', 'select': 'name' },
+                    { 'path': 'game', 'select': 'title' }
                 ])
                 .exec(),
 
-            response.locals._MODELS.game.find(request.query).countDocuments().exec()
+            response.locals._MODELS.media.find(request.query).countDocuments().exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
@@ -75,21 +80,21 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.game.findById(request.params._id)
+        let foundObject = await response.locals._MODELS.media.findById(request.params._id)
             .populate([
-                { 'path': 'createdBy', 'select': 'name' },
-                { 'path': 'updatedBy', 'select': 'name' }
+                { 'path': 'owner', 'select': 'name' },
+                { 'path': 'game', 'select': 'title' }
             ]);
 
         if (!foundObject) {
-            return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+            return next({ 'isDatabase': true, 'message': 'Mídia não encontrada', 'isNotFound': true });
         }
 
         response.locals._UTIL.setLocalsData(
             response,
             200,
             foundObject,
-            'Jogo encontrado'
+            'Mídia encontrada'
         );
 
         next();
@@ -100,13 +105,13 @@ const findById = async function (request, response, next) {
 
 const remove = async function (request, response, next) {
     try {
-        let removedObject = await response.locals._MODELS.game.findByIdAndDelete(request.params._id);
+        let removedObject = await response.locals._MODELS.media.findByIdAndDelete(request.params._id);
 
         response.locals._UTIL.setLocalsData(
             response,
             200,
             removedObject,
-            'Jogo removido'
+            'Mídia removida'
         );
 
         next();

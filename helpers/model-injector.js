@@ -3,6 +3,7 @@ const user = require('../models/user');
 const token = require('../models/token');
 const state = require('../models/state');
 const game = require('../models/game');
+const media = require('../models/media');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -24,6 +25,7 @@ function getModel(modelName) {
         case 'token': return token;
         case 'state': return state;
         case 'game': return game;
+        case 'media': return media;
     }
 };
 

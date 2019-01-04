@@ -53,4 +53,56 @@ describe('# Util', function () {
             transformedQuery.should.have.property('numberInStringQuery', /1/i);
         });
     });
+
+    describe('## Set Locals Data', function () {
+        it('todos campos', function () {
+            let response = { 'locals': {} };
+
+            util.setLocalsData(
+                response,
+                200,
+                { someRandomData: 'Dados' },
+                'Mensagem'
+            );
+
+            should(response).be.ok();
+            should(response.locals).be.ok();
+            response.locals.should.have.property('statusCode', 200);
+            response.locals.should.have.property('message', 'Mensagem');
+            response.locals.should.have.property('data', { someRandomData: 'Dados' });
+        });
+
+        it('sem data', function () {
+            let response = { 'locals': {} };
+
+            util.setLocalsData(
+                response,
+                200,
+                undefined,
+                'Mensagem'
+            );
+
+            should(response).be.ok();
+            should(response.locals).be.ok();
+            response.locals.should.have.property('statusCode', 200);
+            response.locals.should.have.property('message', 'Mensagem');
+            response.locals.should.not.have.property('data');
+        });
+
+        it('sem message', function () {
+            let response = { 'locals': {} };
+
+            util.setLocalsData(
+                response,
+                200,
+                { someRandomData: 'Dados' }
+            );
+
+            should(response).be.ok();
+            should(response.locals).be.ok();
+            response.locals.should.have.property('statusCode', 200);
+            response.locals.should.have.property('data', { someRandomData: 'Dados' });
+            response.locals.should.not.have.property('message', 'Mensagem');
+        });
+    });
 });

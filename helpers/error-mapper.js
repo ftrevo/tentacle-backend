@@ -21,11 +21,11 @@ const handleErrors = function (error, request, response, next) {
         return response.locals._UTIL.handleRequests(errorCode, response, { 'message': errorStack });
     }
 
-    if(error.isAuthDenied){
+    if (error.isAuthDenied) {
         return response.locals._UTIL.handleRequests(401, response);
     }
 
-    if(error.isForbidden){
+    if (error.isForbidden) {
         return response.locals._UTIL.handleRequests(403, response);
     }
 
@@ -39,7 +39,7 @@ const handleErrors = function (error, request, response, next) {
 
 // --------------------- Funções Locais --------------------- //
 function getMessageFromDetail(detail) {
-    if (detail.type.startsWith('string') || detail.type === 'date.base') {
+    if (detail.type.startsWith('string') || detail.type === 'date.base' || detail.type === 'any.allowOnly') {
         return `Dados inválidos para o campo \'${fieldMap[detail.context.key]}\'.`;
     }
     if (detail.type === 'any.required') {
@@ -78,7 +78,11 @@ const fieldMap = {
     'city': 'Cidade',
     'title': 'Título',
     'createdBy': 'Criado por',
-    'updatedBy': 'Atualizado por'
+    'updatedBy': 'Atualizado por',
+    'owner': 'Dono',
+    'game': 'Jogo',
+    'title': 'Título',
+    'platform': 'Plataforma'
 };
 
 // --------------------- Module Exports --------------------- //
