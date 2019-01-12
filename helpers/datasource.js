@@ -6,8 +6,9 @@ mongoose.Promise = global.Promise;
 mongoose.set('debug', true);
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useCreateIndex: true });
 
-mongoose.connection.on('connected', () => {
+mongoose.connection.on('connected', function () {
     console.log('Conectado ao banco de dados ' + process.env.DB_URL);
+    require('../models/library').createView(this.db);
 });
 
 mongoose.connection.on('error', (errorConnectingToDatabase) => {

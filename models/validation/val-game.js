@@ -10,7 +10,7 @@ const keys = {
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
     'page': joi.number().default(0),
-    'limit': joi.number().default(9999999999)
+    'limit': joi.number().default(10).max(100)
 };
 
 // ------------------- Funções Exportadas ------------------- //

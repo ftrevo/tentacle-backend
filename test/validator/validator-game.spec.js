@@ -49,6 +49,7 @@ describe('# Validador de Jogos', function () {
     });
 
     describe('## Id', function () {
+
         it('campos obrigatórios', async function () {
             let request = {
                 'params': {}
@@ -106,12 +107,14 @@ describe('# Validador de Jogos', function () {
     });
 
     describe('## Search', function () {
+
         it('campos inválidos', async function () {
             let request = {
                 'query': {
                     '_id': 'invalidId',
                     'createdBy': 'invalidCreatedBy',
-                    'updatedBy': 'invalidUpdatedBy'
+                    'updatedBy': 'invalidUpdatedBy',
+                    'limit': 999
                 }
             };
 
@@ -121,7 +124,7 @@ describe('# Validador de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(3);
+            nextObject.should.have.property('details').with.lengthOf(4);
             nextObject.details.should.containDeep([
                 {
                     'message': '"_id" with value "invalidId" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
@@ -134,6 +137,10 @@ describe('# Validador de Jogos', function () {
                 {
                     'message': '"updatedBy" with value "invalidUpdatedBy" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
                     'type': 'string.regex.base'
+                },
+                {
+                    'message': '"limit" must be less than or equal to 100',
+                    'type': 'number.max'
                 }
             ]);
         });
@@ -157,6 +164,8 @@ describe('# Validador de Jogos', function () {
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'title', 'createdBy', 'updatedBy', 'page', 'limit']);
+            request.query.limit.should.be.eql(10);
+            request.query.page.should.be.eql(0);
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
         });
     });

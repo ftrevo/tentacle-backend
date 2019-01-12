@@ -313,6 +313,7 @@ paths:
           name: platform
           schema:
             type: string
+            enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
         - in: query
           name: game
           schema:
@@ -386,6 +387,47 @@ paths:
           $ref: '#/components/responses/401'
         '404':
           $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /Library:
+    get:
+      tags:
+        - Library
+      summary: Rota de listagem de biblioteca
+      security:
+        - authenticationUser: []
+      parameters:
+        - in: query
+          name: _id
+          schema:
+            type: string
+        - in: query
+          name: title
+          schema:
+            type: string
+        - in: query
+          name: mediaOwner
+          schema:
+            type: string
+        - in: query
+          name: mediaId
+          schema:
+            type: string
+        - in: query
+          name: mediaPlatform
+          schema:
+            type: string
+            enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
           
@@ -484,5 +526,6 @@ components:
       properties:
         platform:
           type: string
+          enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
         game:
           type: string

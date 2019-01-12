@@ -7,12 +7,14 @@ const defMethods = require('./helpers/default-methods');
 const validador = require('./helpers/validator');
 
 // --------------- Import de regras de negócio -------------- //
+const brLibrary = require('./business-rule/br-library');
 const brAccess = require('./business-rule/br-access');
 const brMedia = require('./business-rule/br-media');
 const brUser = require('./business-rule/br-user');
 const brGame = require('./business-rule/br-game');
 
 // ------------------ Import de repositórios ---------------- //
+const repoLibrary = require('./repositories/repo-library');
 const repoToken = require('./repositories/repo-token');
 const repoState = require('./repositories/repo-state');
 const repoMedia = require('./repositories/repo-media');
@@ -26,7 +28,6 @@ const privateRoute = passport.authenticate('jwt', { session: false });
 const routes = function (app) {
 
   app.route('/').get(defMethods.route, defMethods.requestHandler);
-
 
   app.route('/login')
     .post(modelInjector('user', 'token'), validador('access', 'login', 'body'),
@@ -77,6 +78,10 @@ const routes = function (app) {
       modelInjector('media', 'game', 'user'), privateRoute, validador('media', 'id', 'params'), validador('media', 'update', 'body'),
       brMedia.update, repoMedia.update, defMethods.requestHandler
     );
+
+
+  app.route('/library')
+    .get(modelInjector('library', 'user'), privateRoute, validador('library', 'search', 'query'), brLibrary.search, repoLibrary.search, defMethods.requestHandler);
 };
 
 // --------------------- Module Exports --------------------- //

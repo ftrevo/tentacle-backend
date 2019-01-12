@@ -2,6 +2,7 @@
 const joi = require('joi');
 
 // --------------- Import de arquivos do core --------------- //
+const valLibrary = require('../models/validation/val-library');
 const valAccess = require('../models/validation/val-access');
 const valState = require('../models/validation/val-state');
 const valMedia = require('../models/validation/val-media');
@@ -52,6 +53,10 @@ const validationMethods = {
         'id': valMedia.id,
         'update': valMedia.update,
         'search': valMedia.search
+    },
+    'library': {
+        'id': valLibrary.id,
+        'search': valLibrary.search
     }
 };
 

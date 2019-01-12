@@ -4,6 +4,7 @@ const token = require('../models/token');
 const state = require('../models/state');
 const game = require('../models/game');
 const media = require('../models/media');
+const library = require('../models/library').model;
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -26,6 +27,7 @@ function getModel(modelName) {
         case 'state': return state;
         case 'game': return game;
         case 'media': return media;
+        case 'library': return library;
     }
 };
 

@@ -99,7 +99,7 @@ describe('# Regra de negócio de Jogo', function () {
             requestMock.query.should.have.property('_id', requestMock.query._id);
             requestMock.query.should.not.have.property('page');
             requestMock.query.should.not.have.property('limit');
-            responseMock.locals.should.containDeep({ 'pagination': { 'skip': 0, 'max': 10 } });
+            responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
     });
 });
