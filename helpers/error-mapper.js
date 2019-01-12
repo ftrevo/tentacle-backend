@@ -86,6 +86,9 @@ const fieldMap = {
     'game': 'Jogo',
     'title': 'Título',
     'platform': 'Plataforma',
+    'mediaId': 'Identificador da Mídia',
+    'mediaOwner': 'Dono da Mídia',
+    'mediaPlatform': 'Plataforma',
     'limit': 'Limite'
 };
 
