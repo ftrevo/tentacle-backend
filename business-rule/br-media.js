@@ -68,6 +68,11 @@ const update = async function (request, response, next) {
 
 const search = async function (request, response, next) {
     try {
+        if (request.query && request.query.mineOnly) {
+            request.query.owner = response.locals._USER._id;
+            response.locals._UTIL.clearObject(request.query, ['mineOnly']);
+        }
+
         response.locals.pagination = response.locals._UTIL.resolvePagination(request.query);
 
         request.query = response.locals._UTIL.transformObjectToQuery(request.query);

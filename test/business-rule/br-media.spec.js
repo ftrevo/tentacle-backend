@@ -178,17 +178,18 @@ describe('# Regra de negócio de Jogo', function () {
     });
 
     describe('## Search', function () {
-        let requestMock = {
-            'query': {
-                'owner': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                'platform': 'PS4',
-                '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                'page': 0, 'limit': 10
-            }
-        };
 
         it('nome e paginação', async function () {
+            let requestMock = {
+                'query': {
+                    'owner': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'platform': 'PS4',
+                    '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'page': 0, 'limit': 10
+                }
+            };
+
             let responseMock = getResponseMock(1);
 
             let nextObject = await brMedia.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -198,6 +199,29 @@ describe('# Regra de negócio de Jogo', function () {
             requestMock.query.should.have.property('_id', requestMock.query._id);
             requestMock.query.should.have.property('owner', requestMock.query.owner);
             requestMock.query.should.have.property('game', requestMock.query.game);
+            requestMock.query.should.not.have.property('page');
+            requestMock.query.should.not.have.property('limit');
+            responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+        });
+
+        it('substituicao do owner devido ao campo mineOnly', async function () {
+            let requestMock = {
+                'query': {
+                    'owner': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'mineOnly': true,
+                    'page': 0, 'limit': 10
+                }
+            };
+
+            let ownerId = '112233445566778899001122';
+
+            let responseMock = getResponseMock(1, undefined, ownerId);
+
+            let nextObject = await brMedia.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.query.should.have.property('owner', ownerId);
+            requestMock.query.should.not.have.property('mineOnly');
             requestMock.query.should.not.have.property('page');
             requestMock.query.should.not.have.property('limit');
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });

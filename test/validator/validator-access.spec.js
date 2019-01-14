@@ -4,7 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const validator = require('../../helpers/validator');
 
-describe('# Validador de Acesso', function () {
+describe('# Validator de Acesso', function () {
 
     describe('## Login', function () {
 

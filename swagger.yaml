@@ -322,6 +322,10 @@ paths:
           name: owner
           schema:
             type: string
+        - in: query
+          name: mineOnly
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
