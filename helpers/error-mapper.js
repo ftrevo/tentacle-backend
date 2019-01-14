@@ -51,6 +51,9 @@ function getMessageFromDetail(detail) {
     if (detail.type === 'object.missing') {
         return `Para esta ação você deve informar ao menos um dos seguintes campos: ${getFieldNames(detail.context.peers).join(', ')}.`
     }
+    if (detail.type === 'number.max') {
+        return `O campo \'${fieldMap[detail.context.key]}\' deve ser no máximo ${detail.context.limit}.`
+    }
 
     return detail.message;
 };
@@ -82,7 +85,11 @@ const fieldMap = {
     'owner': 'Dono',
     'game': 'Jogo',
     'title': 'Título',
-    'platform': 'Plataforma'
+    'platform': 'Plataforma',
+    'mediaId': 'Identificador da Mídia',
+    'mediaOwner': 'Dono da Mídia',
+    'mediaPlatform': 'Plataforma',
+    'limit': 'Limite'
 };
 
 // --------------------- Module Exports --------------------- //

@@ -194,7 +194,7 @@ describe('# Regra de negócio do Usuário', function () {
             requestMock.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
             requestMock.query.should.not.have.property('page');
             requestMock.query.should.not.have.property('limit');
-            responseMock.locals.should.containDeep({ 'pagination': { 'skip': 0, 'max': 10 } });
+            responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
     });
 });
