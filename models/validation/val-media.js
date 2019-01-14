@@ -7,6 +7,7 @@ const keys = {
     'platform': joi.string().trim().valid('PS4', 'PS3', 'XBOXONE', 'XBOX360', 'NINTENDOSWITCH', 'NINTENDO3DS'),
     'game': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'owner': joi.string().regex(/^[0-9a-fA-F]{24}$/),
+    'mineOnly': joi.boolean(),
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
     'page': joi.number().default(0),
@@ -29,6 +30,7 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'platform': keys.platform.optional(),
     'game': keys.game.optional(),
     'owner': keys.owner.optional(),
+    'mineOnly': keys.mineOnly.optional(),
     'page': keys.page,
     'limit': keys.limit
 });

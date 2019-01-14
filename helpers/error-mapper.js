@@ -39,7 +39,7 @@ const handleErrors = function (error, request, response, next) {
 
 // --------------------- Funções Locais --------------------- //
 function getMessageFromDetail(detail) {
-    if (detail.type.startsWith('string') || detail.type === 'date.base' || detail.type === 'any.allowOnly') {
+    if (detail.type.startsWith('string') || detail.type === 'date.base' || detail.type === 'any.allowOnly' || detail.type === 'boolean.base') {
         return `Dados inválidos para o campo \'${fieldMap[detail.context.key]}\'.`;
     }
     if (detail.type === 'any.required') {
@@ -89,6 +89,7 @@ const fieldMap = {
     'mediaId': 'Identificador da Mídia',
     'mediaOwner': 'Dono da Mídia',
     'mediaPlatform': 'Plataforma',
+    'mineOnly': 'Apenas meus jogos',
     'limit': 'Limite'
 };
 
