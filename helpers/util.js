@@ -40,7 +40,7 @@ const transformObjectToQuery = (filter = {}) => {
         if (
             (typeof tuple[1] === 'string' || tuple[1] instanceof String)
             && !tuple[1].match(/^[0-9a-fA-F]{24}$/)
-            && (!isNaN(tuple[1]) || isNaN(Date.parse(tuple[1])))
+            && !tuple[1].match(/^\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z)/)
         ) {
             return mongodbFilter[tuple[0]] = new RegExp(tuple[1], 'i');
         }
