@@ -4,7 +4,6 @@ const save = async function (request, response, next) {
         let toBeIncluded = new response.locals._MODELS.user(request.body);
 
         await toBeIncluded.save();
-        await response.locals._MODELS.user.populate(toBeIncluded, { 'path': 'state', 'select': 'name initials' });
 
         response.locals._UTIL.setLocalsData(
             response,

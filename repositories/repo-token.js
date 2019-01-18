@@ -1,12 +1,20 @@
 // ------------------- Funções Exportadas ------------------- //
-const saveOrUpdate = async function (request, response, next) {
+const update = async function (request, response, next) {
     try {
-        let docCount = await response.locals._MODELS.token.countDocuments({ 'user': response.locals.userId }).exec();
+        await response.locals._MODELS.token.findOneAndUpdate(
+            { 'user': response.locals.userId },
+            { 'refreshToken': response.locals.data.refreshToken },
+            { 'new': true }
+        ).exec();
 
-        if (docCount !== 0) {
-            await response.locals._MODELS.token.deleteMany({ 'user': response.locals.userId });
-        }
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
 
+const save = async function (request, response, next) {
+    try {
         let toBeIncluded = new response.locals._MODELS.token();
         toBeIncluded.user = response.locals.userId;
         toBeIncluded.refreshToken = response.locals.data.refreshToken;
@@ -21,6 +29,6 @@ const saveOrUpdate = async function (request, response, next) {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'saveOrUpdate': saveOrUpdate
+    'save': save,
+    'update': update
 };
-

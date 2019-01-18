@@ -31,10 +31,10 @@ const routes = function (app) {
 
   app.route('/login')
     .post(modelInjector('user', 'token'), validator('access', 'login', 'body'),
-      brAccess.logIn, repoToken.saveOrUpdate, defMethods.requestHandler);
+      brAccess.logIn, repoToken.update, defMethods.requestHandler);
   app.route('/refresh-token')
     .post(modelInjector('user', 'token'), validator('access', 'refreshToken', 'body'),
-      brAccess.refreshToken, repoToken.saveOrUpdate, defMethods.requestHandler);
+      brAccess.refreshToken, repoToken.update, defMethods.requestHandler);
 
 
   app.route('/states').get(modelInjector('state'), repoState.search, defMethods.requestHandler);
@@ -43,7 +43,10 @@ const routes = function (app) {
 
   app.route('/users')
     .get(modelInjector('user'), privateRoute, validator('user', 'search', 'query'), brUser.search, repoUser.search, defMethods.requestHandler)
-    .post(modelInjector('user', 'state'), validator('user', 'create', 'body'), brUser.save, repoUser.save, defMethods.requestHandler);
+    .post(
+      modelInjector('user', 'state', 'token'), validator('user', 'create', 'body'),
+      brUser.save, repoUser.save, brAccess.logInOnCreate, repoToken.save, defMethods.requestHandler
+    );
 
   app.route('/users/:_id')
     .get(modelInjector('user'), privateRoute, validator('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
