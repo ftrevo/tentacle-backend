@@ -34,6 +34,20 @@ const logIn = async function (request, response, next) {
     }
 };
 
+const logInOnCreate = async function (request, response, next) {
+    try {
+        let userData = response.locals.data;
+
+        response.locals.userId = userData._id;
+        response.locals.data = getAuthorizationData(userData);
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 const refreshToken = async function (request, response, next) {
     try {
         let splittedRefreshToken = request.body.refreshToken.split('.');
@@ -78,5 +92,6 @@ function getUserNotFoundObject() {
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'logIn': logIn,
+    'logInOnCreate': logInOnCreate,
     'refreshToken': refreshToken
 };

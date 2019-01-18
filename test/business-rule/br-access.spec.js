@@ -58,6 +58,24 @@ describe('# Regra de negócio de Acesso', function () {
         });
     });
 
+    describe('## LogInOnCreate', function () {
+
+        it('tokens gerados', async function () {
+            let responseMock = getResponseMock();
+            responseMock.locals.data = getUserMock();
+
+            let nextObject = await brAccess.logInOnCreate(undefined, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            responseMock.locals.should.have.property('userId', 'randomId');
+            responseMock.locals.should.have.property('data');
+            responseMock.locals.data.should.have.property('tokenType', 'JWT');
+            responseMock.locals.data.should.have.property('accessToken');
+            responseMock.locals.data.should.have.property('refreshToken');
+            responseMock.locals.data.refreshToken.should.be.a.String().and.match(/\.randomId\./);
+        });
+    });
+
     describe('## Refresh Token', function () {
         let requestMock = getRequestMock(
             'body', undefined, undefined, 'af044be0-fd9c-11e8-9497-0b3f993f11d0.5c058e46a7d6682cf28f667d.ed5728a5-7f1d-4727-8ace-634a3b0f9471'

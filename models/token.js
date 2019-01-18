@@ -25,7 +25,16 @@ TokenSchema.pre('save', async function (next) {
     let token = this;
 
     token.logInDate = Date.now();
-    token.expirationDate = new Date(token.logInDate.getTime() + ms(process.env.REFRESH_EXP_TIME));
+    token.expirationDate = new Date(token.logInDate + ms(process.env.REFRESH_EXP_TIME));
+
+    next();
+});
+
+TokenSchema.pre('findOneAndUpdate', async function (next) {
+    let query = this;
+
+    query._update.logInDate = Date.now();
+    query._update.expirationDate = new Date(query._update['logInDate'] + ms(process.env.REFRESH_EXP_TIME));
 
     next();
 });
