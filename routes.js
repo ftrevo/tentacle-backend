@@ -20,6 +20,7 @@ const repoState = require('./repositories/repo-state');
 const repoMedia = require('./repositories/repo-media');
 const repoUser = require('./repositories/repo-user');
 const repoGame = require('./repositories/repo-game');
+const repoLoan = require('./repositories/repo-loan');
 
 
 const privateRoute = passport.authenticate('jwt', { session: false });
@@ -81,7 +82,22 @@ const routes = function (app) {
 
 
   app.route('/library')
-    .get(modelInjector('library', 'user'), privateRoute, validator('library', 'search', 'query'), brLibrary.search, repoLibrary.search, defMethods.requestHandler);
+    .get(
+      modelInjector('library', 'user'), privateRoute, validator('library', 'search', 'query'),
+      brLibrary.search, repoLibrary.search, defMethods.requestHandler);
+
+
+  app.route('/loans')
+    .get(modelInjector('loan', 'user'), privateRoute, repoLoan.search, defMethods.requestHandler)
+    .post(modelInjector('loan', 'user'), privateRoute, repoLoan.save, defMethods.requestHandler);
+
+  app.route('/loans/:_id')
+    .get(modelInjector('loan', 'user'), privateRoute, repoLoan.findById, defMethods.requestHandler)
+    .delete(modelInjector('loan', 'user'), privateRoute, repoLoan.remove, defMethods.requestHandler)
+    .patch(
+      modelInjector('loan', 'user'), privateRoute, repoLoan.update, defMethods.requestHandler
+    );
+
 };
 
 // --------------------- Module Exports --------------------- //
