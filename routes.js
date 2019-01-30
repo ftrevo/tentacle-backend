@@ -12,6 +12,7 @@ const brAccess = require('./business-rule/br-access');
 const brMedia = require('./business-rule/br-media');
 const brUser = require('./business-rule/br-user');
 const brGame = require('./business-rule/br-game');
+const brLoan = require('./business-rule/br-loan');
 
 // ------------------ Import de repositórios ---------------- //
 const repoLibrary = require('./repositories/repo-library');
@@ -88,14 +89,15 @@ const routes = function (app) {
 
 
   app.route('/loans')
-    .get(modelInjector('loan', 'user'), privateRoute, repoLoan.search, defMethods.requestHandler)
-    .post(modelInjector('loan', 'user'), privateRoute, repoLoan.save, defMethods.requestHandler);
+    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
+    .post(modelInjector('loan', 'media', 'user'), privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
 
   app.route('/loans/:_id')
-    .get(modelInjector('loan', 'user'), privateRoute, repoLoan.findById, defMethods.requestHandler)
-    .delete(modelInjector('loan', 'user'), privateRoute, repoLoan.remove, defMethods.requestHandler)
+    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
+    .delete(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), brLoan.remove, repoLoan.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('loan', 'user'), privateRoute, repoLoan.update, defMethods.requestHandler
+      modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
+      brLoan.update, repoLoan.update, defMethods.requestHandler
     );
 
 };

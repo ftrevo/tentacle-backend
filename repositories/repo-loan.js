@@ -7,16 +7,8 @@ const save = async function (request, response, next) {
         await response.locals._MODELS.loan.populate(toBeIncluded,
             [
                 { 'path': 'requestedBy mediaOwner', 'select': 'name' },
-                {
-                    'path': 'media',
-                    'select': 'platform game',
-                    populate: [
-                        {
-                            'path': 'game',
-                            'select': 'title'
-                        }
-                    ]
-                }
+                { 'path': 'media', 'select': 'platform' },
+                { 'path': 'game', 'select': 'title' }
             ]
         );
 
@@ -39,19 +31,13 @@ const update = async function (request, response, next) {
             { '_id': request.params._id },
             request.body,
             { 'new': true }
-        ).populate([
-            { 'path': 'requestedBy mediaOwner', 'select': 'name' },
-            {
-                'path': 'media',
-                'select': 'platform game',
-                populate: [
-                    {
-                        'path': 'game',
-                        'select': 'title'
-                    }
-                ]
-            }
-        ]);
+        ).populate(
+            [
+                { 'path': 'requestedBy mediaOwner', 'select': 'name' },
+                { 'path': 'media', 'select': 'platform' },
+                { 'path': 'game', 'select': 'title' }
+            ]
+        );
 
         response.locals._UTIL.setLocalsData(
             response,
@@ -73,19 +59,13 @@ const search = async function (request, response, next) {
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
                 .sort({ 'requestedAt': 1 })
-                .populate([
-                    { 'path': 'requestedBy mediaOwner', 'select': 'name' },
-                    {
-                        'path': 'media',
-                        'select': 'platform game',
-                        populate: [
-                            {
-                                'path': 'game',
-                                'select': 'title'
-                            }
-                        ]
-                    }
-                ])
+                .populate(
+                    [
+                        { 'path': 'requestedBy mediaOwner', 'select': 'name' },
+                        { 'path': 'media', 'select': 'platform' },
+                        { 'path': 'game', 'select': 'title' }
+                    ]
+                )
                 .exec(),
 
             response.locals._MODELS.loan.find(request.query).countDocuments().exec()
@@ -108,19 +88,13 @@ const search = async function (request, response, next) {
 const findById = async function (request, response, next) {
     try {
         let foundObject = await response.locals._MODELS.loan.findById(request.params._id)
-            .populate([
-                { 'path': 'requestedBy mediaOwner', 'select': 'name' },
-                {
-                    'path': 'media',
-                    'select': 'platform game',
-                    populate: [
-                        {
-                            'path': 'game',
-                            'select': 'title'
-                        }
-                    ]
-                }
-            ]);
+            .populate(
+                [
+                    { 'path': 'requestedBy mediaOwner', 'select': 'name' },
+                    { 'path': 'media', 'select': 'platform' },
+                    { 'path': 'game', 'select': 'title' }
+                ]
+            );
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Empréstimo não encontrado', 'isNotFound': true });

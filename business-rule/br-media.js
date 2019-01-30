@@ -49,7 +49,7 @@ const update = async function (request, response, next) {
 
         if (!resolvedPromisses[2]) {
             return next({ 'isBusiness': true, 'message': 'Mídia não encontrada', 'isNotFound': true });
-        } else if (resolvedPromisses[2].owner + '' !== response.locals._USER._id + '') {
+        } else if (resolvedPromisses[2].owner.toString() !== response.locals._USER._id.toString()) {
             return next({ 'isForbidden': true });
         }
 

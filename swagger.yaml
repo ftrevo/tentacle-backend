@@ -169,7 +169,7 @@ paths:
               $ref: '#/components/schemas/User'
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200Update'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -270,7 +270,7 @@ paths:
               $ref: '#/components/schemas/Game'
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200Detail'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -384,7 +384,7 @@ paths:
               $ref: '#/components/schemas/Media'
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200Update'
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -519,10 +519,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Loan'
+              type: object
+              properties:
+                action:
+                  type: string
+                  enum: ['LEND', 'RETURN']
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200Update'
         '400':
           $ref: '#/components/responses/400'
         '401':

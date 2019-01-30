@@ -11,6 +11,9 @@ const LoanSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     },
+    estimatedReturnDate: {
+        type: Date
+    },
     media: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Media',
@@ -19,10 +22,14 @@ const LoanSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     },
+    game: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Game',
+    },
     loanDate: {
         type: Date
     },
-    loanDate: {
+    returnDate: {
         type: Date
     }
 }, { versionKey: false, timestamps: false });

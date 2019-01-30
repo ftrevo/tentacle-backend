@@ -55,7 +55,7 @@ describe('# Regra de negócio do Usuário', function () {
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
         it('não autorizado', async function () {
-            let responseMock = getResponseMock(0);
+            let responseMock = getResponseMock(0, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
 
             let nextObject = await brUser.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -164,7 +164,7 @@ describe('# Regra de negócio do Usuário', function () {
         requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
 
         it('não autorizado', async function () {
-            let responseMock = getResponseMock(0);
+            let responseMock = getResponseMock(0, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
 
             let nextObject = await brUser.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
