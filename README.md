@@ -27,3 +27,4 @@ DEFAULT_LOAN_TIME=14 days
 * Repensar a função genérica de validação para melhor usabilidade
 * Revisar os objetos de populate nos repo's para unificação dos mesmos em uma constante no arquivo
 * Criar opção de informar a ordenação das listas de maneira dinâmica
+* Criar opção de informar os campos as erem retornados de maneira dinâmica no endpoint de Biblioteca
