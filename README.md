@@ -25,3 +25,5 @@ DEFAULT_LOAN_TIME=14 days
 * Refatorar o arquivo de rotas, quebrando mesmo em múltiplos arquivos para melhor legibilidade
 * Injetar por default o model de usuário
 * Repensar a função genérica de validação para melhor usabilidade
+* Revisar os objetos de populate nos repo's para unificação dos mesmos em uma constante no arquivo
+* Criar opção de informar a ordenação das listas de maneira dinâmica
