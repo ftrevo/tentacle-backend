@@ -464,6 +464,26 @@ paths:
       security:
         - authenticationUser: []
       parameters:
+        - in: query
+          name: _id
+          schema:
+            type: string
+        - in: query
+          name: requestedBy
+          schema:
+            type: string
+        - in: query
+          name: media
+          schema:
+            type: string
+        - in: query
+          name: mediaOwner
+          schema:
+            type: string
+        - in: query
+          name: game
+          schema:
+            type: string
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
