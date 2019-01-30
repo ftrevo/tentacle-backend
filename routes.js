@@ -12,6 +12,7 @@ const brAccess = require('./business-rule/br-access');
 const brMedia = require('./business-rule/br-media');
 const brUser = require('./business-rule/br-user');
 const brGame = require('./business-rule/br-game');
+const brLoan = require('./business-rule/br-loan');
 
 // ------------------ Import de repositórios ---------------- //
 const repoLibrary = require('./repositories/repo-library');
@@ -20,6 +21,7 @@ const repoState = require('./repositories/repo-state');
 const repoMedia = require('./repositories/repo-media');
 const repoUser = require('./repositories/repo-user');
 const repoGame = require('./repositories/repo-game');
+const repoLoan = require('./repositories/repo-loan');
 
 
 const privateRoute = passport.authenticate('jwt', { session: false });
@@ -84,7 +86,23 @@ const routes = function (app) {
 
 
   app.route('/library')
-    .get(modelInjector('library', 'user'), privateRoute, validator('library', 'search', 'query'), brLibrary.search, repoLibrary.search, defMethods.requestHandler);
+    .get(
+      modelInjector('library', 'user'), privateRoute, validator('library', 'search', 'query'),
+      brLibrary.search, repoLibrary.search, defMethods.requestHandler);
+
+
+  app.route('/loans')
+    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
+    .post(modelInjector('loan', 'media', 'user'), privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
+
+  app.route('/loans/:_id')
+    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
+    .delete(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), brLoan.remove, repoLoan.remove, defMethods.requestHandler)
+    .patch(
+      modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
+      brLoan.update, repoLoan.update, defMethods.requestHandler
+    );
+
 };
 
 // --------------------- Module Exports --------------------- //

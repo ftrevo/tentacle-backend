@@ -1,10 +1,12 @@
 // --------------- Import de arquivos do core --------------- //
-const user = require('../models/user');
+const library = require('../models/library').model;
 const token = require('../models/token');
+const media = require('../models/media');
 const state = require('../models/state');
 const game = require('../models/game');
-const media = require('../models/media');
-const library = require('../models/library').model;
+const loan = require('../models/loan');
+const user = require('../models/user');
+
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (...modelNames) {
@@ -28,6 +30,7 @@ function getModel(modelName) {
         case 'game': return game;
         case 'media': return media;
         case 'library': return library;
+        case 'loan': return loan;
     }
 };
 

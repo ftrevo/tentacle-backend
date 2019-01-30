@@ -45,6 +45,7 @@ UserSchema.pre('save', async function (next) {
 
     next();
 });
+
 UserSchema.pre('findOneAndUpdate', async function (next) {
     let query = this;
 

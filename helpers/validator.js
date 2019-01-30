@@ -8,6 +8,7 @@ const valState = require('../models/validation/val-state');
 const valMedia = require('../models/validation/val-media');
 const valUser = require('../models/validation/val-user');
 const valGame = require('../models/validation/val-game');
+const valLoan = require('../models/validation/val-loan');
 
 // ------------------- Funções Exportadas ------------------- //
 const validate = function (schemaName, functionValidation, requestObject) {
@@ -57,6 +58,12 @@ const validationMethods = {
     'library': {
         'id': valLibrary.id,
         'search': valLibrary.search
+    },
+    'loan': {
+        'create': valLoan.create,
+        'id': valLoan.id,
+        'update': valLoan.update,
+        'search': valLoan.search
     }
 };
 
