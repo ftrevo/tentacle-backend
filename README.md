@@ -16,8 +16,12 @@ MONGOOSE_DEBUG=true
 APP_SECRET=some-random-secret-from-this-project
 TOKEN_EXP_TIME=1 hrs
 REFRESH_EXP_TIME=2 hrs
+DEFAULT_LOAN_TIME=14 days
 ```
 #### TODO's
-* CRUD de "mídias"
+* Revisão no arquivo do Swagger, adicionando os filtros faltantes e as descrições
 * Alteração na remoção de jogos para possibilitar apenas se não houverem mídias registradas ao jogo
-* Fluxos de negócio de empréstimo
+* Alteração na remoção de mídia para possibilitar apenas se não houverem empréstimos registrados
+* Refatorar o arquivo de rotas, quebrando mesmo em múltiplos arquivos para melhor legibilidade
+* Injetar por default o model de usuário
+* Repensar a função genérica de validação para melhor usabilidade
