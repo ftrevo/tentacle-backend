@@ -32,74 +32,75 @@ const routes = function (app) {
   app.route('/').get(defMethods.route, defMethods.requestHandler);
 
   app.route('/login')
-    .post(modelInjector('user', 'token'), validator('access', 'login', 'body'),
+    .post(modelInjector, validator('access', 'login', 'body'),
       brAccess.logIn, repoToken.update, defMethods.requestHandler);
   app.route('/refresh-token')
-    .post(modelInjector('user', 'token'), validator('access', 'refreshToken', 'body'),
+    .post(modelInjector, validator('access', 'refreshToken', 'body'),
       brAccess.refreshToken, repoToken.update, defMethods.requestHandler);
 
 
-  app.route('/states').get(modelInjector('state'), repoState.search, defMethods.requestHandler);
-  app.route('/states/:_id/cities').get(modelInjector('state'), validator('state', 'id', 'params'), repoState.findById, defMethods.requestHandler);
+  app.route('/states').get(modelInjector, repoState.search, defMethods.requestHandler);
+  app.route('/states/:_id/cities').get(modelInjector, validator('state', 'id', 'params'), repoState.findById, defMethods.requestHandler);
 
 
   app.route('/users')
-    .get(modelInjector('user'), privateRoute, validator('user', 'search', 'query'), brUser.search, repoUser.search, defMethods.requestHandler)
+    .get(modelInjector, privateRoute, validator('user', 'search', 'query'), brUser.search, repoUser.search, defMethods.requestHandler)
     .post(
-      modelInjector('user', 'state', 'token'), validator('user', 'create', 'body'),
+      modelInjector, validator('user', 'create', 'body'),
       brUser.save, repoUser.save, brAccess.logInOnCreate, repoToken.save, defMethods.requestHandler
     );
 
   app.route('/users/:_id')
-    .get(modelInjector('user'), privateRoute, validator('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
-    .delete(modelInjector('user'), privateRoute, validator('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
+    .get(modelInjector, privateRoute, validator('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
+    .delete(modelInjector, privateRoute, validator('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('user', 'state'), privateRoute, validator('user', 'id', 'params'), validator('user', 'update', 'body'),
+      modelInjector, privateRoute, validator('user', 'id', 'params'), validator('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler
     );
 
-
   app.route('/games')
-    .get(modelInjector('game', 'user'), privateRoute, validator('game', 'search', 'query'), brGame.search, repoGame.search, defMethods.requestHandler)
-    .post(modelInjector('game', 'user'), privateRoute, validator('game', 'create', 'body'), brGame.save, repoGame.save, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('game', 'search', 'query'), brGame.search, repoGame.search, defMethods.requestHandler)
+    .post(modelInjector, privateRoute, validator('game', 'create', 'body'), brGame.save, repoGame.save, defMethods.requestHandler);
 
-  app.route('/games/:_id')
-    .get(modelInjector('game', 'user'), privateRoute, validator('game', 'id', 'params'), repoGame.findById, defMethods.requestHandler)
-    .delete(modelInjector('game', 'user'), privateRoute, validator('game', 'id', 'params'), repoGame.remove, defMethods.requestHandler)
-    .patch(
-      modelInjector('game', 'user'), privateRoute, validator('game', 'id', 'params'), validator('game', 'update', 'body'),
-      brGame.update, repoGame.update, defMethods.requestHandler
-    );
+  app.route('/games/:_id([0-9a-fA-F]{24})')
+    .get(modelInjector, privateRoute, validator('game', 'id', 'params'), repoGame.findById, defMethods.requestHandler);
 
+  app.route('/games/remote')
+    .get(modelInjector, privateRoute, validator('game', 'searchRemote', 'query'), brGame.searchRemote, defMethods.requestHandler)
+    .post(modelInjector, privateRoute, brGame.saveRemote, repoGame.save, defMethods.requestHandler);
 
   app.route('/media')
-    .get(modelInjector('media', 'game', 'user'), privateRoute, validator('media', 'search', 'query'), brMedia.search, repoMedia.search, defMethods.requestHandler)
-    .post(modelInjector('media', 'game', 'user'), privateRoute, validator('media', 'create', 'body'), brMedia.save, repoMedia.save, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('media', 'search', 'query'), brMedia.search, repoMedia.search, defMethods.requestHandler)
+    .post(modelInjector, privateRoute, validator('media', 'create', 'body'), brMedia.save, repoMedia.save, defMethods.requestHandler);
 
   app.route('/media/:_id')
-    .get(modelInjector('media', 'game', 'user'), privateRoute, validator('media', 'id', 'params'), repoMedia.findById, defMethods.requestHandler)
-    .delete(modelInjector('media', 'game', 'user'), privateRoute, validator('media', 'id', 'params'), repoMedia.remove, defMethods.requestHandler)
+    .get(modelInjector, privateRoute, validator('media', 'id', 'params'), repoMedia.findById, defMethods.requestHandler)
+    .delete(modelInjector, privateRoute, validator('media', 'id', 'params'), repoMedia.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('media', 'game', 'user'), privateRoute, validator('media', 'id', 'params'), validator('media', 'update', 'body'),
+      modelInjector, privateRoute, validator('media', 'id', 'params'), validator('media', 'update', 'body'),
       brMedia.update, repoMedia.update, defMethods.requestHandler
     );
 
 
   app.route('/library')
     .get(
-      modelInjector('library', 'user'), privateRoute, validator('library', 'search', 'query'),
+      modelInjector, privateRoute, validator('library', 'search', 'query'),
       brLibrary.search, repoLibrary.search, defMethods.requestHandler);
+
+  app.route('/library/:_id')
+    .get(
+      modelInjector, privateRoute, validator('library', 'id', 'params'), repoLibrary.findById, defMethods.requestHandler);
 
 
   app.route('/loans')
-    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
-    .post(modelInjector('loan', 'media', 'user'), privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
+    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
 
   app.route('/loans/:_id')
-    .get(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
-    .delete(modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), brLoan.remove, repoLoan.remove, defMethods.requestHandler)
+    .get(modelInjector, privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
+    .delete(modelInjector, privateRoute, validator('loan', 'id', 'params'), brLoan.remove, repoLoan.remove, defMethods.requestHandler)
     .patch(
-      modelInjector('loan', 'user'), privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
+      modelInjector, privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
       brLoan.update, repoLoan.update, defMethods.requestHandler
     );
 

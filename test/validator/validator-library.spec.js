@@ -50,7 +50,7 @@ describe('# Validator de Biblioteca de jogos', function () {
         it('limpeza de campos e dados OK', async function () {
             let request = {
                 'params': {
-                    'title': 'Título',
+                    'name': 'Nome',
                     '_id': '1a2b3c4d5e6f1a2b3c4d5e6f'
                 }
             };
@@ -60,7 +60,7 @@ describe('# Validator de Biblioteca de jogos', function () {
             let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.params.should.have.properties(['title', '_id']);
+            request.params.should.have.properties(['name', '_id']);
         });
     });
 
@@ -121,7 +121,7 @@ describe('# Validator de Biblioteca de jogos', function () {
                     'mediaId': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'mediaOwner': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'mediaPlatform': 'PS4',
-                    'title': 'title',
+                    'name': 'name',
                     'createdAt': 'Should be removed',
                     'updatedAt': 'Should be removed',
                     'randomField': 'Should be removed'
@@ -133,7 +133,7 @@ describe('# Validator de Biblioteca de jogos', function () {
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.query.should.have.properties(['_id', 'createdBy', 'mediaId', 'mediaOwner', 'mediaPlatform', 'title', 'page', 'limit']);
+            request.query.should.have.properties(['_id', 'createdBy', 'mediaId', 'mediaOwner', 'mediaPlatform', 'name', 'page', 'limit']);
             request.query.limit.should.be.eql(10);
             request.query.page.should.be.eql(0);
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);

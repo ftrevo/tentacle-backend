@@ -2,7 +2,7 @@
 const populateFields = [
     { 'path': 'requestedBy mediaOwner', 'select': 'name' },
     { 'path': 'media', 'select': 'platform' },
-    { 'path': 'game', 'select': 'title' }
+    { 'path': 'game', 'select': 'name' }
 ];
 
 // ------------------- Funções Exportadas ------------------- //

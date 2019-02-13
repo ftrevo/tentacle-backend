@@ -7,31 +7,19 @@ const game = require('../models/game');
 const loan = require('../models/loan');
 const user = require('../models/user');
 
-
 // ------------------- Funções Exportadas ------------------- //
-const injector = function (...modelNames) {
-    return function (request, response, next) {
-        response.locals._MODELS = {};
-
-        for (let modelName of modelNames) {
-            response.locals._MODELS[modelName] = getModel(modelName);
-        }
-
-        return next();
+const injector = function (request, response, next) {
+    response.locals._MODELS = {
+        'user': user,
+        'token': token,
+        'state': state,
+        'game': game.GameModel,
+        'media': media,
+        'library': library,
+        'loan': loan
     };
-};
 
-// --------------------- Funções Locais --------------------- //
-function getModel(modelName) {
-    switch (modelName.toLowerCase()) {
-        case 'user': return user;
-        case 'token': return token;
-        case 'state': return state;
-        case 'game': return game;
-        case 'media': return media;
-        case 'library': return library;
-        case 'loan': return loan;
-    }
+    return next();
 };
 
 // --------------------- Module Exports --------------------- //

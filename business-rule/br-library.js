@@ -28,8 +28,8 @@ function updateLibraryQuery(requestQuery) {
         }
     }
 
-    if (requestQuery.title) {
-        requestQuery.title = new RegExp(requestQuery.title, 'i');
+    if (requestQuery.name) {
+        requestQuery.name = new RegExp(requestQuery.name, 'i');
     }
 };
 

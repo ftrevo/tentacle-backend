@@ -209,7 +209,7 @@ paths:
         - authenticationUser: []
       parameters:
         - in: query
-          name: title
+          name: name
           schema:
             type: string
         - $ref: '#/components/parameters/limitParam'
@@ -243,23 +243,35 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-    delete:
+  /games/remote:
+    get:
       tags:
         - Game
-      summary: Rota de remoção de jogos
+      summary: Rota de detalhamento de jogos do IGDB
       security:
         - authenticationUser: []
+      parameters:
+        - in: query
+          name: name
+          schema:
+            type: string
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-    patch:
+    post:
       tags:
         - Game
-      summary: Rota de alteração de jogos
+      summary: Rota de criação de jogos do IGDB
       security:
         - authenticationUser: []
       requestBody:
@@ -267,16 +279,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Game'
+                $ref: '#/components/schemas/GameIgdb'
       responses:
-        '200':
-          $ref: '#/components/responses/200Detail'
+        '201':
+          $ref: '#/components/responses/201'
         '400':
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
 
@@ -407,7 +417,7 @@ paths:
           schema:
             type: string
         - in: query
-          name: title
+          name: name
           schema:
             type: string
         - in: query
@@ -432,6 +442,26 @@ paths:
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /library/{id}:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - Library
+      summary: Rota de detalhamento de biblioteca
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
 
@@ -644,8 +674,13 @@ components:
     Game:
       type: object
       properties:
-        title:
+        name:
           type: string
+    GameIgdb:
+      type: object
+      properties:
+        id:
+          type: integer
     Media:
       type: object
       properties:

@@ -1,7 +1,8 @@
 // ----------------- Import de dependências ----------------- //
 const mongoose = require('mongoose');
+const GameSchemaKeys = require('./game').GameSchemaKeys;
 
-const LibraryMediaSchema = mongoose.Schema({
+const LibraryMediaSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Media'
@@ -15,30 +16,28 @@ const LibraryMediaSchema = mongoose.Schema({
     }
 });
 
-const LibrarySchema = mongoose.Schema({
-    _id: {
-        type: mongoose.Schema.Types.ObjectId
+const LibraryKeys = Object.assign(
+    {
+        _id: {
+            type: mongoose.Schema.Types.ObjectId
+        },
+
+        createdAt: {
+            type: mongoose.Schema.Types.Date
+        },
+        updatedAt: {
+            type: mongoose.Schema.Types.Date
+        },
+        mediaPs3: [LibraryMediaSchema],
+        mediaPs4: [LibraryMediaSchema],
+        mediaXbox360: [LibraryMediaSchema],
+        mediaXboxOne: [LibraryMediaSchema],
+        mediaNintendoSwitch: [LibraryMediaSchema],
+        mediaNintendo3ds: [LibraryMediaSchema]
     },
-    title: {
-        type: String
-    },
-    createdBy: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    },
-    createdAt: {
-        type: mongoose.Schema.Types.Date
-    },
-    updatedAt: {
-        type: mongoose.Schema.Types.Date
-    },
-    mediaPs3: [LibraryMediaSchema],
-    mediaPs4: [LibraryMediaSchema],
-    mediaXbox360: [LibraryMediaSchema],
-    mediaXboxOne: [LibraryMediaSchema],
-    mediaNintendoSwitch: [LibraryMediaSchema],
-    mediaNintendo3ds: [LibraryMediaSchema]
-});
+    GameSchemaKeys);
+
+const LibrarySchema = new mongoose.Schema(LibraryKeys);
 
 const createView = function (db) {
     db.createCollection(
@@ -225,6 +224,28 @@ const createView = function (db) {
                             { 'mediaNintendo3ds': { $exists: true, $ne: [] } },
                             { 'mediaNintendoSwitch': { $exists: true, $ne: [] } }
                         ]
+                    }
+                },
+                {
+                    $addFields: {
+                        'mediaPs3Count': {
+                            $size: '$mediaPs3'
+                        },
+                        'mediaPs4Count': {
+                            $size: '$mediaPs4'
+                        },
+                        'mediaXbox360Count': {
+                            $size: '$mediaXbox360'
+                        },
+                        'mediaXboxOneCount': {
+                            $size: '$mediaXboxOne'
+                        },
+                        'mediaNintendo3dsCount': {
+                            $size: '$mediaNintendo3ds'
+                        },
+                        'mediaNintendoSwitchCount': {
+                            $size: '$mediaNintendoSwitch'
+                        }
                     }
                 }
             ]

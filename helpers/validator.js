@@ -47,7 +47,9 @@ const validationMethods = {
         'create': valGame.create,
         'id': valGame.id,
         'update': valGame.update,
-        'search': valGame.search
+        'search': valGame.search,
+        'searchRemote': valGame.searchRemote,
+        'createRemote': valGame.createRemote
     },
     'media': {
         'create': valMedia.create,

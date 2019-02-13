@@ -7,7 +7,7 @@ const save = async function (request, response, next) {
         await response.locals._MODELS.media.populate(toBeIncluded,
             [
                 { 'path': 'owner', 'select': 'name' },
-                { 'path': 'game', 'select': 'title' }
+                { 'path': 'game', 'select': 'name' }
             ]
         );
 
@@ -32,7 +32,7 @@ const update = async function (request, response, next) {
             { 'new': true }
         ).populate([
             { 'path': 'owner', 'select': 'name' },
-            { 'path': 'game', 'select': 'title' }
+            { 'path': 'game', 'select': 'name' }
         ]);
 
         response.locals._UTIL.setLocalsData(
@@ -57,7 +57,7 @@ const search = async function (request, response, next) {
                 .sort({ 'owner': 1 })
                 .populate([
                     { 'path': 'owner', 'select': 'name' },
-                    { 'path': 'game', 'select': 'title' }
+                    { 'path': 'game', 'select': 'name' }
                 ])
                 .exec(),
 
@@ -83,7 +83,7 @@ const findById = async function (request, response, next) {
         let foundObject = await response.locals._MODELS.media.findById(request.params._id)
             .populate([
                 { 'path': 'owner', 'select': 'name' },
-                { 'path': 'game', 'select': 'title' }
+                { 'path': 'game', 'select': 'name' }
             ]);
 
         if (!foundObject) {

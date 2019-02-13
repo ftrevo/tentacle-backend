@@ -4,7 +4,7 @@ const joi = require('joi');
 // --------------------- Objetos Locais --------------------- //
 const keys = {
     '_id': joi.string().regex(/^[0-9a-fA-F]{24}$/),
-    'title': joi.string().trim(),
+    'name': joi.string().trim(),
     'createdBy': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'mediaId': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'mediaOwner': joi.string().regex(/^[0-9a-fA-F]{24}$/),
@@ -16,7 +16,7 @@ const keys = {
 // ------------------- Funções Exportadas ------------------- //
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),
-    'title': keys.title.optional(),
+    'name': keys.name.optional(),
     'createdBy': keys.createdBy.optional(),
     'mediaId': keys.mediaId.optional(),
     'mediaOwner': keys.mediaOwner.optional(),

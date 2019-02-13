@@ -12,7 +12,7 @@ describe('# Regra de negócio de Biblioteca', function () {
         it('id, título, criado por e paginação', async function () {
             let requestMock = {
                 'query': {
-                    'title': 'Título',
+                    'name': 'Nome',
                     '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'createdBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'page': 0,
@@ -25,7 +25,7 @@ describe('# Regra de negócio de Biblioteca', function () {
             let nextObject = await brLibrary.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            requestMock.query.should.have.property('title', /Título/i);
+            requestMock.query.should.have.property('name', /Nome/i);
             requestMock.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
             requestMock.query.should.have.property('createdBy', '1a2b3c4d5e6f1a2b3c4d5e6f');
             requestMock.query.should.not.have.property('page');

@@ -19,40 +19,15 @@ const save = async function (request, response, next) {
     }
 };
 
-const update = async function (request, response, next) {
-    try {
-        let updated = await response.locals._MODELS.game.findOneAndUpdate(
-            { '_id': request.params._id },
-            request.body,
-            { 'new': true }
-        ).populate([
-            { 'path': 'createdBy', 'select': 'name' },
-            { 'path': 'updatedBy', 'select': 'name' }
-        ]);
-
-        response.locals._UTIL.setLocalsData(
-            response,
-            200,
-            updated.toObject(),
-            'Jogo atualizado'
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
             response.locals._MODELS.game.find(request.query)
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'title': 1 })
+                .sort({ 'name': 1 })
                 .populate([
-                    { 'path': 'createdBy', 'select': 'name' },
-                    { 'path': 'updatedBy', 'select': 'name' }
+                    { 'path': 'createdBy', 'select': 'name' }
                 ])
                 .exec(),
 
@@ -77,8 +52,7 @@ const findById = async function (request, response, next) {
     try {
         let foundObject = await response.locals._MODELS.game.findById(request.params._id)
             .populate([
-                { 'path': 'createdBy', 'select': 'name' },
-                { 'path': 'updatedBy', 'select': 'name' }
+                { 'path': 'createdBy', 'select': 'name' }
             ]);
 
         if (!foundObject) {
@@ -98,29 +72,10 @@ const findById = async function (request, response, next) {
     }
 };
 
-const remove = async function (request, response, next) {
-    try {
-        let removedObject = await response.locals._MODELS.game.findByIdAndDelete(request.params._id);
-
-        response.locals._UTIL.setLocalsData(
-            response,
-            200,
-            removedObject,
-            'Jogo removido'
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
-    'update': update,
     'findById': findById,
-    'remove': remove,
     'search': search
 };
 

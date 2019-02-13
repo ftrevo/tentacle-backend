@@ -21,14 +21,14 @@ describe('# Validator de Jogos', function () {
             nextObject.should.have.property('isJoi', true);
             nextObject.should.have.property('details').with.lengthOf(1);
             nextObject.details.should.containDeep([
-                { 'message': '"title" is required', 'type': 'any.required' }
+                { 'message': '"name" is required', 'type': 'any.required' }
             ]);
         });
 
         it('limpeza de campos e dados OK', async function () {
             let request = {
                 'body': {
-                    'title': 'Título',
+                    'name': 'Nome',
                     'createdBy': 'Should be removed',
                     'updatedBy': 'Should be removed',
                     '_id': 'Should be removed',
@@ -43,7 +43,7 @@ describe('# Validator de Jogos', function () {
             let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.body.should.have.properties(['title']);
+            request.body.should.have.properties(['name']);
             request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField', 'createdBy', 'updatedBy']);
         });
     });
@@ -92,7 +92,7 @@ describe('# Validator de Jogos', function () {
         it('limpeza de campos e dados OK', async function () {
             let request = {
                 'params': {
-                    'title': 'Título',
+                    'name': 'Nome',
                     '_id': '1a2b3c4d5e6f1a2b3c4d5e6f'
                 }
             };
@@ -102,7 +102,7 @@ describe('# Validator de Jogos', function () {
             let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.params.should.have.properties(['title', '_id']);
+            request.params.should.have.properties(['name', '_id']);
         });
     });
 
@@ -151,7 +151,7 @@ describe('# Validator de Jogos', function () {
                     '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'createdBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'updatedBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'title': 'tile',
+                    'name': 'name',
                     'createdAt': 'Should be removed',
                     'updatedAt': 'Should be removed',
                     'randomField': 'Should be removed'
@@ -163,21 +163,83 @@ describe('# Validator de Jogos', function () {
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.query.should.have.properties(['_id', 'title', 'createdBy', 'updatedBy', 'page', 'limit']);
+            request.query.should.have.properties(['_id', 'name', 'createdBy', 'updatedBy', 'page', 'limit']);
             request.query.limit.should.be.eql(10);
             request.query.page.should.be.eql(0);
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
         });
     });
 
-    describe('## Update', function () {
+    describe('## Search Remote', function () {
+
+        it('campos inválidos', async function () {
+            let request = {
+                'query': {
+                    'name': 'name',
+                    'limit': 999
+                }
+            };
+
+            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+
+            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                {
+                    'message': '"limit" must be less than or equal to 50',
+                    'type': 'number.max'
+                }
+            ]);
+        });
+
+        it('campos obrigatórios', async function () {
+            let request = {
+                'query': {}
+            };
+
+            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+
+            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"name" is required', 'type': 'any.required' }
+            ]);
+        });
+
+        it('limpeza, inserção de campos e dados OK', async function () {
+            let request = {
+                'query': {
+                    'name': 'name',
+                    'randomField': 'Should be removed'
+                }
+            };
+
+            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+
+            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.query.should.have.properties(['name', 'page', 'limit']);
+            request.query.limit.should.be.eql(25);
+            request.query.page.should.be.eql(0);
+            request.query.should.not.have.any.property('randomField');
+        });
+    });
+
+    describe('## Create Remote', function () {
 
         it('campos obrigatórios', async function () {
             let request = {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('game', 'update', 'body');
+            let createValidatorFunction = validator('game', 'createRemote', 'body');
 
             let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
@@ -185,30 +247,51 @@ describe('# Validator de Jogos', function () {
             nextObject.should.have.property('isJoi', true);
             nextObject.should.have.property('details').with.lengthOf(1);
             nextObject.details.should.containDeep([
-                { 'message': '"value" must contain at least one of [title]', 'type': 'object.missing' }
+                { 'message': '"id" is required', 'type': 'any.required' }
+            ]);
+        });
+
+        it('campos inválidos', async function () {
+            let request = {
+                'body': {
+                    'id': 'invalidId'
+                }
+            };
+
+            let createValidatorFunction = validator('game', 'createRemote', 'body');
+
+            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                {
+                    'message': '"id" must be a number',
+                    'type': 'number.base'
+                }
             ]);
         });
 
         it('limpeza de campos e dados OK', async function () {
             let request = {
                 'body': {
-                    'title': 'Título',
+                    'id': 987654321,
                     'createdBy': 'Should be removed',
-                    'updatedBy': 'Should be removed',
                     '_id': 'Should be removed',
-                    'createdAt': 'Should be removed',
-                    'updatedAt': 'Should be removed',
                     'randomField': 'Should be removed'
                 }
             };
 
-            let updateValidatorFunction = validator('game', 'update', 'body');
+            let createValidatorFunction = validator('game', 'createRemote', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.body.should.have.properties(['title']);
-            request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField', 'createdBy', 'updatedBy']);
+            request.body.should.have.property('id', 987654321);
+            request.body.should.not.have.any.properties(['_id', 'randomField', 'createdBy']);
         });
     });
+
+
 });
