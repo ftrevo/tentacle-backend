@@ -77,7 +77,7 @@ const GameSchemaKeys = {
     },
     formattedReleaseDate: {
         type: String
-    },
+    }
 };
 
 //Schema de Jogo

@@ -13,6 +13,13 @@ const LibraryMediaSchema = new mongoose.Schema({
     },
     ownerName: {
         type: String
+    },
+    ownerState: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'State'
+    },
+    ownerCity: {
+        type: String
     }
 });
 
@@ -21,11 +28,7 @@ const LibraryKeys = Object.assign(
         _id: {
             type: mongoose.Schema.Types.ObjectId
         },
-
         createdAt: {
-            type: mongoose.Schema.Types.Date
-        },
-        updatedAt: {
             type: mongoose.Schema.Types.Date
         },
         mediaPs3: [LibraryMediaSchema],
@@ -66,7 +69,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
@@ -94,7 +99,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
@@ -122,7 +129,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
@@ -150,7 +159,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
@@ -178,7 +189,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
@@ -206,7 +219,9 @@ const createView = function (db) {
                             { $unwind: '$ownerData' },
                             {
                                 $addFields: {
-                                    'ownerName': '$ownerData.name'
+                                    'ownerName': '$ownerData.name',
+                                    'ownerState': '$ownerData.state',
+                                    'ownerCity': '$ownerData.city'
                                 }
                             },
                             { $project: { 'ownerData': 0 } }
