@@ -210,6 +210,7 @@ paths:
       parameters:
         - in: query
           name: name
+          description: Nome do jogo
           schema:
             type: string
         - $ref: '#/components/parameters/limitParam'
@@ -253,6 +254,7 @@ paths:
       parameters:
         - in: query
           name: name
+          description: Nome do jogo
           schema:
             type: string
         - $ref: '#/components/parameters/limitParam'
@@ -321,19 +323,23 @@ paths:
       parameters:
         - in: query
           name: platform
+          description: Plataforma da mídia
           schema:
             type: string
             enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
         - in: query
           name: game
+          description: ObjectId do jogo
           schema:
             type: string
         - in: query
           name: owner
+          description: ObjectId do dono do jogo
           schema:
             type: string
         - in: query
           name: mineOnly
+          description: Ver apenas minhas mídias
           schema:
             type: boolean
         - $ref: '#/components/parameters/limitParam'
@@ -414,14 +420,17 @@ paths:
       parameters:
         - in: query
           name: _id
+          description: ObjectId do jogo
           schema:
             type: string
         - in: query
           name: name
+          description: Nome do jogo
           schema:
             type: string
         - in: query
           name: mediaPlatform
+          description: Lista de plataformas
           schema:
             type: array
             items:
@@ -491,22 +500,27 @@ paths:
       parameters:
         - in: query
           name: _id
+          description: ObjectId do empréstimo
           schema:
             type: string
         - in: query
           name: requestedBy
+          description: ObjectId de quem solicitou o empréstimo
           schema:
             type: string
         - in: query
           name: media
+          description: ObjectId da mídia
           schema:
             type: string
         - in: query
           name: mediaOwner
+          description: ObjectId do dono da mídia
           schema:
             type: string
         - in: query
           name: game
+          description: ObjectId do jogo
           schema:
             type: string
         - $ref: '#/components/parameters/limitParam'
@@ -592,7 +606,7 @@ components:
     idParam:
       in: path
       name: id
-      description: Object Id
+      description: Object Id do objeto
       schema:
         type: string
     limitParam:
