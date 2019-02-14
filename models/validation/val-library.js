@@ -2,13 +2,14 @@
 const joi = require('joi');
 
 // --------------------- Objetos Locais --------------------- //
+const mediaPlatformRegex = /^(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS)(,(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS))*$/;
 const keys = {
     '_id': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'name': joi.string().trim(),
     'createdBy': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'mediaId': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'mediaOwner': joi.string().regex(/^[0-9a-fA-F]{24}$/),
-    'mediaPlatform': joi.string().trim().valid('PS4', 'PS3', 'XBOXONE', 'XBOX360', 'NINTENDOSWITCH', 'NINTENDO3DS'),
+    'mediaPlatform': joi.string().trim().regex(mediaPlatformRegex),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };

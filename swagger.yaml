@@ -421,18 +421,13 @@ paths:
           schema:
             type: string
         - in: query
-          name: mediaOwner
-          schema:
-            type: string
-        - in: query
-          name: mediaId
-          schema:
-            type: string
-        - in: query
           name: mediaPlatform
           schema:
-            type: string
-            enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+            type: array
+            items:
+              type: string
+              enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+          explode: false
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
