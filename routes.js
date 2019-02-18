@@ -7,8 +7,8 @@ const defMethods = require('./helpers/default-methods');
 const validator = require('./helpers/validator');
 
 // --------------- Import de regras de negócio -------------- //
+const brMediaLoan = require('./business-rule/br-media-loan');
 const brLibrary = require('./business-rule/br-library');
-const brTenancy = require('./business-rule/br-tenancy');
 const brAccess = require('./business-rule/br-access');
 const brMedia = require('./business-rule/br-media');
 const brUser = require('./business-rule/br-user');
@@ -16,8 +16,8 @@ const brGame = require('./business-rule/br-game');
 const brLoan = require('./business-rule/br-loan');
 
 // ------------------ Import de repositórios ---------------- //
+const repoMediaLoan = require('./repositories/repo-media-loan');
 const repoLibrary = require('./repositories/repo-library');
-const repoTenancy = require('./repositories/repo-tenancy');
 const repoToken = require('./repositories/repo-token');
 const repoState = require('./repositories/repo-state');
 const repoMedia = require('./repositories/repo-media');
@@ -106,10 +106,10 @@ const routes = function (app) {
       brLoan.update, repoLoan.update, defMethods.requestHandler
     );
 
-  app.route('/tenancy')
-    .get(modelInjector, privateRoute, validator('tenancy', 'search', 'query'), brTenancy.search, repoTenancy.search, defMethods.requestHandler)
+  app.route('/media-loan')
+    .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), brMediaLoan.search, repoMediaLoan.search, defMethods.requestHandler)
 
-  app.route('/tenancy/:_id').get(modelInjector, privateRoute, validator('tenancy', 'id', 'params'), repoTenancy.findById, defMethods.requestHandler);
+  app.route('/media-loan/:_id').get(modelInjector, privateRoute, validator('mediaLoan', 'id', 'params'), repoMediaLoan.findById, defMethods.requestHandler);
 };
 
 // --------------------- Module Exports --------------------- //

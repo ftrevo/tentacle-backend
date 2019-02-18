@@ -2,10 +2,10 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brTenancy = require('../../business-rule/br-tenancy');
+const brMediaLoan = require('../../business-rule/br-media-loan');
 const util = require('../../helpers/util');
 
-describe('# Regra de negócio de Locação', function () {
+describe('# Regra de negócio de Mídia/Empréstimo', function () {
 
     describe('## Search', function () {
 
@@ -21,7 +21,7 @@ describe('# Regra de negócio de Locação', function () {
 
             let responseMock = getResponseMock();
 
-            let nextObject = await brTenancy.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+            let nextObject = await brMediaLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             requestMock.query.should.have.property('platform', /PS4/i);
@@ -45,7 +45,7 @@ describe('# Regra de negócio de Locação', function () {
 
             let responseMock = getResponseMock(ownerId);
 
-            let nextObject = await brTenancy.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+            let nextObject = await brMediaLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             requestMock.query.should.have.property('owner', ownerId);

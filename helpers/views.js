@@ -1,13 +1,13 @@
 // ----------------- Import de dependências ----------------- //
-const tenancyVwName = require('../models/tenancy').viewName;
+const mediaLoanVwName = require('../models/media-loan').viewName;
 const libraryVwName = require('../models/library').viewName;
 
+const mediaLoanVwObject = require('../models/views/vw-media-loan');
 const libraryVwObject = require('../models/views/vw-library');
-const tenancyVwObject = require('../models/views/vw-tenancy');
 
 // ------------------- Funções Exportadas ------------------- //
 const createViews = function (db) {
-    db.createCollection(tenancyVwName, tenancyVwObject);
+    db.createCollection(mediaLoanVwName, mediaLoanVwObject);
     db.createCollection(libraryVwName, libraryVwObject);
 };
 

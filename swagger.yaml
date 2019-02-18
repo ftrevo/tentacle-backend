@@ -595,11 +595,11 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
-  /tenancy:
+  /media-loan:
     get:
       tags:
-        - Tenancy
-      summary: Rota de listagem de locações
+        - MediaLoan
+      summary: Rota de listagem de Mídia/Empréstimo
       security:
         - authenticationUser: []
       parameters:
@@ -630,13 +630,13 @@ paths:
           $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
-  /tenancy/{id}:
+  /media-loan/{id}:
     parameters:
       - $ref: '#/components/parameters/idParam'
     get:
       tags:
-        - Tenancy
-      summary: Rota de detalhamento de locação
+        - MediaLoan
+      summary: Rota de detalhamento de Mídia/Empréstimo
       security:
         - authenticationUser: []
       responses:

@@ -19,7 +19,6 @@ REFRESH_EXP_TIME=2 hrs
 DEFAULT_LOAN_TIME=14 days
 ```
 #### TODO's
-* Rever o nome Tenancy
 * Revisão no arquivo do Swagger, adicionando os filtros faltantes e as descrições
 * Alteração na remoção de jogos para possibilitar apenas se não houverem mídias registradas ao jogo
 * Alteração na remoção de mídia para possibilitar apenas se não houverem empréstimos registrados

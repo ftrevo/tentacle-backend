@@ -2,7 +2,7 @@
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.tenancy
+            response.locals._MODELS.mediaLoan
                 .find(
                     request.query,
                     'id platform gameData._id gameData.name activeLoan._id activeLoan.requestedAt activeLoan.loanDate'
@@ -12,7 +12,7 @@ const search = async function (request, response, next) {
                 .sort({ 'gameData.name': 1 })
                 .exec(),
 
-            response.locals._MODELS.tenancy.find(request.query).countDocuments().exec()
+            response.locals._MODELS.mediaLoan.find(request.query).countDocuments().exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
@@ -31,7 +31,7 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.tenancy.findById(request.params._id);;
+        let foundObject = await response.locals._MODELS.mediaLoan.findById(request.params._id);;
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Mídia não encontrada', 'isNotFound': true });

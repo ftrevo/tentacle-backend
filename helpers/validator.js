@@ -2,8 +2,8 @@
 const joi = require('joi');
 
 // --------------- Import de arquivos do core --------------- //
+const valMediaLoan = require('../models/validation/val-media-loan');
 const valLibrary = require('../models/validation/val-library');
-const valTenancy = require('../models/validation/val-tenancy');
 const valAccess = require('../models/validation/val-access');
 const valState = require('../models/validation/val-state');
 const valMedia = require('../models/validation/val-media');
@@ -68,9 +68,9 @@ const validationMethods = {
         'update': valLoan.update,
         'search': valLoan.search
     },
-    'tenancy': {
-        'id': valTenancy.id,
-        'search': valTenancy.search
+    'mediaLoan': {
+        'id': valMediaLoan.id,
+        'search': valMediaLoan.search
     }
 };
 

@@ -2,7 +2,7 @@
 const mongoose = require('mongoose');
 
 // ------------------- Objetos Exportadas ------------------- //
-const viewName = 'tenancy';
+const viewName = 'mediaLoan';
 
 //Schemas Filhos
 const ActiveLoanSchema = new mongoose.Schema({
@@ -74,7 +74,7 @@ const GameDataSchema = new mongoose.Schema({
 });
 
 //Schema de Mídia/Empréstimo
-const TenancySchema = new mongoose.Schema({
+const MediaLoanSchema = new mongoose.Schema({
     _id: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Media'
@@ -100,7 +100,7 @@ const TenancySchema = new mongoose.Schema({
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'viewName': viewName,
-    'model': mongoose.model('Tenancy', TenancySchema, viewName)
+    'model': mongoose.model('MediaLoan', MediaLoanSchema, viewName)
 };
 
 

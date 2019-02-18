@@ -13,7 +13,7 @@ describe('# Validator de Locação de Jogos', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('tenancy', 'id', 'params');
+            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
 
             let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
@@ -32,7 +32,7 @@ describe('# Validator de Locação de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('tenancy', 'id', 'params');
+            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
 
             let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
@@ -56,7 +56,7 @@ describe('# Validator de Locação de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('tenancy', 'id', 'params');
+            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
 
             let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
@@ -77,7 +77,7 @@ describe('# Validator de Locação de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('tenancy', 'search', 'query');
+            let searchValidatorFunction = validator('mediaLoan', 'search', 'query');
 
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
@@ -116,7 +116,7 @@ describe('# Validator de Locação de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('tenancy', 'search', 'query');
+            let searchValidatorFunction = validator('mediaLoan', 'search', 'query');
 
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
