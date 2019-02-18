@@ -1,14 +1,14 @@
 // ----------------- Import de dependências ----------------- //
-const mediaLoanVwName = require('../models/media-loan').viewName;
-const libraryVwName = require('../models/library').viewName;
+const mediaLoan = require('../models/media-loan');
+const library = require('../models/library');
 
 const mediaLoanVwObject = require('../models/views/vw-media-loan');
 const libraryVwObject = require('../models/views/vw-library');
 
 // ------------------- Funções Exportadas ------------------- //
 const createViews = function (db) {
-    db.createCollection(mediaLoanVwName, mediaLoanVwObject);
-    db.createCollection(libraryVwName, libraryVwObject);
+    db.createCollection(mediaLoan.viewName, mediaLoanVwObject);
+    db.createCollection(library.viewName, libraryVwObject);
 };
 
 // --------------------- Module Exports --------------------- //

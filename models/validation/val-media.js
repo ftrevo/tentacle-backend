@@ -28,6 +28,7 @@ const update = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),
     'platform': keys.platform.optional(),
+    'mineOnly': keys.mineOnly.optional(),
     'game': keys.game.optional(),
     'owner': keys.owner.optional(),
     'page': keys.page,
