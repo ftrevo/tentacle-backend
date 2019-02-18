@@ -1,5 +1,6 @@
 // ----------------- Import de dependências ----------------- //
 const mongoose = require('mongoose');
+const createViews = require('./views');
 
 // -------------------- Datasource Logic -------------------- //
 mongoose.Promise = global.Promise;
@@ -8,7 +9,7 @@ mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useCreateIndex: tr
 
 mongoose.connection.on('connected', function () {
     console.log('Conectado ao banco de dados ' + process.env.DB_URL);
-    require('../models/library').createView(this.db);
+    createViews(this.db);
 });
 
 mongoose.connection.on('error', (errorConnectingToDatabase) => {

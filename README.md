@@ -19,12 +19,12 @@ REFRESH_EXP_TIME=2 hrs
 DEFAULT_LOAN_TIME=14 days
 ```
 #### TODO's
+* Rever o nome Tenancy
 * Revisão no arquivo do Swagger, adicionando os filtros faltantes e as descrições
 * Alteração na remoção de jogos para possibilitar apenas se não houverem mídias registradas ao jogo
 * Alteração na remoção de mídia para possibilitar apenas se não houverem empréstimos registrados
 * Refatorar o arquivo de rotas, quebrando mesmo em múltiplos arquivos para melhor legibilidade
-* Injetar por default o model de usuário
 * Repensar a função genérica de validação para melhor usabilidade
 * Revisar os objetos de populate nos repo's para unificação dos mesmos em uma constante no arquivo
 * Criar opção de informar a ordenação das listas de maneira dinâmica
-* Criar opção de informar os campos as erem retornados de maneira dinâmica no endpoint de Biblioteca
+* Criar opção de informar os campos a serem retornados de maneira dinâmica no endpoint de Biblioteca
