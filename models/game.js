@@ -84,7 +84,7 @@ const GameSchemaKeys = {
 const GameSchema = new mongoose.Schema(GameSchemaKeys, { versionKey: false, timestamps: true });
 
 module.exports = {
-    'GameModel': mongoose.model('Game', GameSchema),
-    'GameSchemaKeys': GameSchemaKeys
+    'model': mongoose.model('Game', GameSchema),
+    'schemaKeys': GameSchemaKeys
 };
 

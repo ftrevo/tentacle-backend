@@ -1,11 +1,12 @@
 // --------------- Import de arquivos do core --------------- //
-const library = require('../models/library').model;
+const library = require('../models/library');
 const token = require('../models/token');
 const media = require('../models/media');
 const state = require('../models/state');
 const game = require('../models/game');
 const loan = require('../models/loan');
 const user = require('../models/user');
+const mediaLoan = require('../models/media-loan');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (request, response, next) {
@@ -13,10 +14,11 @@ const injector = function (request, response, next) {
         'user': user,
         'token': token,
         'state': state,
-        'game': game.GameModel,
+        'game': game.model,
         'media': media,
-        'library': library,
-        'loan': loan
+        'library': library.model,
+        'loan': loan,
+        'mediaLoan': mediaLoan.model
     };
 
     return next();
