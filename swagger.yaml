@@ -178,6 +178,30 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+  /users/forgot-password:
+    post:
+      tags:
+        - User
+      summary: Rota de envio de e-mail com token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Email de recuperação de senha enviado
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
 
   /games:
     post:

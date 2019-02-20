@@ -1,3 +1,6 @@
+// ----------------- Import de dependências ----------------- //
+const uIDGenerator = require('uid-generator');
+
 // ------------------- Funções Exportadas ------------------- //
 const save = async function (request, response, next) {
     try {
@@ -112,6 +115,25 @@ const remove = async function (request, response, next) {
     }
 };
 
+const forgotPwd = async function (request, response, next) {
+    try {
+        let user = await response.locals._MODELS.user.findOne({ 'email': request.body.email }).exec();
+
+        if (!user) {
+            return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
+        }
+
+        request.body.token = new uIDGenerator(uIDGenerator.BASE36, 5).generateSync();
+
+        request.params = { '_id': user._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function validateDataFromUser(resolvedPromisses) {
     let validationErrors = [];
@@ -136,5 +158,6 @@ module.exports = {
     'save': save,
     'update': update,
     'remove': remove,
-    'search': search
+    'search': search,
+    'forgotPwd': forgotPwd
 };

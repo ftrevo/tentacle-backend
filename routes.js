@@ -5,6 +5,7 @@ const passport = require('passport');
 const modelInjector = require('./helpers/model-injector');
 const defMethods = require('./helpers/default-methods');
 const validator = require('./helpers/validator');
+const mailer = require('./helpers/mailer');
 
 // --------------- Import de regras de negócio -------------- //
 const brMediaLoan = require('./business-rule/br-media-loan');
@@ -52,13 +53,18 @@ const routes = function (app) {
       brUser.save, repoUser.save, brAccess.logInOnCreate, repoToken.save, defMethods.requestHandler
     );
 
-  app.route('/users/:_id')
+  app.route('/users/:_id([0-9a-fA-F]{24})')
     .get(modelInjector, privateRoute, validator('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
     .delete(modelInjector, privateRoute, validator('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
       modelInjector, privateRoute, validator('user', 'id', 'params'), validator('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler
     );
+
+  app.route('/users/forgot-password')
+    .post(modelInjector, validator('user', 'forgotPwd', 'body'),
+      brUser.forgotPwd, repoUser.update, mailer.forgotPwd, defMethods.requestHandler);
+
 
   app.route('/games')
     .get(modelInjector, privateRoute, validator('game', 'search', 'query'), brGame.search, repoGame.search, defMethods.requestHandler)
@@ -70,6 +76,7 @@ const routes = function (app) {
   app.route('/games/remote')
     .get(modelInjector, privateRoute, validator('game', 'searchRemote', 'query'), brGame.searchRemote, defMethods.requestHandler)
     .post(modelInjector, privateRoute, brGame.saveRemote, repoGame.save, defMethods.requestHandler);
+
 
   app.route('/media')
     .get(modelInjector, privateRoute, validator('media', 'search', 'query'), brMedia.search, repoMedia.search, defMethods.requestHandler)
@@ -109,7 +116,8 @@ const routes = function (app) {
   app.route('/media-loan')
     .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), brMediaLoan.search, repoMediaLoan.search, defMethods.requestHandler)
 
-  app.route('/media-loan/:_id').get(modelInjector, privateRoute, validator('mediaLoan', 'id', 'params'), repoMediaLoan.findById, defMethods.requestHandler);
+  app.route('/media-loan/:_id')
+    .get(modelInjector, privateRoute, validator('mediaLoan', 'id', 'params'), repoMediaLoan.findById, defMethods.requestHandler);
 };
 
 // --------------------- Module Exports --------------------- //
