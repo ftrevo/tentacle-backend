@@ -291,4 +291,61 @@ describe('# Validador do Usuário', function () {
             request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField']);
         });
     });
+
+    describe('## Forgot Password', function () {
+
+        it('campos obrigatórios', async function () {
+            let request = {
+                'body': {}
+            };
+
+            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+
+            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" is required', 'type': 'any.required' }
+            ]);
+        });
+
+        it('campos inválidos', async function () {
+            let request = {
+                'body': {
+                    'email': 'invalidEmail'
+                }
+            };
+
+            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+
+            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" must be a valid email', 'type': 'string.email' }
+            ]);
+        });
+
+        it('limpeza de campos e dados OK', async function () {
+            let request = {
+                'body': {
+                    'email': 'validemail@gmail.com',
+                    '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'randomField': 'Should be removed'
+                }
+            };
+
+            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+
+            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.body.should.have.property('email', 'validemail@gmail.com');
+            request.body.should.not.have.any.properties(['_id', 'randomField']);
+        });
+    });
 });

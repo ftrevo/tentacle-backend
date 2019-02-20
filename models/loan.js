@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const LoanSchema = new mongoose.Schema({
     requestedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     requestedAt: {
         type: Date,
@@ -16,15 +16,15 @@ const LoanSchema = new mongoose.Schema({
     },
     media: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Media',
+        ref: 'Media'
     },
     mediaOwner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     game: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Game',
+        ref: 'Game'
     },
     loanDate: {
         type: Date

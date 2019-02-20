@@ -12,7 +12,7 @@ const save = async function (request, response, next) {
             'Usuário salvo'
         );
 
-        response.locals._UTIL.clearObject(response.locals.data, ['password']);
+        response.locals._UTIL.clearObject(response.locals.data, ['password', 'token']);
 
         next();
     } catch (error) {
@@ -40,7 +40,7 @@ const update = async function (request, response, next) {
             'Usuário atualizado'
         );
 
-        response.locals._UTIL.clearObject(response.locals.data, ['password']);
+        response.locals._UTIL.clearObject(response.locals.data, ['password', 'token']);
 
         next();
     } catch (error) {
@@ -51,7 +51,7 @@ const update = async function (request, response, next) {
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.user.find(request.query, { 'password': 0 })
+            response.locals._MODELS.user.find(request.query, { 'password': 0, 'token': 0 })
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
                 .sort({ 'name': 1 })
@@ -77,7 +77,7 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0 }, { lean: true })
+        let foundObject = await response.locals._MODELS.user.findById(request.params._id, { 'password': 0, 'token': 0 }, { lean: true })
             .populate('state', 'name initials');
 
         if (!foundObject) {

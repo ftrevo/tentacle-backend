@@ -28,6 +28,10 @@ const UserSchema = new mongoose.Schema({
     city: {
         type: String,
         trim: true
+    },
+    token: {
+        type: String,
+        trim: true
     }
 }, { versionKey: false, timestamps: true });
 
@@ -52,6 +56,12 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     if (!query._update.password) {
         return next();
     }
+
+    if (!query._update.$unset) {
+        query._update$unset = {};
+    }
+
+    query._update.$unset.token = '';
 
     let salt = await bcrypt.genSalt(12);
 

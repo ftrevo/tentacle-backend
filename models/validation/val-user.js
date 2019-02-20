@@ -50,10 +50,15 @@ const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys(
     '_id': userKeys._id.required(),
 });
 
+const forgotPwd = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'email': userKeys.email.required(),
+});
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'create': create,
     'id': id,
     'update': update,
-    'search': search
+    'search': search,
+    'forgotPwd': forgotPwd
 };
