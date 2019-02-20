@@ -17,7 +17,7 @@ function send(to, subject, html) {
     let transporter = getTransporter();
 
     let mailOptions = {
-        'from': `Tentacle 🐙 <${process.env.EMAIL_SENDER}>`,
+        'from': `Tentacle 🐙 <${process.env.SMTP_USER}>`,
         'to': to,
         'subject': subject,
         'html': html
@@ -28,8 +28,8 @@ function send(to, subject, html) {
 
 function getTransporter() {
     return nodemailer.createTransport({
-        host: process.env.EMAIL_SMTP,
-        port: process.env.EMAIL_PORT,
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT,
         secure: true,
         auth: {
             user: process.env.SMTP_USER,
