@@ -202,6 +202,34 @@ paths:
           $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
+  /users/restore-password:
+    post:
+      tags:
+        - User
+      summary: Rota de alteração de senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Senha alterada
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
 
   /games:
     post:
@@ -707,20 +735,6 @@ components:
       description: Nome
       schema:
         type: string
-    emailParam:
-      in: body
-      name: email
-      description: Email
-      schema:
-        type: string
-        format: email
-    passwordParam:
-      in: body
-      name: password
-      description: Password
-      schema:
-        type: string
-        format: password
   responses:
     '200Detail':
       description: Objeto detalhado

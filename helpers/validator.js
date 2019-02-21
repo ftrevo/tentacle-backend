@@ -36,7 +36,8 @@ const validationMethods = {
         'id': valUser.id,
         'update': valUser.update,
         'search': valUser.search,
-        'forgotPwd': valUser.forgotPwd
+        'forgotPwd': valUser.forgotPwd,
+        'restorePwd': valUser.restorePwd
     },
     'access': {
         'login': valAccess.login,

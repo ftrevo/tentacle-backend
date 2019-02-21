@@ -58,7 +58,7 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     }
 
     if (!query._update.$unset) {
-        query._update$unset = {};
+        query._update.$unset = {};
     }
 
     query._update.$unset.token = '';

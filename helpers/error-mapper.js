@@ -89,6 +89,7 @@ const fieldMap = {
     'platform': 'Plataforma',
     'refreshToken': 'Refresh Token',
     'state': 'Estado',
+    'token': 'Token',
     'updatedAt': 'Atualizado em',
     'updatedBy': 'Atualizado por'
 };

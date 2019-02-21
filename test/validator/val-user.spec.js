@@ -348,4 +348,74 @@ describe('# Validador do Usuário', function () {
             request.body.should.not.have.any.properties(['_id', 'randomField']);
         });
     });
+
+    describe('## Restore Password', function () {
+
+        it('campos obrigatórios', async function () {
+            let request = {
+                'body': {}
+            };
+
+            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+
+            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(3);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" is required', 'type': 'any.required' },
+                { 'message': '"token" is required', 'type': 'any.required' },
+                { 'message': '"password" is required', 'type': 'any.required' }
+            ]);
+        });
+
+        it('campos inválidos', async function () {
+            let request = {
+                'body': {
+                    'email': 'invalidEmail',
+                    'token': 'invalidToken',
+                    'password': '123'
+                }
+            };
+
+            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+
+            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(3);
+            nextObject.details.should.containDeep([
+                { 'message': '"email" must be a valid email', 'type': 'string.email' },
+                { 'message': '"password" length must be at least 5 characters long', 'type': 'string.min' },
+                {
+                    'message': '"token" with value "invalidToken" fails to match the required pattern: /^[0-9A-Z]{5}$/',
+                    'type': 'string.regex.base'
+                }
+            ]);
+        });
+
+        it('limpeza de campos e dados OK', async function () {
+            let request = {
+                'body': {
+                    'email': 'validemail@gmail.com',
+                    'password': '123456',
+                    'token': 'ABCDE',
+                    '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'randomField': 'Should be removed'
+                }
+            };
+
+            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+
+            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.body.should.have.property('email', 'validemail@gmail.com');
+            request.body.should.have.property('password', '123456');
+            request.body.should.have.property('token', 'ABCDE');
+            request.body.should.not.have.any.properties(['_id', 'randomField']);
+        });
+    });
 });

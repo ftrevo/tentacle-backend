@@ -12,6 +12,7 @@ const userKeys = {
     'city': joi.string().trim(),
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
+    'token': joi.string().regex(/^[0-9A-Z]{5}$/),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };
@@ -47,11 +48,17 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 });
 
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': userKeys._id.required(),
+    '_id': userKeys._id.required()
 });
 
 const forgotPwd = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'email': userKeys.email.required()
+});
+
+const restorePwd = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     'email': userKeys.email.required(),
+    'token': userKeys.token.required(),
+    'password': userKeys.password.required()
 });
 
 // --------------------- Module Exports --------------------- //
@@ -60,5 +67,6 @@ module.exports = {
     'id': id,
     'update': update,
     'search': search,
-    'forgotPwd': forgotPwd
+    'forgotPwd': forgotPwd,
+    'restorePwd': restorePwd
 };
