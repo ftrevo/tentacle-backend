@@ -8,7 +8,7 @@ const stateKeys = {
 
 // ------------------- Funções Exportadas ------------------- //
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': stateKeys._id.required(),
+    '_id': stateKeys._id.required()
 });
 
 // --------------------- Module Exports --------------------- //
