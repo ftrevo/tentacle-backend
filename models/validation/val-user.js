@@ -4,7 +4,7 @@ const joi = require('joi');
 // --------------------- Objetos Locais --------------------- //
 const userKeys = {
     '_id': joi.string().regex(/^[0-9a-fA-F]{24}$/),
-    'name': joi.string().uppercase().trim(),
+    'name': joi.string().trim(),
     'email': joi.string().email({ minDomainAtoms: 2 }).lowercase().trim(),
     'phone': joi.string().trim().regex(/^\d{2} \d{8,9}$/),
     'password': joi.string().min(5).trim(),
@@ -33,7 +33,7 @@ const update = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'phone': userKeys.phone.optional(),
     'password': userKeys.password.optional(),
     'state': userKeys.state.optional(),
-    'city': userKeys.city.optional(),
+    'city': userKeys.city.optional()
 }).or('name', 'email', 'phone', 'password', 'state', 'city');
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({

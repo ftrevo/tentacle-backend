@@ -33,7 +33,7 @@ const LibraryKeys = Object.assign(
             type: mongoose.Schema.Types.ObjectId
         },
         createdAt: {
-            type: mongoose.Schema.Types.Date
+            type: Date
         },
         mediaPs3: [LibraryMediaSchema],
         mediaPs4: [LibraryMediaSchema],

@@ -11,27 +11,27 @@ const ActiveLoanSchema = new mongoose.Schema({
         ref: 'Loan'
     },
     requestedAt: {
-        type: mongoose.Schema.Types.Date
+        type: Date
     },
     requestedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
     estimatedReturnDate: {
-        type: mongoose.Schema.Types.Date
+        type: Date
     },
     loanDate: {
-        type: mongoose.Schema.Types.Date
+        type: Date
     },
     requestedByName: {
-        type: mongoose.Schema.Types.String
+        type: String
     },
     requestedByState: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'State'
     },
     requestedByCity: {
-        type: mongoose.Schema.Types.String
+        type: String
     }
 });
 
@@ -57,19 +57,19 @@ const GameDataSchema = new mongoose.Schema({
     },
     cover: ImageSchema,
     id: {
-        type: mongoose.Schema.Types.Number
+        type: Number
     },
     aggregated_rating: {
-        type: mongoose.Schema.Types.Number
+        type: Number
     },
     aggregated_rating_count: {
-        type: mongoose.Schema.Types.Number
+        type: Number
     },
     name: {
-        type: mongoose.Schema.Types.String
+        type: String
     },
     formattedReleaseDate: {
-        type: mongoose.Schema.Types.String
+        type: String
     }
 });
 
@@ -80,7 +80,7 @@ const MediaLoanSchema = new mongoose.Schema({
         ref: 'Media'
     },
     platform: {
-        type: mongoose.Schema.Types.String
+        type: String
     },
     game: {
         type: mongoose.Schema.Types.ObjectId,
@@ -91,7 +91,7 @@ const MediaLoanSchema = new mongoose.Schema({
         ref: 'User'
     },
     createdAt: {
-        type: mongoose.Schema.Types.Date
+        type: Date
     },
     activeLoan: ActiveLoanSchema,
     gameData: GameDataSchema

@@ -27,7 +27,7 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 });
 
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': keys._id.required(),
+    '_id': keys._id.required()
 });
 
 // --------------------- Module Exports --------------------- //
