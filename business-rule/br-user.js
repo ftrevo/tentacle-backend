@@ -125,6 +125,31 @@ const forgotPwd = async function (request, response, next) {
 
         request.body.token = new uIDGenerator(uIDGenerator.BASE36, 5).generateSync();
 
+        response.locals._UTIL.clearObject(request.body, ['email']);
+
+        request.params = { '_id': user._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
+const restorePwd = async function (request, response, next) {
+    try {
+        let user = await response.locals._MODELS.user.findOne({ 'email': request.body.email }).exec();
+
+        if (!user) {
+            return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
+        }
+
+        if (user.token !== request.body.token) {
+            return next({ 'isForbidden': true });
+        }
+
+        response.locals._UTIL.clearObject(request.body, ['token', 'email']);
+
         request.params = { '_id': user._id };
 
         next();
@@ -159,5 +184,6 @@ module.exports = {
     'update': update,
     'remove': remove,
     'search': search,
-    'forgotPwd': forgotPwd
+    'forgotPwd': forgotPwd,
+    'restorePwd': restorePwd
 };

@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
     state: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'State',
+        ref: 'State'
     },
     city: {
         type: String,
@@ -58,7 +58,7 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     }
 
     if (!query._update.$unset) {
-        query._update$unset = {};
+        query._update.$unset = {};
     }
 
     query._update.$unset.token = '';

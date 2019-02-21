@@ -222,6 +222,47 @@ describe('# Regra de negócio do Usuário', function () {
 
             should(nextObject).not.be.ok();
             requestMock.body.should.have.property('token');
+            requestMock.body.should.not.have.property('email');
+            requestMock.params.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
+        });
+    });
+
+    describe('## Restore Password', function () {
+
+        it('usuário não encontrado', async function () {
+            let requestMock = { 'body': { 'email': 'randomemail@gmail.com' } };
+
+            let responseMock = getResponseMock();
+
+            let nextObject = await brUser.restorePwd(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('isNotFound', true);
+            nextObject.should.have.property('message', 'Usuário não encontrado');
+        });
+
+        it('não autorizado', async function () {
+            let requestMock = { 'body': { 'email': 'randomemail@gmail.com', 'token': 'AAAAA' } };
+
+            let responseMock = getResponseMock(undefined, undefined, undefined, undefined, { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'token': 'BBBBB' });
+
+            let nextObject = await brUser.restorePwd(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isForbidden', true);
+        });
+
+        it('dados OK', async function () {
+            let requestMock = { 'body': { 'email': 'randomemail@gmail.com', 'token': 'AAAAA', 'password': 'someRandomPwd' } };
+
+            let responseMock = getResponseMock(undefined, undefined, undefined, undefined, { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'token': 'AAAAA' });
+
+            let nextObject = await brUser.restorePwd(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('password', 'someRandomPwd');
+            requestMock.body.should.not.have.properties(['token', 'email']);
             requestMock.params.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
         });
     });
