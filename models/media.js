@@ -8,11 +8,11 @@ const MediaSchema = new mongoose.Schema({
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     game: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Game',
+        ref: 'Game'
     }
 }, { versionKey: false, timestamps: true });
 

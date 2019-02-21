@@ -6,7 +6,7 @@ const ms = require('ms');
 const TokenSchema = new mongoose.Schema({
     user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     refreshToken: {
         type: String,

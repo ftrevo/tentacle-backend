@@ -73,7 +73,7 @@ const GameSchemaKeys = {
     videos: [VideoSchema],
     createdBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     formattedReleaseDate: {
         type: String

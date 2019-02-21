@@ -23,7 +23,7 @@ const UserSchema = new mongoose.Schema({
     },
     state: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'State',
+        ref: 'State'
     },
     city: {
         type: String,

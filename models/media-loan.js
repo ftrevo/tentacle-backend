@@ -15,7 +15,7 @@ const ActiveLoanSchema = new mongoose.Schema({
     },
     requestedBy: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     estimatedReturnDate: {
         type: mongoose.Schema.Types.Date
@@ -84,11 +84,11 @@ const MediaLoanSchema = new mongoose.Schema({
     },
     game: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Game',
+        ref: 'Game'
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
+        ref: 'User'
     },
     createdAt: {
         type: mongoose.Schema.Types.Date
