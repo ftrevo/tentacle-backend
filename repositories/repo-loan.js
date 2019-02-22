@@ -1,6 +1,6 @@
 // --------------------- Objetos Locais --------------------- //
 const populateFields = [
-    { 'path': 'requestedBy mediaOwner', 'select': 'name' },
+    { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
     { 'path': 'media', 'select': 'platform' },
     { 'path': 'game', 'select': 'name' }
 ];

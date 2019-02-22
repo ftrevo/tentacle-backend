@@ -105,7 +105,7 @@ const routes = function (app) {
 
   app.route('/loans')
     .get(modelInjector, privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
-    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
+    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, mailer.loanReminder, defMethods.requestHandler);
 
   app.route('/loans/:_id')
     .get(modelInjector, privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
