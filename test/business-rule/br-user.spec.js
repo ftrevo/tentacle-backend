@@ -266,6 +266,20 @@ describe('# Regra de negócio do Usuário', function () {
             requestMock.params.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
         });
     });
+
+    describe('## Profile', function () {
+
+        it('dados OK', async function () {
+            let requestMock = {};
+
+            let responseMock = getResponseMock(undefined, undefined, '1a2b3c4d5e6f1a2b3c4d5e6f');
+
+            let nextObject = await brUser.profile(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.should.have.property('params', { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' });
+        });
+    });
 });
 
 // --------------------- Funções Locais --------------------- //
