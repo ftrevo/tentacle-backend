@@ -115,6 +115,9 @@ const routes = function (app) {
       brLoan.update, repoLoan.update, defMethods.requestHandler
     );
 
+  app.route('/loans/:_id/remember-delivery')
+    .post(modelInjector, privateRoute, validator('loan', 'id', 'params'), brLoan.rememberDelivery, mailer.rememberDelivery, defMethods.requestHandler);
+
   app.route('/media-loan')
     .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), brMediaLoan.search, repoMediaLoan.search, defMethods.requestHandler)
 

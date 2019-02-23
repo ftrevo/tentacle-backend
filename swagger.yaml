@@ -647,6 +647,27 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /loans/{id}/remember-delivery:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    post:
+      tags:
+        - Loan
+      summary: Rota de envio de e-mail lembrando da devolução da mídia
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
   /media-loan:
     get:
       tags:

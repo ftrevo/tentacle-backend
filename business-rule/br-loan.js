@@ -108,6 +108,35 @@ const search = async function (request, response, next) {
     }
 };
 
+
+const rememberDelivery = async function (request, response, next) {
+    try {
+        let loan = await response.locals._MODELS.loan.findById(request.params._id)
+            .populate([
+                { path: 'requestedBy', select: 'name email' },
+                { path: 'game', select: 'name' },
+                { path: 'media', select: 'platform' }
+            ]).exec();
+
+        if (!loan) {
+            return next({ 'isBusiness': true, 'message': ['Empréstimo não encontrado'] });
+        }
+
+        if (loan.mediaOwner.toString() !== response.locals._USER._id.toString()) {
+            return next({ 'isForbidden': true });
+        }
+
+        response.locals.data = loan;
+        response.locals.statusCode = 200;
+        response.locals.message = 'E-mail enviado com sucesso';
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 function validateDataFromLoan(resolvedPromisses, loggedUserId) {
     let validationErrors = [];
 
@@ -134,5 +163,6 @@ module.exports = {
     'save': save,
     'update': update,
     'remove': remove,
-    'search': search
+    'search': search,
+    'rememberDelivery': rememberDelivery
 };
