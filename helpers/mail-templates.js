@@ -45,7 +45,7 @@ const mediaReturned = function (gameName, mediaPlatform, mediaOwnerName) {
         `<p><span style="text-decoration: underline;"><em><strong>Equipe Tentacle</strong></em></span></p>`
 };
 
-const askForRetur = function (gameName, mediaPlatform, mediaOwnerName) {
+const rememberDelivery = function (gameName, mediaPlatform, mediaOwnerName) {
     return `<p><strong>Prezado</strong>,` +
         `</p><p>Voc&ecirc; est&aacute; recebendo este e-mail pois ${mediaOwnerName} está solicitando a devolução do jogo que você pegou emprestado.</p>` +
         `<p>&nbsp;</p>` +
@@ -62,5 +62,5 @@ module.exports = {
     'mediaRequested': mediaRequested,
     'mediaLended': mediaLended,
     'mediaReturned': mediaReturned,
-    'askForRetur': askForRetur
+    'rememberDelivery': rememberDelivery
 };

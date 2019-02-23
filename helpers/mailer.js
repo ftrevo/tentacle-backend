@@ -12,6 +12,42 @@ const forgotPwd = async function (request, response, next) {
     }
 };
 
+const loanReminder = async function (request, response, next) {
+    try {
+        await send(
+            response.locals.data.mediaOwner.email,
+            'Empréstimo de jogo',
+            mailTemplates.mediaRequested(
+                response.locals.data.game.name,
+                response.locals.data.media.platform,
+                response.locals.data.requestedBy.name
+            )
+        );
+        next();
+    } catch (error) {
+        //TODO Ver com Letícia como notificar o não envio de e-mail.
+        console.log(error);
+        next();
+    }
+};
+
+const rememberDelivery = async function (request, response, next) {
+    try {
+        await send(
+            response.locals.data.requestedBy.email,
+            'Lembrete de devolução de jogo',
+            mailTemplates.rememberDelivery(
+                response.locals.data.game.name,
+                response.locals.data.media.platform,
+                response.locals._USER.name)
+        );
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function send(to, subject, html) {
     let transporter = getTransporter();
@@ -40,5 +76,7 @@ function getTransporter() {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'forgotPwd': forgotPwd
+    'forgotPwd': forgotPwd,
+    'loanReminder': loanReminder,
+    'rememberDelivery': rememberDelivery
 };

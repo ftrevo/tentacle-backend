@@ -105,7 +105,7 @@ const routes = function (app) {
 
   app.route('/loans')
     .get(modelInjector, privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
-    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, defMethods.requestHandler);
+    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), brLoan.save, repoLoan.save, mailer.loanReminder, defMethods.requestHandler);
 
   app.route('/loans/:_id')
     .get(modelInjector, privateRoute, validator('loan', 'id', 'params'), repoLoan.findById, defMethods.requestHandler)
@@ -114,6 +114,9 @@ const routes = function (app) {
       modelInjector, privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
       brLoan.update, repoLoan.update, defMethods.requestHandler
     );
+
+  app.route('/loans/:_id/remember-delivery')
+    .post(modelInjector, privateRoute, validator('loan', 'id', 'params'), brLoan.rememberDelivery, mailer.rememberDelivery, defMethods.requestHandler);
 
   app.route('/media-loan')
     .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), brMediaLoan.search, repoMediaLoan.search, defMethods.requestHandler)

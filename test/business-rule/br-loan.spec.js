@@ -316,6 +316,49 @@ describe('# Regra de negócio de Empréstimo', function () {
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
     });
+
+    describe('## Remember Delivery', function () {
+
+        it('não encontrado', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock();
+
+            let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep([
+                'Empréstimo não encontrado'
+            ]);
+        });
+
+        it('não autorizado', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(undefined, undefined, '111111111111aaaaaaaaaaaa', { 'mediaOwner': '222222222222bbbbbbbbbbbb' });
+
+            let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isForbidden', true);
+        });
+
+        it('dados ok', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(undefined, undefined, '111111111111aaaaaaaaaaaa', { 'mediaOwner': '111111111111aaaaaaaaaaaa' });
+
+            let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            responseMock.locals.should.have.property('data', { 'mediaOwner': '111111111111aaaaaaaaaaaa' });
+            responseMock.locals.should.have.property('statusCode', 200);
+            responseMock.locals.should.have.property('message', 'E-mail enviado com sucesso');
+        });
+
+    });
 });
 
 // --------------------- Funções Locais --------------------- //
@@ -331,7 +374,7 @@ function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, f
                 },
                 'loan': {
                     'findOne': getExecObject(findOneLoanObject),
-                    'findById': getExecObject(findByIdLoanObject)
+                    'findById': getPopulateObject(findByIdLoanObject)
                 }
             },
             '_MONGOOSE': {
@@ -349,12 +392,29 @@ function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, f
     };
 };
 
-function getExecObject(returnedObject) {
+function getPopulateObject(returnedObject) {
     return function () {
         return {
-            exec: function () {
-                return returnedObject;
-            }
+            'populate': function () {
+                return {
+                    'exec': execFunction(returnedObject)
+                };
+            },
+            'exec': execFunction(returnedObject)
         };
     };
 };
+
+function getExecObject(returnedObject) {
+    return function () {
+        return {
+            'exec': execFunction(returnedObject)
+        };
+    };
+};
+
+function execFunction(returnedObject) {
+    return function () {
+        return returnedObject;
+    };
+}
