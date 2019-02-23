@@ -230,6 +230,22 @@ paths:
           $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
+  /users/profile:
+    get:
+      tags:
+        - User
+      summary: Rota de perfil
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/response/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
 
   /games:
     post:
@@ -658,7 +674,7 @@ paths:
         - authenticationUser: []
       responses:
         '200':
-          $ref: '#/components/responses/200Detail'
+          description: Envio de e-mail de lembrete de devolução de jogo
         '400':
           $ref: '#/components/responses/400'
         '401':

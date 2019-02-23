@@ -67,6 +67,8 @@ const routes = function (app) {
   app.route('/users/restore-password')
     .post(modelInjector, validator('user', 'restorePwd', 'body'), brUser.restorePwd, repoUser.update, defMethods.requestHandler);
 
+  app.route('/users/profile')
+    .get(modelInjector, privateRoute, brUser.profile, repoUser.findById, defMethods.requestHandler);
 
   app.route('/games')
     .get(modelInjector, privateRoute, validator('game', 'search', 'query'), brGame.search, repoGame.search, defMethods.requestHandler)

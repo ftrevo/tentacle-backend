@@ -159,6 +159,17 @@ const restorePwd = async function (request, response, next) {
     }
 };
 
+const profile = async function (request, response, next) {
+    try {
+        request.params = { '_id': response.locals._USER._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function validateDataFromUser(resolvedPromisses) {
     let validationErrors = [];
@@ -185,5 +196,6 @@ module.exports = {
     'remove': remove,
     'search': search,
     'forgotPwd': forgotPwd,
-    'restorePwd': restorePwd
+    'restorePwd': restorePwd,
+    'profile': profile
 };
