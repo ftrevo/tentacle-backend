@@ -76,7 +76,15 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.loan.findById(request.params._id).populate(populateFields);
+        let foundObject = await response.locals._MODELS.loan
+            .findById(request.params._id)
+            .populate(
+                [
+                    { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
+                    { 'path': 'media', 'select': 'platform' },
+                    { 'path': 'game', 'select': 'name cover aggregated_rating formattedReleaseDate summary game_modes genres' }
+                ]
+            );
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Empréstimo não encontrado', 'isNotFound': true });
