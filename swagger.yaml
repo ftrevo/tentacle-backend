@@ -562,7 +562,7 @@ paths:
     get:
       tags:
         - Loan
-      summary: Rota de listagem de empréstimo
+      summary: Rota de listagem de empréstimos ativos
       security:
         - authenticationUser: []
       parameters:
@@ -591,6 +591,11 @@ paths:
           description: ObjectId do jogo
           schema:
             type: string
+        - in: query
+          name: mineOnly
+          description: Ver apenas meus empréstimos
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:

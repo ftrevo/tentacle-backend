@@ -311,10 +311,34 @@ describe('# Regra de negócio de Empréstimo', function () {
             requestMock.query.should.have.property('media', '2b2b2b2b2b2b3c3c3c3c3c3c');
             requestMock.query.should.have.property('mediaOwner', '3c3c3c3c3c3c4d4d4d4d4d4d');
             requestMock.query.should.have.property('game', '4d4d4d4d4d4d5e5e5e5e5e5e');
+            requestMock.query.should.have.property('returnDate', { '$exists': false });
             requestMock.query.should.not.have.property('page');
             requestMock.query.should.not.have.property('limit');
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
+
+
+        it('substituicao do owner devido ao campo mineOnly', async function () {
+            let requestMock = {
+                'query': {
+                    'requestedBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
+                    'mineOnly': true,
+                    'page': 0, 'limit': 10
+                }
+            };
+
+            let responseMock = getResponseMock(undefined, undefined, '112233445566778899001122');
+
+            let nextObject = await brLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.query.should.have.property('requestedBy', '112233445566778899001122');
+            requestMock.query.should.not.have.property('mineOnly');
+            requestMock.query.should.not.have.property('page');
+            requestMock.query.should.not.have.property('limit');
+            responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+        });
+
     });
 
     describe('## Remember Delivery', function () {
