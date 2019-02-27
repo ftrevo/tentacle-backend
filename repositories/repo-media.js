@@ -120,12 +120,20 @@ const remove = async function (request, response, next) {
     }
 };
 
+const removeOrUpdate = function (request, response, next) {
+    if (request.body.action === 'remove') {
+        return remove(request, response, next);
+    }
+    return update(request, response, next);
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
     'findById': findById,
     'remove': remove,
-    'search': search
+    'search': search,
+    'removeOrUpdate': removeOrUpdate
 };
 

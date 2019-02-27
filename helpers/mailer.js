@@ -39,7 +39,8 @@ const rememberDelivery = async function (request, response, next) {
             mailTemplates.rememberDelivery(
                 response.locals.data.game.name,
                 response.locals.data.media.platform,
-                response.locals._USER.name)
+                response.locals._USER.name
+            )
         );
 
         next();
@@ -59,7 +60,9 @@ function send(to, subject, html) {
         'html': html
     };
 
-    return transporter.sendMail(mailOptions);
+    if (process.env.ENABLE_EMAIL === 'true') {
+        return transporter.sendMail(mailOptions);
+    }
 };
 
 function getTransporter() {

@@ -13,6 +13,10 @@ const MediaSchema = new mongoose.Schema({
     game: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Game'
+    },
+    active: {
+        type: Boolean,
+        default: true
     }
 }, { versionKey: false, timestamps: true });
 
