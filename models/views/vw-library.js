@@ -13,6 +13,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'PS3'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
@@ -43,6 +44,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'PS4'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
@@ -73,6 +75,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'XBOX360'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
@@ -103,6 +106,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'XBOXONE'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
@@ -133,6 +137,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'NINTENDO3DS'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
@@ -163,6 +168,7 @@ const createVwObject = {
                             $expr: {
                                 $and: [
                                     { $eq: ['$platform', 'NINTENDOSWITCH'] },
+                                    { $eq: ['$active', true] },
                                     { $eq: ['$game', '$$game_id'] }
                                 ]
                             }
