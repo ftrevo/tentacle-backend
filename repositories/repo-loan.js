@@ -112,12 +112,25 @@ const remove = async function (request, response, next) {
     }
 };
 
+const removeFromMedia = async function (request, response, next) {
+    try {
+        if (request.body.loanId) {
+            await response.locals._MODELS.loan.findByIdAndDelete(request.body.loanId);
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
     'findById': findById,
     'remove': remove,
+    'removeFromMedia': removeFromMedia,
     'search': search
 };
 

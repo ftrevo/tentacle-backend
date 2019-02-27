@@ -12,7 +12,7 @@ const forgotPwd = function (token) {
 
 const mediaRequested = function (gameName, mediaPlatform, requestedBy) {
     return `<p><strong>Prezado</strong>,` +
-        `</p><p>Voc&ecirc; est&aacute; recebendo este e-mail pois ${requestedBy} solicitou o empr&eacute;stimo do jogo` +
+        `</p><p>Voc&ecirc; est&aacute; recebendo este e-mail pois ${requestedBy} solicitou o empr&eacute;stimo do jogo ` +
         `${gameName} para a plataforma ${mediaPlatform}</p>` +
         `<p>Ao emprestar o jogo lembre-se de entrar na plataforma Tentacle e sinalizar seu jogo como emprestado aba "Meus Jogos".</p>` +
         `<p>&nbsp;</p>` +

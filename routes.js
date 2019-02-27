@@ -88,7 +88,8 @@ const routes = function (app) {
 
   app.route('/media/:_id')
     .get(modelInjector, privateRoute, validator('media', 'id', 'params'), repoMedia.findById, defMethods.requestHandler)
-    .delete(modelInjector, privateRoute, validator('media', 'id', 'params'), repoMedia.remove, defMethods.requestHandler)
+    .delete(modelInjector, privateRoute, validator('media', 'id', 'params'),
+      brMedia.remove, repoMedia.removeOrUpdate, repoLoan.removeFromMedia, defMethods.requestHandler)
     .patch(
       modelInjector, privateRoute, validator('media', 'id', 'params'), validator('media', 'update', 'body'),
       brMedia.update, repoMedia.update, defMethods.requestHandler
