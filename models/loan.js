@@ -8,8 +8,7 @@ const LoanSchema = new mongoose.Schema({
         ref: 'User'
     },
     requestedAt: {
-        type: Date,
-        default: Date.now()
+        type: Date
     },
     estimatedReturnDate: {
         type: Date
@@ -33,5 +32,13 @@ const LoanSchema = new mongoose.Schema({
         type: Date
     }
 }, { versionKey: false, timestamps: false });
+
+LoanSchema.pre('save', async function (next) {
+    let loan = this;
+
+    loan.requestedAt = Date.now();
+
+    next();
+});
 
 module.exports = mongoose.model('Loan', LoanSchema);
