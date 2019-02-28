@@ -13,7 +13,7 @@ const forgotPwd = function (token) {
 const mediaRequested = function (gameName, mediaPlatform, requestedBy) {
     return `<p><strong>Prezado</strong>,` +
         `</p><p>Voc&ecirc; est&aacute; recebendo este e-mail pois ${requestedBy} solicitou o empr&eacute;stimo do jogo ` +
-        `${gameName} para a plataforma ${mediaPlatform}</p>` +
+        `${gameName} para a plataforma ${mediaPlatform}.</p>` +
         `<p>Ao emprestar o jogo lembre-se de entrar na plataforma Tentacle e sinalizar seu jogo como emprestado aba "Meus Jogos".</p>` +
         `<p>&nbsp;</p>` +
         `<p>Atenciosamente,</p>` +
@@ -56,11 +56,22 @@ const rememberDelivery = function (gameName, mediaPlatform, mediaOwnerName) {
         `<p><span style="text-decoration: underline;"><em><strong>Equipe Tentacle</strong></em></span></p>`
 };
 
+const mediaRemoved = function (gameName, mediaPlatform, mediaOwner) {
+    return `<p><strong>Prezado</strong>,` +
+        `</p><p>Voc&ecirc; est&aacute; recebendo este e-mail pois ${mediaOwner} indisponibilizou o jogo  ` +
+        `${gameName} para a plataforma ${mediaPlatform} que voc&ecirc; solicitou emprestado, ` +
+        `assim cancelando sua solicita&ccedil;&atilde;o de empr&eacute;stimo.</p>` +
+        `<p>&nbsp;</p>` +
+        `<p>Atenciosamente,</p>` +
+        `<p><span style="text-decoration: underline;"><em><strong>Equipe Tentacle</strong></em></span></p>`
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'forgotPwd': forgotPwd,
     'mediaRequested': mediaRequested,
     'mediaLended': mediaLended,
     'mediaReturned': mediaReturned,
-    'rememberDelivery': rememberDelivery
+    'rememberDelivery': rememberDelivery,
+    'mediaRemoved': mediaRemoved
 };
