@@ -73,6 +73,7 @@ function handleBodyParserParsingError(response) {
 // --------------------- Objetos Locais --------------------- //
 const fieldMap = {
     '_id': 'Identificador',
+    'action': 'Ação',
     'city': 'Cidade',
     'createdAt': 'Criado em',
     'createdBy': 'Criado por',

@@ -12,7 +12,7 @@ const keys = {
     'game': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'loanDate': joi.date().raw(),
     'returnDate': joi.date().raw(),
-    'action': joi.string().trim().valid('LEND', 'RETURN'),
+    'action': joi.string().trim().uppercase().valid('LEND', 'RETURN'),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };
