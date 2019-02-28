@@ -82,7 +82,7 @@ const findById = async function (request, response, next) {
                 [
                     { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
                     { 'path': 'media', 'select': 'platform' },
-                    { 'path': 'game', 'select': 'name cover aggregated_rating formattedReleaseDate summary game_modes genres' }
+                    { 'path': 'game', 'select': 'name cover aggregated_rating first_release_date formattedReleaseDate summary game_modes genres' }
                 ]
             );
 
