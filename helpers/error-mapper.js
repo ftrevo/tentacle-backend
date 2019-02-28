@@ -45,6 +45,9 @@ function getMessageFromDetail(detail) {
     if (detail.type === 'any.required') {
         return `O campo \'${fieldMap[detail.context.key]}\' é obrigatório.`;
     }
+    if (detail.type === 'any.empty') {
+        return `O campo \'${fieldMap[detail.context.key]}\' não pode ser vazio.`;
+    }
     if (detail.type === 'any.unknown') {
         return `O campo \'${fieldMap[detail.context.key]}\' não pode ser informado para esta ação.`;
     }

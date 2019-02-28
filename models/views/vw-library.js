@@ -2,7 +2,7 @@
 const createVwObject = {
     viewOn: 'games',
     pipeline: [
-        { $sort: { 'createdAt': -1 } },
+        { $sort: { 'name': 1 } },
         {
             $lookup: {
                 from: 'media',
