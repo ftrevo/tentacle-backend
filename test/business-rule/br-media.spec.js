@@ -227,10 +227,172 @@ describe('# Regra de negócio de Jogo', function () {
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
     });
+
+    describe('## Remove', function () {
+
+        it('mídia não encontrada', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock();
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('isNotFound', true);
+            nextObject.should.have.property('message', 'Mídia não encontrada');
+        });
+
+        it('outro dono', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+            let responseMock = getResponseMock(undefined, { '_id': requestMock.params._id, 'owner': ownerId }, '123456789012123456789012');
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isForbidden', true);
+        });
+
+        it('mídia emprestada', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                undefined,
+                [{ 'requestedAt': new Date(), 'loanDate': new Date() }]
+            );
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message', 'Mídia emprestada, espere a devolução para inativar o jogo.');
+        });
+
+        it('sem solicitação de empréstimo', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(undefined, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId);
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'remove');
+        });
+
+        it('sem solicitação de empréstimo - lista vazia', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(undefined, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, undefined, []);
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'remove');
+        });
+
+        it('única solicitação de empréstimo', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                undefined,
+                [{ 'requestedAt': new Date(), '_id': 'aaaaaaaaaaaabbbbbbbbbbbb' }]
+            );
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'remove');
+            requestMock.body.should.have.property('loanId', 'aaaaaaaaaaaabbbbbbbbbbbb');
+        });
+
+        it('único empréstimo já efetivado', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                undefined,
+                [{ 'requestedAt': new Date(), 'loanDate': new Date(), 'returnDate': new Date(), '_id': 'aaaaaaaaaaaabbbbbbbbbbbb' }]
+            );
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'deactivate');
+            requestMock.body.should.have.property('active', false);
+        });
+
+        it('múltiplos empréstimos já efetivados', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                undefined,
+                [
+                    { 'requestedAt': new Date(), 'loanDate': new Date(), 'returnDate': new Date(), '_id': 'bbbbbbbbbbbbcccccccccccc' },
+                    { 'requestedAt': new Date(), 'loanDate': new Date(), 'returnDate': new Date(), '_id': 'aaaaaaaaaaaabbbbbbbbbbbb' }
+                ]
+            );
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'deactivate');
+            requestMock.body.should.have.property('active', false);
+        });
+
+
+        it('múltiplos empréstimos já efetivados e solicitação', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                undefined,
+                [
+                    { 'requestedAt': new Date(), '_id': 'ccccccccccccdddddddddddd' },
+                    { 'requestedAt': new Date(), 'loanDate': new Date(), 'returnDate': new Date(), '_id': 'bbbbbbbbbbbbcccccccccccc' },
+                    { 'requestedAt': new Date(), 'loanDate': new Date(), 'returnDate': new Date(), '_id': 'aaaaaaaaaaaabbbbbbbbbbbb' }
+                ]
+            );
+
+            let nextObject = await brMedia.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.body.should.have.property('action', 'deactivate');
+            requestMock.body.should.have.property('loanId', 'ccccccccccccdddddddddddd');
+        });
+    });
 });
 
 // --------------------- Funções Locais --------------------- //
-function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount) {
+function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount, findLoanObject) {
     return {
         status: () => ({
             json: obj => obj
@@ -242,7 +404,10 @@ function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, cou
                     'findById': getExecObject(findByIdObject)
                 },
                 'game': {
-                    'countDocuments': getExecObject(countGameDocAmmount),
+                    'countDocuments': getExecObject(countGameDocAmmount)
+                },
+                'loan': {
+                    'find': getSortObject(findLoanObject)
                 }
             },
             '_MONGOOSE': {
@@ -260,12 +425,28 @@ function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, cou
     };
 };
 
-function getExecObject(returnedObject) {
+function getSortObject(returnedObject) {
     return function () {
         return {
-            exec: function () {
-                return returnedObject;
+            'sort': function () {
+                return {
+                    'exec': execFunction(returnedObject)
+                };
             }
         };
     };
 };
+
+function getExecObject(returnedObject) {
+    return function () {
+        return {
+            'exec': execFunction(returnedObject)
+        };
+    };
+};
+
+function execFunction(returnedObject) {
+    return function () {
+        return returnedObject;
+    };
+}

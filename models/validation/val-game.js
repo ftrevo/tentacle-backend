@@ -4,7 +4,8 @@ const joi = require('joi');
 // --------------------- Objetos Locais --------------------- //
 const keys = {
     '_id': joi.string().regex(/^[0-9a-fA-F]{24}$/),
-    'title': joi.string().trim(),
+    'id': joi.number(),
+    'name': joi.string().trim(),
     'createdBy': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'updatedBy': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'createdAt': joi.date().raw(),
@@ -15,16 +16,12 @@ const keys = {
 
 // ------------------- Funções Exportadas ------------------- //
 const create = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'title': keys.title.required()
+    'name': keys.name.required()
 });
-
-const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'title': keys.title.optional(),
-}).or('title');
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),
-    'title': keys.title.optional(),
+    'name': keys.name.optional(),
     'createdBy': keys.createdBy.optional(),
     'updatedBy': keys.updatedBy.optional(),
     'page': keys.page,
@@ -32,13 +29,24 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 });
 
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': keys._id.required(),
+    '_id': keys._id.required()
+});
+
+const searchRemote = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'name': keys.name.required(),
+    'page': joi.number().default(0),
+    'limit': joi.number().default(25).max(50)
+});
+
+const createRemote = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'id': keys.id.required()
 });
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'create': create,
+    'createRemote': createRemote,
     'id': id,
-    'update': update,
-    'search': search
+    'search': search,
+    'searchRemote': searchRemote
 };

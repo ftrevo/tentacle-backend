@@ -1,8 +1,8 @@
 // --------------------- Objetos Locais --------------------- //
 const populateFields = [
-    { 'path': 'requestedBy mediaOwner', 'select': 'name' },
+    { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
     { 'path': 'media', 'select': 'platform' },
-    { 'path': 'game', 'select': 'title' }
+    { 'path': 'game', 'select': 'name cover formattedReleaseDate' }
 ];
 
 // ------------------- Funções Exportadas ------------------- //
@@ -76,7 +76,15 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.loan.findById(request.params._id).populate(populateFields);
+        let foundObject = await response.locals._MODELS.loan
+            .findById(request.params._id)
+            .populate(
+                [
+                    { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
+                    { 'path': 'media', 'select': 'platform' },
+                    { 'path': 'game', 'select': 'name cover aggregated_rating formattedReleaseDate summary game_modes genres' }
+                ]
+            );
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Empréstimo não encontrado', 'isNotFound': true });
@@ -112,12 +120,25 @@ const remove = async function (request, response, next) {
     }
 };
 
+const removeFromMedia = async function (request, response, next) {
+    try {
+        if (request.body.loanId) {
+            await response.locals._MODELS.loan.findByIdAndDelete(request.body.loanId);
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
     'findById': findById,
     'remove': remove,
+    'removeFromMedia': removeFromMedia,
     'search': search
 };
 

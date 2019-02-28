@@ -1,3 +1,6 @@
+// ----------------- Import de dependências ----------------- //
+const uIDGenerator = require('uid-generator');
+
 // ------------------- Funções Exportadas ------------------- //
 const save = async function (request, response, next) {
     try {
@@ -112,6 +115,61 @@ const remove = async function (request, response, next) {
     }
 };
 
+const forgotPwd = async function (request, response, next) {
+    try {
+        let user = await response.locals._MODELS.user.findOne({ 'email': request.body.email }).exec();
+
+        if (!user) {
+            return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
+        }
+
+        request.body.token = new uIDGenerator(uIDGenerator.BASE36, 5).generateSync();
+
+        response.locals._UTIL.clearObject(request.body, ['email']);
+
+        request.params = { '_id': user._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
+const restorePwd = async function (request, response, next) {
+    try {
+        let user = await response.locals._MODELS.user.findOne({ 'email': request.body.email }).exec();
+
+        if (!user) {
+            return next({ 'isBusiness': true, 'message': 'Usuário não encontrado', 'isNotFound': true });
+        }
+
+        if (user.token !== request.body.token) {
+            return next({ 'isForbidden': true });
+        }
+
+        response.locals._UTIL.clearObject(request.body, ['token', 'email']);
+
+        request.params = { '_id': user._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
+const profile = async function (request, response, next) {
+    try {
+        request.params = { '_id': response.locals._USER._id };
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function validateDataFromUser(resolvedPromisses) {
     let validationErrors = [];
@@ -136,5 +194,8 @@ module.exports = {
     'save': save,
     'update': update,
     'remove': remove,
-    'search': search
+    'search': search,
+    'forgotPwd': forgotPwd,
+    'restorePwd': restorePwd,
+    'profile': profile
 };

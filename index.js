@@ -13,6 +13,7 @@ const cors = require('cors');
 const errorMapper = require('./helpers/error-mapper');
 const authorizer = require('./helpers/authorizer');
 const util = require('./helpers/util');
+const igdb = require('./helpers/igdb');
 const routes = require('./routes');
 
 const swaggerYaml = require('yamljs').load('./swagger.yaml');
@@ -35,6 +36,7 @@ authorizer.authorize(passport);
 app.all('*', (request, response, next) => {
     response.locals._UTIL = util;
     response.locals._MONGOOSE = mongoose;
+    response.locals._IGDB = igdb;
     next();
 });
 

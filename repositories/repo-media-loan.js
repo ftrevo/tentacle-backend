@@ -1,37 +1,18 @@
 // ------------------- Funções Exportadas ------------------- //
-const save = async function (request, response, next) {
-    try {
-        let toBeIncluded = new response.locals._MODELS.game(request.body);
-
-        await toBeIncluded.save();
-
-        response.locals._UTIL.setLocalsData(
-            response,
-            201,
-            toBeIncluded.toObject(),
-            'Jogo salvo'
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.game
+            response.locals._MODELS.mediaLoan
                 .find(
                     request.query,
-                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'sumary': 1, 'screenshots': 1 }
+                    'id platform gameData._id gameData.name activeLoan._id activeLoan.requestedAt activeLoan.loanDate'
                 )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'createdAt': -1 })
+                .sort({ 'gameData.name': 1 })
                 .exec(),
 
-            response.locals._MODELS.game.find(request.query).countDocuments().exec()
+            response.locals._MODELS.mediaLoan.find(request.query).countDocuments().exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
@@ -50,17 +31,17 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.game.findById(request.params._id);
+        let foundObject = await response.locals._MODELS.mediaLoan.findById(request.params._id);;
 
         if (!foundObject) {
-            return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+            return next({ 'isDatabase': true, 'message': 'Mídia não encontrada', 'isNotFound': true });
         }
 
         response.locals._UTIL.setLocalsData(
             response,
             200,
             foundObject,
-            'Jogo encontrado'
+            'Mídia encontrada'
         );
 
         next();
@@ -71,7 +52,6 @@ const findById = async function (request, response, next) {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'save': save,
     'findById': findById,
     'search': search
 };

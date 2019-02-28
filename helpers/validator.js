@@ -2,6 +2,7 @@
 const joi = require('joi');
 
 // --------------- Import de arquivos do core --------------- //
+const valMediaLoan = require('../models/validation/val-media-loan');
 const valLibrary = require('../models/validation/val-library');
 const valAccess = require('../models/validation/val-access');
 const valState = require('../models/validation/val-state');
@@ -34,7 +35,9 @@ const validationMethods = {
         'create': valUser.create,
         'id': valUser.id,
         'update': valUser.update,
-        'search': valUser.search
+        'search': valUser.search,
+        'forgotPwd': valUser.forgotPwd,
+        'restorePwd': valUser.restorePwd
     },
     'access': {
         'login': valAccess.login,
@@ -47,7 +50,9 @@ const validationMethods = {
         'create': valGame.create,
         'id': valGame.id,
         'update': valGame.update,
-        'search': valGame.search
+        'search': valGame.search,
+        'searchRemote': valGame.searchRemote,
+        'createRemote': valGame.createRemote
     },
     'media': {
         'create': valMedia.create,
@@ -64,6 +69,10 @@ const validationMethods = {
         'id': valLoan.id,
         'update': valLoan.update,
         'search': valLoan.search
+    },
+    'mediaLoan': {
+        'id': valMediaLoan.id,
+        'search': valMediaLoan.search
     }
 };
 

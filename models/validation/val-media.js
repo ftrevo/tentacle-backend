@@ -28,15 +28,15 @@ const update = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),
     'platform': keys.platform.optional(),
+    'mineOnly': keys.mineOnly.optional(),
     'game': keys.game.optional(),
     'owner': keys.owner.optional(),
-    'mineOnly': keys.mineOnly.optional(),
     'page': keys.page,
     'limit': keys.limit
 });
 
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': keys._id.required(),
+    '_id': keys._id.required()
 });
 
 // --------------------- Module Exports --------------------- //

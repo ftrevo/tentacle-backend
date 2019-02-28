@@ -45,6 +45,9 @@ function getMessageFromDetail(detail) {
     if (detail.type === 'any.required') {
         return `O campo \'${fieldMap[detail.context.key]}\' é obrigatório.`;
     }
+    if (detail.type === 'any.empty') {
+        return `O campo \'${fieldMap[detail.context.key]}\' não pode ser vazio.`;
+    }
     if (detail.type === 'any.unknown') {
         return `O campo \'${fieldMap[detail.context.key]}\' não pode ser informado para esta ação.`;
     }
@@ -70,27 +73,28 @@ function handleBodyParserParsingError(response) {
 // --------------------- Objetos Locais --------------------- //
 const fieldMap = {
     '_id': 'Identificador',
-    'name': 'Nome',
-    'email': 'E-mail',
-    'phone': 'Telefone',
-    'password': 'Senha',
-    'createdAt': 'Criado em',
-    'updatedAt': 'Atualizado em',
-    'refreshToken': 'Refresh Token',
-    'state': 'Estado',
     'city': 'Cidade',
-    'title': 'Título',
+    'createdAt': 'Criado em',
     'createdBy': 'Criado por',
-    'updatedBy': 'Atualizado por',
-    'owner': 'Dono',
+    'email': 'E-mail',
     'game': 'Jogo',
-    'title': 'Título',
-    'platform': 'Plataforma',
+    'id': 'Identificador',
+    'limit': 'Limite',
     'mediaId': 'Identificador da Mídia',
     'mediaOwner': 'Dono da Mídia',
     'mediaPlatform': 'Plataforma',
     'mineOnly': 'Apenas meus jogos',
-    'limit': 'Limite'
+    'name': 'Nome',
+    'owner': 'Dono',
+    'page': 'Página',
+    'password': 'Senha',
+    'phone': 'Telefone',
+    'platform': 'Plataforma',
+    'refreshToken': 'Refresh Token',
+    'state': 'Estado',
+    'token': 'Token',
+    'updatedAt': 'Atualizado em',
+    'updatedBy': 'Atualizado por'
 };
 
 // --------------------- Module Exports --------------------- //

@@ -2,7 +2,7 @@
 const save = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.game.countDocuments({ 'title': new RegExp(`^${request.body.title}$`, 'i') }).exec(),
+            response.locals._MODELS.game.countDocuments({ 'name': new RegExp(`^${request.body.name}$`, 'i') }).exec(),
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
@@ -14,44 +14,6 @@ const save = async function (request, response, next) {
         }
 
         request.body.createdBy = response.locals._USER._id;
-
-        next();
-    } catch (error) {
-        /* istanbul ignore next */
-        next(error);
-    }
-};
-
-const update = async function (request, response, next) {
-    try {
-        let promisseStack = [];
-
-        promisseStack.push(
-            response.locals._MODELS.game.countDocuments(
-                {
-                    '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                    'title': new RegExp(`^${request.body.title}$`, 'i')
-                }
-            ).exec()
-        );
-
-        promisseStack.push(
-            response.locals._MODELS.game.findById(request.params._id).exec()
-        );
-
-        let resolvedPromisses = await Promise.all(promisseStack);
-
-        if (!resolvedPromisses[1]) {
-            return next({ 'isBusiness': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
-        }
-
-        let validationErrors = validateGameData(resolvedPromisses);
-
-        if (validationErrors && validationErrors.length > 0) {
-            return next({ 'isBusiness': true, 'message': validationErrors });
-        }
-
-        request.body.updatedBy = response.locals._USER._id;
 
         next();
     } catch (error) {
@@ -72,6 +34,66 @@ const search = async function (request, response, next) {
     }
 };
 
+const searchRemote = async function (request, response, next) {
+    try {
+        let pagination = response.locals._UTIL.resolvePagination(request.query);
+
+        let igdbResponse = await response.locals._IGDB.list(request.query.name, pagination);
+
+        if (igdbResponse.statusCode !== 200) {
+            return next({ 'statusCode': 500, 'message': `IGDB ${igdbResponse.statusCode}` });
+        }
+
+        let list = JSON.parse(igdbResponse.body).map((singleGame) => {
+            return transformUnixDate(singleGame, response);
+        });
+
+        response.locals._UTIL.setLocalsData(response, 200, { 'list': list });
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
+const saveRemote = async function (request, response, next) {
+    try {
+        let promisseStack = [
+            response.locals._MODELS.game.countDocuments({ 'id': request.body.id }).exec()
+        ];
+
+        let resolvedPromisses = await Promise.all(promisseStack);
+
+        let validationErrors = validateGameData(resolvedPromisses);
+
+        if (validationErrors && validationErrors.length > 0) {
+            return next({ 'isBusiness': true, 'message': validationErrors });
+        }
+
+        let igdbResponse = await response.locals._IGDB.detail(request.body.id);
+
+        if (igdbResponse.statusCode !== 200) {
+            return next({ 'statusCode': 500, 'message': `IGDB ${igdbResponse.statusCode}` });
+        }
+
+        let igdbResponseBody = JSON.parse(igdbResponse.body || '[]');
+
+        if (!igdbResponseBody || igdbResponseBody.length !== 1) {
+            return next({ 'isBusiness': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+        }
+
+        request.body = transformUnixDate(igdbResponseBody[0], response);
+
+        request.body.createdBy = response.locals._USER._id;
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function validateGameData(resolvedPromisses) {
     let validationErrors = [];
@@ -82,9 +104,21 @@ function validateGameData(resolvedPromisses) {
 
     return validationErrors;
 };
+
+function transformUnixDate(singleGame, response) {
+    let releaseDate = new Date(singleGame.first_release_date * 1000);
+
+    singleGame.first_release_date = releaseDate;
+    singleGame.formattedReleaseDate = response.locals._UTIL.getUtcFormattedDateFromDate(releaseDate);
+
+    return singleGame;
+};
+
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
-    'update': update,
-    'search': search
+    'saveRemote': saveRemote,
+    'search': search,
+    'searchRemote': searchRemote
 };

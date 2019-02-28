@@ -178,6 +178,74 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+  /users/forgot-password:
+    post:
+      tags:
+        - User
+      summary: Rota de envio de e-mail com token
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+      responses:
+        '200':
+          description: Email de recuperação de senha enviado
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /users/restore-password:
+    post:
+      tags:
+        - User
+      summary: Rota de alteração de senha
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                token:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Senha alterada
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /users/profile:
+    get:
+      tags:
+        - User
+      summary: Rota de perfil
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/response/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
 
   /games:
     post:
@@ -209,7 +277,8 @@ paths:
         - authenticationUser: []
       parameters:
         - in: query
-          name: title
+          name: name
+          description: Nome do jogo
           schema:
             type: string
         - $ref: '#/components/parameters/limitParam'
@@ -243,23 +312,36 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-    delete:
+  /games/remote:
+    get:
       tags:
         - Game
-      summary: Rota de remoção de jogos
+      summary: Rota de detalhamento de jogos do IGDB
       security:
         - authenticationUser: []
+      parameters:
+        - in: query
+          name: name
+          description: Nome do jogo
+          schema:
+            type: string
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
       responses:
         '200':
-          $ref: '#/components/responses/200Remove'
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-    patch:
+    post:
       tags:
         - Game
-      summary: Rota de alteração de jogos
+      summary: Rota de criação de jogos do IGDB
       security:
         - authenticationUser: []
       requestBody:
@@ -267,16 +349,14 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Game'
+                $ref: '#/components/schemas/GameIgdb'
       responses:
-        '200':
-          $ref: '#/components/responses/200Detail'
+        '201':
+          $ref: '#/components/responses/201'
         '400':
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
-        '404':
-          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
 
@@ -311,19 +391,23 @@ paths:
       parameters:
         - in: query
           name: platform
+          description: Plataforma da mídia
           schema:
             type: string
             enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
         - in: query
           name: game
+          description: ObjectId do jogo
           schema:
             type: string
         - in: query
           name: owner
+          description: ObjectId do dono do jogo
           schema:
             type: string
         - in: query
           name: mineOnly
+          description: Ver apenas minhas mídias
           schema:
             type: boolean
         - $ref: '#/components/parameters/limitParam'
@@ -404,25 +488,23 @@ paths:
       parameters:
         - in: query
           name: _id
+          description: ObjectId do jogo
           schema:
             type: string
         - in: query
-          name: title
-          schema:
-            type: string
-        - in: query
-          name: mediaOwner
-          schema:
-            type: string
-        - in: query
-          name: mediaId
+          name: name
+          description: Nome do jogo
           schema:
             type: string
         - in: query
           name: mediaPlatform
+          description: Lista de plataformas
           schema:
-            type: string
-            enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+            type: array
+            items:
+              type: string
+              enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+          explode: false
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
@@ -432,6 +514,26 @@ paths:
           $ref: '#/components/responses/400'
         '401':
           $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /library/{id}:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - Library
+      summary: Rota de detalhamento de biblioteca
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
 
@@ -460,30 +562,40 @@ paths:
     get:
       tags:
         - Loan
-      summary: Rota de listagem de empréstimo
+      summary: Rota de listagem de empréstimos ativos
       security:
         - authenticationUser: []
       parameters:
         - in: query
           name: _id
+          description: ObjectId do empréstimo
           schema:
             type: string
         - in: query
           name: requestedBy
+          description: ObjectId de quem solicitou o empréstimo
           schema:
             type: string
         - in: query
           name: media
+          description: ObjectId da mídia
           schema:
             type: string
         - in: query
           name: mediaOwner
+          description: ObjectId do dono da mídia
           schema:
             type: string
         - in: query
           name: game
+          description: ObjectId do jogo
           schema:
             type: string
+        - in: query
+          name: mineOnly
+          description: Ver apenas meus empréstimos
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
@@ -556,6 +668,83 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /loans/{id}/remember-delivery:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    post:
+      tags:
+        - Loan
+      summary: Rota de envio de e-mail lembrando da devolução da mídia
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          description: Envio de e-mail de lembrete de devolução de jogo
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /media-loan:
+    get:
+      tags:
+        - MediaLoan
+      summary: Rota de listagem de Mídia/Empréstimo
+      security:
+        - authenticationUser: []
+      parameters:
+        - in: query
+          name: _id
+          description: ObjectId da mídia
+          schema:
+            type: string
+        - in: query
+          name: platform
+          description: Plataforma da mídia
+          schema:
+            type: string
+            enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+        - in: query
+          name: game
+          description: ObjectId do jogo
+          schema:
+            type: string
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /media-loan/{id}:
+    parameters:
+      - $ref: '#/components/parameters/idParam'
+    get:
+      tags:
+        - MediaLoan
+      summary: Rota de detalhamento de Mídia/Empréstimo
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
 components:
   securitySchemes:
     authenticationUser:
@@ -567,7 +756,7 @@ components:
     idParam:
       in: path
       name: id
-      description: Object Id
+      description: Object Id do objeto
       schema:
         type: string
     limitParam:
@@ -588,20 +777,6 @@ components:
       description: Nome
       schema:
         type: string
-    emailParam:
-      in: body
-      name: email
-      description: Email
-      schema:
-        type: string
-        format: email
-    passwordParam:
-      in: body
-      name: password
-      description: Password
-      schema:
-        type: string
-        format: password
   responses:
     '200Detail':
       description: Objeto detalhado
@@ -644,8 +819,13 @@ components:
     Game:
       type: object
       properties:
-        title:
+        name:
           type: string
+    GameIgdb:
+      type: object
+      properties:
+        id:
+          type: integer
     Media:
       type: object
       properties:

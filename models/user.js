@@ -6,8 +6,7 @@ const bcrypt = require('bcryptjs');
 const UserSchema = new mongoose.Schema({
     name: {
         type: String,
-        trim: true,
-        uppercase: true
+        trim: true
     },
     email: {
         type: String,
@@ -23,9 +22,13 @@ const UserSchema = new mongoose.Schema({
     },
     state: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'State',
+        ref: 'State'
     },
     city: {
+        type: String,
+        trim: true
+    },
+    token: {
         type: String,
         trim: true
     }
@@ -52,6 +55,12 @@ UserSchema.pre('findOneAndUpdate', async function (next) {
     if (!query._update.password) {
         return next();
     }
+
+    if (!query._update.$unset) {
+        query._update.$unset = {};
+    }
+
+    query._update.$unset.token = '';
 
     let salt = await bcrypt.genSalt(12);
 

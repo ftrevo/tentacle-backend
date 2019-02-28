@@ -62,9 +62,14 @@ const setLocalsData = (response, statusCode, data, message) => {
     }
 };
 
+const getUtcFormattedDateFromDate = (targetDate) => {
+    return `${((targetDate.getUTCDate()) + '').padStart(2, '0')}/${((targetDate.getUTCMonth() + 1) + '').padStart(2, '0')}/${targetDate.getFullYear()}`;
+}
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'clearObject': clearObject,
+    'getUtcFormattedDateFromDate': getUtcFormattedDateFromDate,
     'handleRequests': handleRequests,
     'resolvePagination': resolvePagination,
     'setLocalsData': setLocalsData,
