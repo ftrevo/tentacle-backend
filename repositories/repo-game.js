@@ -4,7 +4,6 @@ const save = async function (request, response, next) {
         let toBeIncluded = new response.locals._MODELS.game(request.body);
 
         await toBeIncluded.save();
-        await response.locals._MODELS.game.populate(toBeIncluded, { 'path': 'createdBy', 'select': 'name' });
 
         response.locals._UTIL.setLocalsData(
             response,
@@ -22,13 +21,14 @@ const save = async function (request, response, next) {
 const search = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.game.find(request.query)
+            response.locals._MODELS.game
+                .find(
+                    request.query,
+                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'sumary': 1, 'screenshots': 1 }
+                )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'name': 1 })
-                .populate([
-                    { 'path': 'createdBy', 'select': 'name' }
-                ])
+                .sort({ 'createdAt': -1 })
                 .exec(),
 
             response.locals._MODELS.game.find(request.query).countDocuments().exec()
@@ -50,10 +50,7 @@ const search = async function (request, response, next) {
 
 const findById = async function (request, response, next) {
     try {
-        let foundObject = await response.locals._MODELS.game.findById(request.params._id)
-            .populate([
-                { 'path': 'createdBy', 'select': 'name' }
-            ]);
+        let foundObject = await response.locals._MODELS.game.findById(request.params._id);
 
         if (!foundObject) {
             return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });

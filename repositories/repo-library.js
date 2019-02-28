@@ -5,11 +5,12 @@ const search = async function (request, response, next) {
             response.locals._MODELS.library.
                 find(
                     request.query,
-                    'name aggregated_rating aggregated_rating_count cover id formattedReleaseDate ' +
+                    'name ' +
                     'mediaPs3Count mediaPs4Count mediaXbox360Count mediaXboxOneCount mediaNintendo3dsCount mediaNintendoSwitchCount'
                 )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
+                .sort('name')
                 .exec(),
 
             response.locals._MODELS.library.find(request.query).countDocuments().exec()
