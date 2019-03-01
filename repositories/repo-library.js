@@ -30,6 +30,36 @@ const search = async function (request, response, next) {
     }
 };
 
+const searchHome = async function (request, response, next) {
+    try {
+        let promisseStack = [
+            response.locals._MODELS.library.
+                find(
+                    request.query,
+                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'summary': 1, 'screenshots': 1 }
+                )
+                .skip(response.locals.pagination.skip)
+                .limit(response.locals.pagination.max)
+                .sort({ 'createdAt': -1 })
+                .exec(),
+
+            response.locals._MODELS.library.find(request.query).countDocuments().exec()
+        ];
+
+        let resolvedPromisses = await Promise.all(promisseStack);
+
+        response.locals._UTIL.setLocalsData(
+            response,
+            200,
+            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
+        );
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 const findById = async function (request, response, next) {
     try {
         let foundObject = await response.locals._MODELS.library.findById(request.params._id);
@@ -53,6 +83,7 @@ const findById = async function (request, response, next) {
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'search': search,
+    'searchHome': searchHome,
     'findById': findById
 };
 

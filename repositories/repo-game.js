@@ -24,11 +24,11 @@ const search = async function (request, response, next) {
             response.locals._MODELS.game
                 .find(
                     request.query,
-                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'sumary': 1, 'screenshots': 1 }
+                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'cover': 1, 'first_release_date': 1, 'formattedReleaseDate': 1 }
                 )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
-                .sort({ 'createdAt': -1 })
+                .sort({ 'name': 1 })
                 .exec(),
 
             response.locals._MODELS.game.find(request.query).countDocuments().exec()

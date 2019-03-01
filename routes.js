@@ -101,10 +101,14 @@ const routes = function (app) {
       modelInjector, privateRoute, validator('library', 'search', 'query'),
       brLibrary.search, repoLibrary.search, defMethods.requestHandler);
 
-  app.route('/library/:_id')
+  app.route('/library/:_id([0-9a-fA-F]{24})')
     .get(
       modelInjector, privateRoute, validator('library', 'id', 'params'), repoLibrary.findById, defMethods.requestHandler);
 
+  app.route('/library/home')
+    .get(
+      modelInjector, privateRoute, validator('library', 'searchHome', 'query'),
+      brLibrary.searchHome, repoLibrary.searchHome, defMethods.requestHandler);
 
   app.route('/loans')
     .get(modelInjector, privateRoute, validator('loan', 'search', 'query'), brLoan.search, repoLoan.search, defMethods.requestHandler)
