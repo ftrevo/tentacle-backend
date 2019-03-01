@@ -62,7 +62,8 @@ const validationMethods = {
     },
     'library': {
         'id': valLibrary.id,
-        'search': valLibrary.search
+        'search': valLibrary.search,
+        'searchHome': valLibrary.searchHome
     },
     'loan': {
         'create': valLoan.create,

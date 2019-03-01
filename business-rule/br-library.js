@@ -14,6 +14,21 @@ const search = async function (request, response, next) {
     }
 };
 
+const searchHome = async function (request, response, next) {
+    try {
+        response.locals.pagination = response.locals._UTIL.resolvePagination(request.query);
+
+        request.query = getLibraryQuery(request.query);
+
+        response.locals._UTIL.clearObject(request.query, ['mediaPlatform']);
+
+        next();
+    } catch (error) {
+        /* istanbul ignore next */
+        next(error);
+    }
+};
+
 // --------------------- Funções Locais --------------------- //
 function getLibraryQuery(requestQuery) {
     if (requestQuery.mediaPlatform) {
@@ -45,5 +60,6 @@ const platformMediaList = {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'search': search
+    'search': search,
+    'searchHome': searchHome
 };

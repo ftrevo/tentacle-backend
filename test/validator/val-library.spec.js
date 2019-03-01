@@ -183,4 +183,98 @@ describe('# Validador de Biblioteca de jogos', function () {
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
         });
     });
+
+    describe('## Search Home', function () {
+
+        it('campos inválidos', async function () {
+            let request = {
+                'query': {
+                    'limit': 999
+                }
+            };
+
+            let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+
+            let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                {
+                    'message': '"limit" must be less than or equal to 100',
+                    'type': 'number.max'
+                }
+            ]);
+        });
+
+        describe('### Plataforma', function () {
+            it('parâmetro como string com , no final', async function () {
+                let request = {
+                    'query': {
+                        'mediaPlatform': 'PS4,'
+                    }
+                };
+
+                let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+
+                let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isJoi', true);
+                nextObject.should.have.property('details').with.lengthOf(1);
+                nextObject.details.should.containDeep([
+                    {
+                        'message': '"mediaPlatform" with value "PS4," fails to match the required pattern: '
+                            + '/^(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS)(,(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS))*$/',
+                        'type': 'string.regex.base'
+                    }
+                ]);
+            });
+
+            it('array com parâmetro inválido', async function () {
+                let request = {
+                    'query': {
+                        'mediaPlatform': 'PS4,invalidPlatformString'
+                    }
+                };
+
+                let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+
+                let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+                should(nextObject).be.ok();
+                nextObject.should.have.property('isJoi', true);
+                nextObject.should.have.property('details').with.lengthOf(1);
+                nextObject.details.should.containDeep([
+                    {
+                        'message': '"mediaPlatform" with value "PS4,invalidPlatformString" fails to match the required pattern: '
+                            + '/^(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS)(,(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS))*$/',
+                        'type': 'string.regex.base'
+                    }
+                ]);
+            });
+
+        });
+
+        it('limpeza e inserção de campos e dados OK', async function () {
+            let request = {
+                'query': {
+                    'mediaPlatform': 'PS4,PS3',
+                    'createdAt': 'Should be removed',
+                    'randomField': 'Should be removed'
+                }
+            };
+
+            let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+
+            let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.query.should.have.properties(['mediaPlatform', 'page', 'limit']);
+            request.query.limit.should.be.eql(10);
+            request.query.page.should.be.eql(0);
+            request.query.should.not.have.any.properties(['createdAt', 'randomField']);
+        });
+    });
 });
