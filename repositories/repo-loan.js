@@ -82,7 +82,7 @@ const findById = async function (request, response, next) {
                 [
                     { 'path': 'requestedBy mediaOwner', 'select': 'name email' },
                     { 'path': 'media', 'select': 'platform' },
-                    { 'path': 'game', 'select': 'name cover aggregated_rating formattedReleaseDate summary game_modes genres' }
+                    { 'path': 'game', 'select': 'name cover aggregated_rating first_release_date formattedReleaseDate summary game_modes genres' }
                 ]
             );
 
@@ -123,7 +123,10 @@ const remove = async function (request, response, next) {
 const removeFromMedia = async function (request, response, next) {
     try {
         if (request.body.loanId) {
-            await response.locals._MODELS.loan.findByIdAndDelete(request.body.loanId);
+            let loan = await response.locals._MODELS.loan.findByIdAndDelete(request.body.loanId).populate('requestedBy', 'name email');
+
+            request.body.loanRequestedByName = loan.requestedBy.name;
+            request.body.loanRequestedByEmail = loan.requestedBy.email;
         }
 
         next();

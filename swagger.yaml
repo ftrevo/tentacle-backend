@@ -536,6 +536,35 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
+  /library/home:
+    get:
+      tags:
+        - Library
+      summary: Rota de listagem da home
+      security:
+        - authenticationUser: []
+      parameters:
+        - in: query
+          name: mediaPlatform
+          description: Lista de plataformas
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+          explode: false
+        - $ref: '#/components/parameters/limitParam'
+        - $ref: '#/components/parameters/pageParam'
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+
 
   /loans:
     post:
@@ -596,6 +625,20 @@ paths:
           description: Ver apenas meus empréstimos
           schema:
             type: boolean
+        - in: query
+          name: showHistory
+          description: Ver histórico de empréstimos
+          schema:
+            type: boolean
+        - in: query
+          name: mediaPlatform
+          description: Lista de plataformas
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+          explode: false
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:

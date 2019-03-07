@@ -33,7 +33,7 @@ describe('# Regra de negócio de Mídia/Empréstimo', function () {
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
 
-        it('substituicao do owner ', async function () {
+        it('substituição do owner ', async function () {
             let requestMock = {
                 'query': {
                     'owner': '1a2b3c4d5e6f1a2b3c4d5e6f',

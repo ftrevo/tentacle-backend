@@ -26,6 +26,13 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'limit': keys.limit
 });
 
+// ------------------- Funções Exportadas ------------------- //
+const searchHome = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'mediaPlatform': keys.mediaPlatform.optional(),
+    'page': keys.page,
+    'limit': keys.limit
+});
+
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.required()
 });
@@ -33,5 +40,6 @@ const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys(
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'id': id,
-    'search': search
+    'search': search,
+    'searchHome': searchHome
 };

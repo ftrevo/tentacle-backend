@@ -105,7 +105,10 @@ const findById = async function (request, response, next) {
 
 const remove = async function (request, response, next) {
     try {
-        let removedObject = await response.locals._MODELS.media.findByIdAndDelete(request.params._id);
+        let removedObject = await response.locals._MODELS.media.findByIdAndDelete(request.params._id).populate([
+            { 'path': 'owner', 'select': 'name' },
+            { 'path': 'game', 'select': 'name' }
+        ]);
 
         response.locals._UTIL.setLocalsData(
             response,

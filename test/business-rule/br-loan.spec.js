@@ -16,9 +16,9 @@ describe('# Regra de negócio de Empréstimo', function () {
     });
 
     describe('## Save', function () {
-        let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
-
         it('mídia não encontrada', async function () {
+            let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
             let responseMock = getResponseMock();
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -34,6 +34,8 @@ describe('# Regra de negócio de Empréstimo', function () {
         });
 
         it('mesmo dono', async function () {
+            let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
             let responseMock = getResponseMock({ 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' }, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -49,6 +51,8 @@ describe('# Regra de negócio de Empréstimo', function () {
         });
 
         it('já cadastrado', async function () {
+            let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
             let responseMock = getResponseMock(
                 { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' },
                 { 'requestedBy': '2b2b2b2b2b2b3c3c3c3c3c3c' },
@@ -68,6 +72,8 @@ describe('# Regra de negócio de Empréstimo', function () {
         });
 
         it('mídia emprestada para outra pessoa', async function () {
+            let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
             let responseMock = getResponseMock(
                 { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' },
                 { 'requestedBy': '2b2b2b2b2b2b3c3c3c3c3c3c' },
@@ -87,11 +93,23 @@ describe('# Regra de negócio de Empréstimo', function () {
         });
 
         it('dados OK', async function () {
-            let responseMock = getResponseMock({ 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' }, undefined, '3c3c3c3c3c3c4d4d4d4d4d4d');
+            let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b', 'game': '9a9a9a9a9a9a8b8b8b8b8b8b', 'platform': 'PS4' },
+                undefined,
+                '3c3c3c3c3c3c4d4d4d4d4d4d'
+            );
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
+
+            requestMock.body.should.have.property('media', '1a2b3c4d5e6f1a2b3c4d5e6f');
+            requestMock.body.should.have.property('requestedBy', '3c3c3c3c3c3c4d4d4d4d4d4d');
+            requestMock.body.should.have.property('mediaOwner', '1a1a1a1a1a1a2b2b2b2b2b2b');
+            requestMock.body.should.have.property('game', '9a9a9a9a9a9a8b8b8b8b8b8b');
+            requestMock.body.should.have.property('mediaPlatform', 'PS4');
         });
     });
 
@@ -312,13 +330,12 @@ describe('# Regra de negócio de Empréstimo', function () {
             requestMock.query.should.have.property('mediaOwner', '3c3c3c3c3c3c4d4d4d4d4d4d');
             requestMock.query.should.have.property('game', '4d4d4d4d4d4d5e5e5e5e5e5e');
             requestMock.query.should.have.property('returnDate', { '$exists': false });
-            requestMock.query.should.not.have.property('page');
-            requestMock.query.should.not.have.property('limit');
+            requestMock.query.should.not.have.any.properties(['mineOnly', 'showHistory', 'page', 'limit']);
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
 
 
-        it('substituicao do owner devido ao campo mineOnly', async function () {
+        it('substituição do owner devido ao campo mineOnly', async function () {
             let requestMock = {
                 'query': {
                     'requestedBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
@@ -333,10 +350,67 @@ describe('# Regra de negócio de Empréstimo', function () {
 
             should(nextObject).not.be.ok();
             requestMock.query.should.have.property('requestedBy', '112233445566778899001122');
-            requestMock.query.should.not.have.property('mineOnly');
-            requestMock.query.should.not.have.property('page');
-            requestMock.query.should.not.have.property('limit');
+            requestMock.query.should.have.property('returnDate', { '$exists': false });
+            requestMock.query.should.not.have.any.properties(['mineOnly', 'showHistory', 'page', 'limit']);
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+        });
+
+        it('showHistory', async function () {
+            let requestMock = {
+                'query': {
+                    'showHistory': true,
+                    'page': 0, 'limit': 10
+                }
+            };
+
+            let responseMock = getResponseMock(undefined, undefined, '112233445566778899001122');
+
+            let nextObject = await brLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            requestMock.query.should.have.property('returnDate', { '$exists': true });
+            requestMock.query.should.not.have.any.properties(['mineOnly', 'showHistory', 'page', 'limit']);
+            responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+        });
+
+        describe('### mediaPlatform', function () {
+            it('apenas uma', async function () {
+                let requestMock = {
+                    'query': {
+                        'mediaPlatform': 'PS3',
+                        'page': 0, 'limit': 10
+                    }
+                };
+
+                let responseMock = getResponseMock(undefined, undefined, '112233445566778899001122');
+
+                let nextObject = await brLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).not.be.ok();
+                requestMock.query.should.have.property('returnDate', { '$exists': false });
+                requestMock.query.should.have.property('mediaPlatform', { '$in': ['PS3'] });
+                requestMock.query.should.not.have.any.properties(['mineOnly', 'showHistory', 'page', 'limit']);
+                responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+            });
+
+            it('múltiplas', async function () {
+                let requestMock = {
+                    'query': {
+                        'mediaPlatform': 'PS3,PS4',
+                        'page': 0, 'limit': 10
+                    }
+                };
+
+                let responseMock = getResponseMock(undefined, undefined, '112233445566778899001122');
+
+                let nextObject = await brLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+                should(nextObject).not.be.ok();
+                requestMock.query.should.have.property('returnDate', { '$exists': false });
+                requestMock.query.should.have.property('mediaPlatform', { '$in': ['PS3', 'PS4'] });
+                requestMock.query.should.not.have.any.properties(['mineOnly', 'showHistory', 'page', 'limit']);
+                responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
+            });
         });
 
     });
