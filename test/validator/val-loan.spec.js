@@ -133,7 +133,11 @@ describe('# Validador de Empréstimo', function () {
                     'media': 'invalidMedia',
                     'requestedBy': 'invalidRequestedBy',
                     'mediaOwner': 'invalidMediaOwner',
+                    'mediaPlatform': 'invalidMediaPlatform',
                     'game': 'invalidGame',
+                    'showHistory': 'invalidShowHistory',
+                    'mineOnly': 'invalidMineOnly',
+                    'page': 'teste',
                     'limit': 999
                 }
             };
@@ -144,7 +148,7 @@ describe('# Validador de Empréstimo', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(6);
+            nextObject.should.have.property('details').with.lengthOf(10);
             nextObject.details.should.containDeep([
                 {
                     'message': '"_id" with value "invalidId" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
@@ -167,6 +171,22 @@ describe('# Validador de Empréstimo', function () {
                     'type': 'string.regex.base'
                 },
                 {
+                    'message': '"mediaPlatform" with value "invalidMediaPlatform" fails to match the required pattern: /^(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS)(,(PS4|PS3|XBOXONE|XBOX360|NINTENDOSWITCH|NINTENDO3DS))*$/',
+                    'type': 'string.regex.base'
+                },
+                {
+                    'message': '"mineOnly" must be a boolean',
+                    'type': 'boolean.base'
+                },
+                {
+                    'message': '"showHistory" must be a boolean',
+                    'type': 'boolean.base'
+                },
+                {
+                    'message': '"page" must be a number',
+                    'type': 'number.base'
+                },
+                {
                     'message': '"limit" must be less than or equal to 100',
                     'type': 'number.max'
                 }
@@ -177,25 +197,32 @@ describe('# Validador de Empréstimo', function () {
             let request = {
                 'query': {
                     '_id': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'requestedBy': '1a1a1a1a1a1a2b2b2b2b2b2b',
                     'media': '2b2b2b2b2b2b3c3c3c3c3c3c',
+                    'requestedBy': '1a1a1a1a1a1a2b2b2b2b2b2b',
                     'mediaOwner': '3c3c3c3c3c3c4d4d4d4d4d4d',
+                    'mediaPlatform': 'PS3,PS4',
                     'game': '4d4d4d4d4d4d5e5e5e5e5e5e',
+                    'showHistory': true,
+                    'mineOnly': true,
                     'estimatedReturnDate': 'Should be removed',
                     'loanDate': 'Should be removed',
                     'randomField': 'Should be removed'
                 }
             };
+
             let searchValidatorFunction = validator('loan', 'search', 'query');
 
             let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
-            request.query.should.have.property('requestedBy', '1a1a1a1a1a1a2b2b2b2b2b2b');
             request.query.should.have.property('media', '2b2b2b2b2b2b3c3c3c3c3c3c');
+            request.query.should.have.property('requestedBy', '1a1a1a1a1a1a2b2b2b2b2b2b');
             request.query.should.have.property('mediaOwner', '3c3c3c3c3c3c4d4d4d4d4d4d');
+            request.query.should.have.property('mediaPlatform', 'PS3,PS4');
             request.query.should.have.property('game', '4d4d4d4d4d4d5e5e5e5e5e5e');
+            request.query.should.have.property('showHistory', true);
+            request.query.should.have.property('mineOnly', true);
             request.query.should.have.property('limit', 10);
             request.query.should.have.property('page', 0);
             request.query.should.not.have.any.properties(['estimatedReturnDate', 'loanDate', 'randomField']);

@@ -21,6 +21,9 @@ const LoanSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     },
+    mediaPlatform: {
+        type: String
+    },
     game: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Game'

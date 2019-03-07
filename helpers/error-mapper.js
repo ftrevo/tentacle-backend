@@ -33,13 +33,16 @@ const handleErrors = function (error, request, response, next) {
         return handleBodyParserParsingError(response);
     }
 
+    console.log('------------------------------');
     console.log(error);
+    console.log('------------------------------');
     response.locals._UTIL.handleRequests(500, response, { 'message': error.message });
 };
 
 // --------------------- Funções Locais --------------------- //
 function getMessageFromDetail(detail) {
-    if (detail.type.startsWith('string') || detail.type === 'date.base' || detail.type === 'any.allowOnly' || detail.type === 'boolean.base') {
+    if (detail.type.startsWith('string') || detail.type === 'any.allowOnly' ||
+        detail.type === 'date.base' || detail.type === 'boolean.base' || detail.type === 'number.base') {
         return `Dados inválidos para o campo \'${fieldMap[detail.context.key]}\'.`;
     }
     if (detail.type === 'any.required') {
@@ -84,7 +87,7 @@ const fieldMap = {
     'mediaId': 'Identificador da Mídia',
     'mediaOwner': 'Dono da Mídia',
     'mediaPlatform': 'Plataforma',
-    'mineOnly': 'Apenas meus jogos',
+    'mineOnly': 'Apenas meus',
     'name': 'Nome',
     'owner': 'Dono',
     'page': 'Página',
@@ -92,6 +95,7 @@ const fieldMap = {
     'phone': 'Telefone',
     'platform': 'Plataforma',
     'refreshToken': 'Refresh Token',
+    'showHistory': 'Mostrar histórico',
     'state': 'Estado',
     'token': 'Token',
     'updatedAt': 'Atualizado em',

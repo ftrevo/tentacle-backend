@@ -262,7 +262,7 @@ describe('# Regra de negócio do Usuário', function () {
 
             should(nextObject).not.be.ok();
             requestMock.body.should.have.property('password', 'someRandomPwd');
-            requestMock.body.should.not.have.properties(['token', 'email']);
+            requestMock.body.should.not.have.any.properties(['token', 'email']);
             requestMock.params.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
         });
     });
