@@ -335,7 +335,7 @@ describe('# Regra de negócio de Empréstimo', function () {
         });
 
 
-        it('substituicao do owner devido ao campo mineOnly', async function () {
+        it('substituição do owner devido ao campo mineOnly', async function () {
             let requestMock = {
                 'query': {
                     'requestedBy': '1a2b3c4d5e6f1a2b3c4d5e6f',
