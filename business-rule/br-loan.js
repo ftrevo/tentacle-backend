@@ -22,6 +22,7 @@ const save = async function (request, response, next) {
         request.body.requestedBy = response.locals._USER._id;
         request.body.mediaOwner = resolvedPromisses[0].owner;
         request.body.game = resolvedPromisses[0].game;
+        request.body.mediaPlatform = resolvedPromisses[0].platform;
 
         next();
     } catch (error) {
@@ -100,14 +101,23 @@ const search = async function (request, response, next) {
     try {
         if (request.query && request.query.mineOnly) {
             request.query.requestedBy = response.locals._USER._id;
-            response.locals._UTIL.clearObject(request.query, ['mineOnly']);
         }
 
         response.locals.pagination = response.locals._UTIL.resolvePagination(request.query);
 
-        request.query = response.locals._UTIL.transformObjectToQuery(request.query);
+        if (request.query.mediaPlatform) {
+            request.query.mediaPlatform = { '$in': request.query.mediaPlatform.split(',') };
+        }
 
         request.query.returnDate = { '$exists': false };
+
+        if (request.query.showHistory) {
+            request.query.returnDate.$exists = true;
+        }
+
+        response.locals._UTIL.clearObject(request.query, ['showHistory', 'mineOnly']);
+
+        request.query = response.locals._UTIL.transformObjectToQuery(request.query);
 
         next();
     } catch (error) {
@@ -145,6 +155,7 @@ const rememberDelivery = async function (request, response, next) {
     }
 };
 
+// --------------------- Funções Locais --------------------- //
 function validateDataFromLoan(resolvedPromisses, loggedUserId) {
     let validationErrors = [];
 
@@ -164,7 +175,6 @@ function validateDataFromLoan(resolvedPromisses, loggedUserId) {
 
     return validationErrors;
 };
-
 
 // --------------------- Module Exports --------------------- //
 module.exports = {

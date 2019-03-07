@@ -625,6 +625,20 @@ paths:
           description: Ver apenas meus empréstimos
           schema:
             type: boolean
+        - in: query
+          name: showHistory
+          description: Ver histórico de empréstimos
+          schema:
+            type: boolean
+        - in: query
+          name: mediaPlatform
+          description: Lista de plataformas
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [PS3, PS4, XBOX360, XBOXONE, NINTENDO3DS, NINTENDOSWITCH]
+          explode: false
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:

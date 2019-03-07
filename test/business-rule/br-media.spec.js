@@ -204,7 +204,7 @@ describe('# Regra de negócio de Jogo', function () {
             responseMock.locals.should.have.property('pagination', { 'skip': 0, 'max': 10 });
         });
 
-        it('substituicao do owner devido ao campo mineOnly', async function () {
+        it('substituição do owner devido ao campo mineOnly', async function () {
             let requestMock = {
                 'query': {
                     'owner': '1a2b3c4d5e6f1a2b3c4d5e6f',
