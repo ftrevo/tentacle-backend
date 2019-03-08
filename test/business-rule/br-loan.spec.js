@@ -4,6 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const brLoan = require('../../business-rules/br-loan');
 const util = require('../../helpers/util');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Empréstimo', function () {
 
@@ -468,11 +469,11 @@ function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, f
         locals: {
             '_MODELS': {
                 'media': {
-                    'findById': getExecObject(findByIdMediaObject)
+                    'findById': testUtil.getExecObject(findByIdMediaObject)
                 },
                 'loan': {
-                    'findOne': getExecObject(findOneLoanObject),
-                    'findById': getPopulateObject(findByIdLoanObject)
+                    'findOne': testUtil.getExecObject(findOneLoanObject),
+                    'findById': testUtil.getPopulateObject(findByIdLoanObject)
                 }
             },
             '_MONGOOSE': {
@@ -489,30 +490,3 @@ function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, f
         }
     };
 };
-
-function getPopulateObject(returnedObject) {
-    return function () {
-        return {
-            'populate': function () {
-                return {
-                    'exec': execFunction(returnedObject)
-                };
-            },
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function execFunction(returnedObject) {
-    return function () {
-        return returnedObject;
-    };
-}

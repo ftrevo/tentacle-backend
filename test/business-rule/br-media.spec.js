@@ -4,6 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const brMedia = require('../../business-rules/br-media');
 const util = require('../../helpers/util');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Jogo', function () {
 
@@ -400,21 +401,19 @@ function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, cou
         locals: {
             '_MODELS': {
                 'media': {
-                    'countDocuments': getExecObject(countMediaDocAmmount),
-                    'findById': getExecObject(findByIdObject)
+                    'countDocuments': testUtil.getExecObject(countMediaDocAmmount),
+                    'findById': testUtil.getExecObject(findByIdObject)
                 },
                 'game': {
-                    'countDocuments': getExecObject(countGameDocAmmount)
+                    'countDocuments': testUtil.getExecObject(countGameDocAmmount)
                 },
                 'loan': {
-                    'find': getSortObject(findLoanObject)
+                    'find': testUtil.getSortObject(findLoanObject)
                 }
             },
             '_MONGOOSE': {
                 'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
+                    'ObjectId': (desiredId) => desiredId
                 }
             },
             '_UTIL': util,
@@ -425,28 +424,3 @@ function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, cou
     };
 };
 
-function getSortObject(returnedObject) {
-    return function () {
-        return {
-            'sort': function () {
-                return {
-                    'exec': execFunction(returnedObject)
-                };
-            }
-        };
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function execFunction(returnedObject) {
-    return function () {
-        return returnedObject;
-    };
-}

@@ -4,6 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const brUser = require('../../business-rules/br-user');
 const util = require('../../helpers/util');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio do Usuário', function () {
 
@@ -287,19 +288,17 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, sta
         locals: {
             '_MODELS': {
                 'user': {
-                    'countDocuments': getExecObject(countDocumentAmmount),
-                    'findById': getExecObject(findByIdObject),
-                    'findOne': getExecObject(findOneUser)
+                    'countDocuments': testUtil.getExecObject(countDocumentAmmount),
+                    'findById': testUtil.getExecObject(findByIdObject),
+                    'findOne': testUtil.getExecObject(findOneUser)
                 },
                 'state': {
-                    'countDocuments': getExecObject(stateCountDocumentAmmount)
+                    'countDocuments': testUtil.getExecObject(stateCountDocumentAmmount)
                 }
             },
             '_MONGOOSE': {
                 'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
+                    'ObjectId': (desiredId) => desiredId
                 }
             },
             '_UTIL': util,
@@ -307,15 +306,5 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, sta
                 '_id': loggedUserId
             }
         }
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            exec: function () {
-                return returnedObject;
-            }
-        };
     };
 };

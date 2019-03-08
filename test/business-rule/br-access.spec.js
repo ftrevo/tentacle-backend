@@ -4,6 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const brAccess = require('../../business-rules/br-access');
 const util = require('../../helpers/util');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Acesso', function () {
 
@@ -18,7 +19,7 @@ describe('# Regra de negócio de Acesso', function () {
     });
 
     describe('## Login', function () {
-        let requestMock = getRequestMock('body', '1234', 'emailtest@gmail.com');
+        let requestMock = { 'body': { 'password': '1234', 'email': 'emailtest@gmail.com' } };
 
         it('usuário não encontrado', async function () {
             let responseMock = getResponseMock();
@@ -77,9 +78,9 @@ describe('# Regra de negócio de Acesso', function () {
     });
 
     describe('## Refresh Token', function () {
-        let requestMock = getRequestMock(
-            'body', undefined, undefined, 'af044be0-fd9c-11e8-9497-0b3f993f11d0.5c058e46a7d6682cf28f667d.ed5728a5-7f1d-4727-8ace-634a3b0f9471'
-        );
+        let requestMock = {
+            'body': { 'refreshToken': 'af044be0-fd9c-11e8-9497-0b3f993f11d0.5c058e46a7d6682cf28f667d.ed5728a5-7f1d-4727-8ace-634a3b0f9471' }
+        };
 
         describe('### Usuário não encontrado', function () {
             it('- user', async function () {
@@ -133,27 +134,7 @@ describe('# Regra de negócio de Acesso', function () {
     });
 });
 
-
-
 // --------------------- Funções Locais --------------------- //
-function getRequestMock(requestParamName, password, email, refreshToken) {
-    let mockedObject = {};
-
-    if (password) {
-        mockedObject.password = password;
-    }
-
-    if (email) {
-        mockedObject.email = email;
-    }
-
-    if (refreshToken) {
-        mockedObject.refreshToken = refreshToken;
-    }
-
-    return { [requestParamName]: mockedObject };
-};
-
 function getResponseMock(findOneObject, findByIdObject, findOneTokenObject) {
     return {
         status: () => ({
@@ -162,32 +143,15 @@ function getResponseMock(findOneObject, findByIdObject, findOneTokenObject) {
         locals: {
             '_MODELS': {
                 'user': {
-                    'findOne': getExecObject(findOneObject),
-                    'findById': getExecObject(findByIdObject)
+                    'findOne': testUtil.getExecObject(findOneObject),
+                    'findById': testUtil.getLeanObject(findByIdObject)
                 },
                 'token': {
-                    'findOne': getExecObject(findOneTokenObject),
+                    'findOne': testUtil.getExecObject(findOneTokenObject)
                 }
             },
             '_UTIL': util
         }
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            'exec': function () {
-                return returnedObject;
-            },
-            'lean': function () {
-                return {
-                    'exec': function () {
-                        return returnedObject;
-                    }
-                };
-            }
-        };
     };
 };
 

@@ -4,6 +4,7 @@ const should = require('should');
 // --------------- Import de arquivos do core --------------- //
 const brGame = require('../../business-rules/br-game');
 const util = require('../../helpers/util');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Jogo', function () {
 
@@ -167,15 +168,13 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, lis
         locals: {
             '_MODELS': {
                 'game': {
-                    'countDocuments': getExecObject(countDocumentAmmount),
-                    'findById': getExecObject(findByIdObject)
+                    'countDocuments': testUtil.getExecObject(countDocumentAmmount),
+                    'findById': testUtil.getExecObject(findByIdObject)
                 }
             },
             '_MONGOOSE': {
                 'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
+                    'ObjectId': (desiredId) => desiredId
                 }
             },
             '_UTIL': util,
@@ -183,23 +182,9 @@ function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, lis
                 '_id': loggedUserId
             },
             '_IGDB': {
-                'list': function () {
-                    return listIgdbObject;
-                },
-                'detail': function () {
-                    return detailIgdbObject;
-                }
+                'list': testUtil.getExecFunction(listIgdbObject),
+                'detail': testUtil.getExecFunction(detailIgdbObject)
             }
         }
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            exec: function () {
-                return returnedObject;
-            }
-        };
     };
 };
