@@ -38,9 +38,7 @@ const getExecObject = function (returnedObject) {
 };
 
 const getExecFunction = function (returnedObject) {
-    return function () {
-        return returnedObject;
-    };
+    return () => returnedObject;
 };
 
 const getSortObject = function (returnedObject) {
@@ -57,9 +55,6 @@ const getSortObject = function (returnedObject) {
 
 const getBaseResponseMock = function (loggedUserId, modelsObject, igdbObject) {
     return {
-        status: () => (
-            { json: obj => obj }
-        ),
         'locals': {
             '_UTIL': util,
             '_USER': {
