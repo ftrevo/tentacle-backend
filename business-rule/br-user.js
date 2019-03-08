@@ -102,19 +102,6 @@ const search = async function (request, response, next) {
     }
 };
 
-const remove = async function (request, response, next) {
-    try {
-        if (request.params._id !== response.locals._USER._id.toString()) {
-            return next({ 'isForbidden': true });
-        }
-
-        next();
-    } catch (error) {
-        /* istanbul ignore next */
-        next(error);
-    }
-};
-
 const forgotPwd = async function (request, response, next) {
     try {
         let user = await response.locals._MODELS.user.findOne({ 'email': request.body.email }).exec();
@@ -193,7 +180,6 @@ function validateDataFromUser(resolvedPromisses) {
 module.exports = {
     'save': save,
     'update': update,
-    'remove': remove,
     'search': search,
     'forgotPwd': forgotPwd,
     'restorePwd': restorePwd,

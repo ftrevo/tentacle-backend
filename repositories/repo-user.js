@@ -97,29 +97,11 @@ const findById = async function (request, response, next) {
     }
 };
 
-const remove = async function (request, response, next) {
-    try {
-        let removedObject = await response.locals._MODELS.user.findByIdAndDelete(request.params._id, { 'select': { 'password': 0 } });
-
-        response.locals._UTIL.setLocalsData(
-            response,
-            200,
-            removedObject,
-            'Usuário removido'
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
     'update': update,
     'findById': findById,
-    'remove': remove,
     'search': search
 };
 
