@@ -4,7 +4,7 @@ const createViews = require('./views');
 
 // -------------------- Datasource Logic -------------------- //
 mongoose.Promise = global.Promise;
-mongoose.set('debug', true);
+mongoose.set('debug', process.env.MONGOOSE_DEBUG === 'true');
 mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useCreateIndex: true });
 
 mongoose.connection.on('connected', function () {

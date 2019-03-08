@@ -142,19 +142,6 @@ paths:
           $ref: '#/components/responses/404'
         '500':
           $ref: '#/components/responses/500'
-    delete:
-      tags:
-        - User
-      summary: Rota de remoção de usuário
-      security:
-        - authenticationUser: []
-      responses:
-        '200':
-          $ref: '#/components/responses/200Remove'
-        '401':
-          $ref: '#/components/responses/401'
-        '500':
-          $ref: '#/components/responses/500'
     patch:
       tags:
         - User
