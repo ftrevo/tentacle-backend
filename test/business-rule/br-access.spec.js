@@ -3,7 +3,6 @@ const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const brAccess = require('../../business-rules/br-access');
-const util = require('../../helpers/util');
 const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Acesso', function () {
@@ -136,23 +135,17 @@ describe('# Regra de negócio de Acesso', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(findOneObject, findByIdObject, findOneTokenObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'user': {
-                    'findOne': testUtil.getExecObject(findOneObject),
-                    'findById': testUtil.getLeanObject(findByIdObject)
-                },
-                'token': {
-                    'findOne': testUtil.getExecObject(findOneTokenObject)
-                }
+    return testUtil.getBaseResponseMock(
+        undefined,
+        {
+            'user': {
+                'findOne': testUtil.getExecObject(findOneObject),
+                'findById': testUtil.getLeanObject(findByIdObject)
             },
-            '_UTIL': util
-        }
-    };
+            'token': {
+                'findOne': testUtil.getExecObject(findOneTokenObject)
+            }
+        });
 };
 
 function getUserMock(comparePasswordResult) {

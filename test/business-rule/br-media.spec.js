@@ -3,7 +3,6 @@ const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const brMedia = require('../../business-rules/br-media');
-const util = require('../../helpers/util');
 const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Jogo', function () {
@@ -394,33 +393,20 @@ describe('# Regra de negócio de Jogo', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount, findLoanObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'media': {
-                    'countDocuments': testUtil.getExecObject(countMediaDocAmmount),
-                    'findById': testUtil.getExecObject(findByIdObject)
-                },
-                'game': {
-                    'countDocuments': testUtil.getExecObject(countGameDocAmmount)
-                },
-                'loan': {
-                    'find': testUtil.getSortObject(findLoanObject)
-                }
+    return testUtil.getBaseResponseMock(
+        loggedUserId,
+        {
+            'media': {
+                'countDocuments': testUtil.getExecObject(countMediaDocAmmount),
+                'findById': testUtil.getExecObject(findByIdObject)
             },
-            '_MONGOOSE': {
-                'Types': {
-                    'ObjectId': (desiredId) => desiredId
-                }
+            'game': {
+                'countDocuments': testUtil.getExecObject(countGameDocAmmount)
             },
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
+            'loan': {
+                'find': testUtil.getSortObject(findLoanObject)
             }
         }
-    };
+    );
 };
 

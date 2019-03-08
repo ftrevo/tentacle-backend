@@ -1,3 +1,7 @@
+
+// --------------- Import de arquivos do core --------------- //
+const util = require('../helpers/util');
+
 // ------------------- Funções Exportadas ------------------- //
 const getPopulateObject = function (returnedObject) {
     return function () {
@@ -51,8 +55,30 @@ const getSortObject = function (returnedObject) {
     };
 };
 
+const getBaseResponseMock = function (loggedUserId, modelsObject, igdbObject) {
+    return {
+        status: () => (
+            { json: obj => obj }
+        ),
+        'locals': {
+            '_UTIL': util,
+            '_USER': {
+                '_id': loggedUserId
+            },
+            '_MONGOOSE': {
+                'Types': {
+                    'ObjectId': (desiredId) => desiredId
+                }
+            },
+            '_IGDB': igdbObject,
+            '_MODELS': modelsObject
+        }
+    };
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
+    'getBaseResponseMock': getBaseResponseMock,
     'getExecFunction': getExecFunction,
     'getExecObject': getExecObject,
     'getLeanObject': getLeanObject,

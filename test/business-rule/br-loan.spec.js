@@ -3,7 +3,6 @@ const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const brLoan = require('../../business-rules/br-loan');
-const util = require('../../helpers/util');
 const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Empréstimo', function () {
@@ -462,31 +461,16 @@ describe('# Regra de negócio de Empréstimo', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, findByIdLoanObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'media': {
-                    'findById': testUtil.getExecObject(findByIdMediaObject)
-                },
-                'loan': {
-                    'findOne': testUtil.getExecObject(findOneLoanObject),
-                    'findById': testUtil.getPopulateObject(findByIdLoanObject)
-                }
+    return testUtil.getBaseResponseMock(
+        loggedUserId,
+        {
+            'media': {
+                'findById': testUtil.getExecObject(findByIdMediaObject)
             },
-            '_MONGOOSE': {
-                'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
-                }
-            },
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
+            'loan': {
+                'findOne': testUtil.getExecObject(findOneLoanObject),
+                'findById': testUtil.getPopulateObject(findByIdLoanObject)
             }
         }
-    };
+    );
 };
