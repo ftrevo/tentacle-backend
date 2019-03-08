@@ -2,7 +2,7 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brAccess = require('../../business-rule/br-access');
+const brAccess = require('../../business-rules/br-access');
 const util = require('../../helpers/util');
 
 describe('# Regra de negócio de Acesso', function () {

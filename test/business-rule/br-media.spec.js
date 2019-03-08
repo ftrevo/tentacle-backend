@@ -2,7 +2,7 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brMedia = require('../../business-rule/br-media');
+const brMedia = require('../../business-rules/br-media');
 const util = require('../../helpers/util');
 
 describe('# Regra de negócio de Jogo', function () {

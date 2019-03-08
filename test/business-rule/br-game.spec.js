@@ -2,7 +2,7 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brGame = require('../../business-rule/br-game');
+const brGame = require('../../business-rules/br-game');
 const util = require('../../helpers/util');
 
 describe('# Regra de negócio de Jogo', function () {
