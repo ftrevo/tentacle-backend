@@ -55,7 +55,6 @@ const routes = function (app) {
 
   app.route('/users/:_id([0-9a-fA-F]{24})')
     .get(modelInjector, privateRoute, validator('user', 'id', 'params'), repoUser.findById, defMethods.requestHandler)
-    .delete(modelInjector, privateRoute, validator('user', 'id', 'params'), brUser.remove, repoUser.remove, defMethods.requestHandler)
     .patch(
       modelInjector, privateRoute, validator('user', 'id', 'params'), validator('user', 'update', 'body'),
       brUser.update, repoUser.update, defMethods.requestHandler

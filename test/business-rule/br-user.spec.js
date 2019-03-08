@@ -159,28 +159,6 @@ describe('# Regra de negócio do Usuário', function () {
         });
     });
 
-    describe('## Remove', function () {
-        let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
-        requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
-
-        it('não autorizado', async function () {
-            let responseMock = getResponseMock(0, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
-
-            let nextObject = await brUser.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
-
-            should(nextObject).be.ok();
-            nextObject.should.have.property('isForbidden', true);
-        });
-
-        it('dados OK', async function () {
-            let responseMock = getResponseMock(0, requestMock.params, requestMock.params._id);
-
-            let nextObject = await brUser.remove(requestMock, responseMock, nextFunction = nextObject => nextObject);
-
-            should(nextObject).not.be.ok();
-        });
-    });
-
     describe('## Search', function () {
         let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
 
