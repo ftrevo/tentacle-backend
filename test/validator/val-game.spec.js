@@ -13,9 +13,9 @@ describe('# Validador de Jogos', function () {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('game', 'create', 'body');
+            let validationFunction = validator('game', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -38,9 +38,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let createValidatorFunction = validator('game', 'create', 'body');
+            let validationFunction = validator('game', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['name']);
@@ -55,9 +55,9 @@ describe('# Validador de Jogos', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('game', 'id', 'params');
+            let validationFunction = validator('game', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -74,9 +74,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('game', 'id', 'params');
+            let validationFunction = validator('game', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -97,9 +97,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('game', 'id', 'params');
+            let validationFunction = validator('game', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['name', '_id']);
@@ -118,9 +118,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('game', 'search', 'query');
+            let validationFunction = validator('game', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -158,9 +158,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('game', 'search', 'query');
+            let validationFunction = validator('game', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'name', 'createdBy', 'updatedBy', 'page', 'limit']);
@@ -180,9 +180,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+            let validationFunction = validator('game', 'searchRemote', 'query');
 
-            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -200,9 +200,9 @@ describe('# Validador de Jogos', function () {
                 'query': {}
             };
 
-            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+            let validationFunction = validator('game', 'searchRemote', 'query');
 
-            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -220,9 +220,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let searchRemoteValFunction = validator('game', 'searchRemote', 'query');
+            let validationFunction = validator('game', 'searchRemote', 'query');
 
-            let nextObject = await searchRemoteValFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['name', 'page', 'limit']);
@@ -239,9 +239,9 @@ describe('# Validador de Jogos', function () {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('game', 'createRemote', 'body');
+            let validationFunction = validator('game', 'createRemote', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -258,9 +258,9 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let createValidatorFunction = validator('game', 'createRemote', 'body');
+            let validationFunction = validator('game', 'createRemote', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -283,15 +283,13 @@ describe('# Validador de Jogos', function () {
                 }
             };
 
-            let createValidatorFunction = validator('game', 'createRemote', 'body');
+            let validationFunction = validator('game', 'createRemote', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('id', 987654321);
             request.body.should.not.have.any.properties(['_id', 'randomField', 'createdBy']);
         });
     });
-
-
 });
