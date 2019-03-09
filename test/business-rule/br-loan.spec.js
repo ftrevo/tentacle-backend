@@ -2,8 +2,8 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brLoan = require('../../business-rule/br-loan');
-const util = require('../../helpers/util');
+const brLoan = require('../../business-rules/br-loan');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Empréstimo', function () {
 
@@ -461,58 +461,16 @@ describe('# Regra de negócio de Empréstimo', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, findByIdLoanObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'media': {
-                    'findById': getExecObject(findByIdMediaObject)
-                },
-                'loan': {
-                    'findOne': getExecObject(findOneLoanObject),
-                    'findById': getPopulateObject(findByIdLoanObject)
-                }
+    return testUtil.getBaseResponseMock(
+        loggedUserId,
+        {
+            'media': {
+                'findById': testUtil.getExecObject(findByIdMediaObject)
             },
-            '_MONGOOSE': {
-                'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
-                }
-            },
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
+            'loan': {
+                'findOne': testUtil.getExecObject(findOneLoanObject),
+                'findById': testUtil.getPopulateObject(findByIdLoanObject)
             }
         }
-    };
+    );
 };
-
-function getPopulateObject(returnedObject) {
-    return function () {
-        return {
-            'populate': function () {
-                return {
-                    'exec': execFunction(returnedObject)
-                };
-            },
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function execFunction(returnedObject) {
-    return function () {
-        return returnedObject;
-    };
-}

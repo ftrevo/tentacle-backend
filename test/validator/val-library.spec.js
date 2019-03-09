@@ -13,9 +13,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('library', 'id', 'params');
+            let validationFunction = validator('library', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -32,9 +32,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('library', 'id', 'params');
+            let validationFunction = validator('library', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -55,9 +55,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('library', 'id', 'params');
+            let validationFunction = validator('library', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['name', '_id']);
@@ -77,9 +77,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('library', 'search', 'query');
+            let validationFunction = validator('library', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -116,9 +116,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                     }
                 };
 
-                let searchValidatorFunction = validator('library', 'search', 'query');
+                let validationFunction = validator('library', 'search', 'query');
 
-                let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isJoi', true);
@@ -139,9 +139,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                     }
                 };
 
-                let searchValidatorFunction = validator('library', 'search', 'query');
+                let validationFunction = validator('library', 'search', 'query');
 
-                let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isJoi', true);
@@ -172,9 +172,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('library', 'search', 'query');
+            let validationFunction = validator('library', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'createdBy', 'mediaId', 'mediaOwner', 'mediaPlatform', 'name', 'page', 'limit']);
@@ -193,9 +193,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+            let validationFunction = validator('library', 'searchHome', 'query');
 
-            let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -216,9 +216,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                     }
                 };
 
-                let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+                let validationFunction = validator('library', 'searchHome', 'query');
 
-                let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isJoi', true);
@@ -239,9 +239,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                     }
                 };
 
-                let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+                let validationFunction = validator('library', 'searchHome', 'query');
 
-                let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).be.ok();
                 nextObject.should.have.property('isJoi', true);
@@ -266,9 +266,9 @@ describe('# Validador de Biblioteca de jogos', function () {
                 }
             };
 
-            let searchHomeValidatorFunction = validator('library', 'searchHome', 'query');
+            let validationFunction = validator('library', 'searchHome', 'query');
 
-            let nextObject = await searchHomeValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['mediaPlatform', 'page', 'limit']);

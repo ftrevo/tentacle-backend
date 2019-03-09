@@ -13,9 +13,9 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
+            let validationFunction = validator('mediaLoan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -32,9 +32,9 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
+            let validationFunction = validator('mediaLoan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -56,9 +56,9 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('mediaLoan', 'id', 'params');
+            let validationFunction = validator('mediaLoan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['platform', 'game', '_id']);
@@ -77,9 +77,9 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('mediaLoan', 'search', 'query');
+            let validationFunction = validator('mediaLoan', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -116,9 +116,9 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('mediaLoan', 'search', 'query');
+            let validationFunction = validator('mediaLoan', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'platform', 'game', 'page', 'limit']);
@@ -127,5 +127,4 @@ describe('# Validador de Mídia/Empréstimo de Jogos', function () {
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
         });
     });
-
 });

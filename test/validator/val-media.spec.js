@@ -13,9 +13,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('media', 'create', 'body');
+            let validationFunction = validator('media', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -34,9 +34,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let createValidatorFunction = validator('media', 'create', 'body');
+            let validationFunction = validator('media', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -66,9 +66,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let createValidatorFunction = validator('media', 'create', 'body');
+            let validationFunction = validator('media', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['platform']);
@@ -85,9 +85,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'PS4');
@@ -102,9 +102,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'PS3');
@@ -118,9 +118,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'XBOXONE');
@@ -134,9 +134,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'XBOX360');
@@ -150,9 +150,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'NINTENDOSWITCH');
@@ -166,9 +166,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let createValidatorFunction = validator('media', 'create', 'body');
+                let validationFunction = validator('media', 'create', 'body');
 
-                let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'NINTENDO3DS');
@@ -183,9 +183,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('media', 'id', 'params');
+            let validationFunction = validator('media', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -202,9 +202,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('media', 'id', 'params');
+            let validationFunction = validator('media', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -226,9 +226,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let idValidatorFunction = validator('media', 'id', 'params');
+            let validationFunction = validator('media', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['platform', 'game', '_id']);
@@ -251,9 +251,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('media', 'search', 'query');
+            let validationFunction = validator('media', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -304,9 +304,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('media', 'search', 'query');
+            let validationFunction = validator('media', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'owner', 'platform', 'game', 'page', 'limit', 'mineOnly']);
@@ -323,9 +323,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 'body': {}
             };
 
-            let updateValidatorFunction = validator('media', 'update', 'body');
+            let validationFunction = validator('media', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -344,9 +344,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('media', 'update', 'body');
+            let validationFunction = validator('media', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -376,9 +376,9 @@ describe('# Validador de Mídia de Jogos', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('media', 'update', 'body');
+            let validationFunction = validator('media', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['platform', 'game']);
@@ -395,9 +395,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'PS4');
@@ -411,9 +411,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'PS3');
@@ -427,9 +427,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'XBOXONE');
@@ -443,9 +443,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'XBOX360');
@@ -459,9 +459,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'NINTENDOSWITCH');
@@ -475,9 +475,9 @@ describe('# Validador de Mídia de Jogos', function () {
                     }
                 };
 
-                let updateValidatorFunction = validator('media', 'update', 'body');
+                let validationFunction = validator('media', 'update', 'body');
 
-                let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
                 should(nextObject).not.be.ok();
                 request.body.should.have.property('platform', 'NINTENDO3DS');

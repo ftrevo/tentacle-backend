@@ -2,8 +2,8 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brLibrary = require('../../business-rule/br-library');
-const util = require('../../helpers/util');
+const brLibrary = require('../../business-rules/br-library');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Biblioteca', function () {
 
@@ -19,7 +19,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                 }
             };
 
-            let responseMock = getResponseMock();
+            let responseMock = testUtil.getBaseResponseMock();
 
             let nextObject = await brLibrary.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -42,7 +42,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                     }
                 };
 
-                let responseMock = getResponseMock();
+                let responseMock = testUtil.getBaseResponseMock();
 
                 let nextObject = await brLibrary.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -65,7 +65,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                     }
                 };
 
-                let responseMock = getResponseMock();
+                let responseMock = testUtil.getBaseResponseMock();
 
                 let nextObject = await brLibrary.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -93,7 +93,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                 }
             };
 
-            let responseMock = getResponseMock();
+            let responseMock = testUtil.getBaseResponseMock();
 
             let nextObject = await brLibrary.searchHome(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -114,7 +114,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                     }
                 };
 
-                let responseMock = getResponseMock();
+                let responseMock = testUtil.getBaseResponseMock();
 
                 let nextObject = await brLibrary.searchHome(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -137,7 +137,7 @@ describe('# Regra de negócio de Biblioteca', function () {
                     }
                 };
 
-                let responseMock = getResponseMock();
+                let responseMock = testUtil.getBaseResponseMock();
 
                 let nextObject = await brLibrary.searchHome(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -156,14 +156,3 @@ describe('# Regra de negócio de Biblioteca', function () {
     });
 });
 
-// --------------------- Funções Locais --------------------- //
-function getResponseMock() {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_UTIL': util
-        }
-    };
-};

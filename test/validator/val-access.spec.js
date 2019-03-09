@@ -13,9 +13,9 @@ describe('# Validador de Acesso', function () {
                 'body': {}
             };
 
-            let loginValidationFunction = validator('access', 'login', 'body');
+            let validationFunction = validator('access', 'login', 'body');
 
-            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -34,9 +34,9 @@ describe('# Validador de Acesso', function () {
                 }
             };
 
-            let loginValidationFunction = validator('access', 'login', 'body');
+            let validationFunction = validator('access', 'login', 'body');
 
-            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -61,9 +61,9 @@ describe('# Validador de Acesso', function () {
                 }
             };
 
-            let loginValidationFunction = validator('access', 'login', 'body');
+            let validationFunction = validator('access', 'login', 'body');
 
-            let nextObject = await loginValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['email', 'password']);
@@ -79,9 +79,9 @@ describe('# Validador de Acesso', function () {
                 'body': {}
             };
 
-            let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
+            let validationFunction = validator('access', 'refreshToken', 'body');
 
-            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -98,9 +98,9 @@ describe('# Validador de Acesso', function () {
                 }
             };
 
-            let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
+            let validationFunction = validator('access', 'refreshToken', 'body');
 
-            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -124,9 +124,9 @@ describe('# Validador de Acesso', function () {
                 }
             };
 
-            let refreshTokenValidationFunction = validator('access', 'refreshToken', 'body');
+            let validationFunction = validator('access', 'refreshToken', 'body');
 
-            let nextObject = await refreshTokenValidationFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('refreshToken');

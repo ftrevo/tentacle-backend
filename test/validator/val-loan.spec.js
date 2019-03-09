@@ -13,9 +13,9 @@ describe('# Validador de Empréstimo', function () {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('loan', 'create', 'body');
+            let validationFunction = validator('loan', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -32,9 +32,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let createValidatorFunction = validator('loan', 'create', 'body');
+            let validationFunction = validator('loan', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('details').with.lengthOf(1);
@@ -56,9 +56,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let createValidatorFunction = validator('loan', 'create', 'body');
+            let validationFunction = validator('loan', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('media', '1a2b3c4d5e6f1a2b3c4d5e6f');
@@ -73,9 +73,9 @@ describe('# Validador de Empréstimo', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('loan', 'id', 'params');
+            let validationFunction = validator('loan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -92,9 +92,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let idValidatorFunction = validator('loan', 'id', 'params');
+            let validationFunction = validator('loan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -115,9 +115,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let idValidatorFunction = validator('loan', 'id', 'params');
+            let validationFunction = validator('loan', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['media', '_id']);
@@ -142,9 +142,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('loan', 'search', 'query');
+            let validationFunction = validator('loan', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -210,9 +210,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('loan', 'search', 'query');
+            let validationFunction = validator('loan', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.property('_id', '1a2b3c4d5e6f1a2b3c4d5e6f');
@@ -236,9 +236,9 @@ describe('# Validador de Empréstimo', function () {
                 'body': {}
             };
 
-            let updateValidatorFunction = validator('loan', 'update', 'body');
+            let validationFunction = validator('loan', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -255,9 +255,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('loan', 'update', 'body');
+            let validationFunction = validator('loan', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -278,9 +278,9 @@ describe('# Validador de Empréstimo', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('loan', 'update', 'body');
+            let validationFunction = validator('loan', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('action', 'LEND');

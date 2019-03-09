@@ -2,8 +2,8 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brMedia = require('../../business-rule/br-media');
-const util = require('../../helpers/util');
+const brMedia = require('../../business-rules/br-media');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Jogo', function () {
 
@@ -393,60 +393,20 @@ describe('# Regra de negócio de Jogo', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount, findLoanObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'media': {
-                    'countDocuments': getExecObject(countMediaDocAmmount),
-                    'findById': getExecObject(findByIdObject)
-                },
-                'game': {
-                    'countDocuments': getExecObject(countGameDocAmmount)
-                },
-                'loan': {
-                    'find': getSortObject(findLoanObject)
-                }
+    return testUtil.getBaseResponseMock(
+        loggedUserId,
+        {
+            'media': {
+                'countDocuments': testUtil.getExecObject(countMediaDocAmmount),
+                'findById': testUtil.getExecObject(findByIdObject)
             },
-            '_MONGOOSE': {
-                'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
-                }
+            'game': {
+                'countDocuments': testUtil.getExecObject(countGameDocAmmount)
             },
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
+            'loan': {
+                'find': testUtil.getSortObject(findLoanObject)
             }
         }
-    };
+    );
 };
 
-function getSortObject(returnedObject) {
-    return function () {
-        return {
-            'sort': function () {
-                return {
-                    'exec': execFunction(returnedObject)
-                };
-            }
-        };
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            'exec': execFunction(returnedObject)
-        };
-    };
-};
-
-function execFunction(returnedObject) {
-    return function () {
-        return returnedObject;
-    };
-}

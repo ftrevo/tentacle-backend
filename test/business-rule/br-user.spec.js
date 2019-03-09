@@ -2,13 +2,13 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brUser = require('../../business-rule/br-user');
-const util = require('../../helpers/util');
+const brUser = require('../../business-rules/br-user');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio do Usuário', function () {
 
     describe('## Save', function () {
-        let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
+        let requestMock = { 'body': { 'name': 'Nome', 'phone': '81 981818181', 'email': 'emailtest@gmail.com' } };
 
         it('telefone/email já cadastrados', async function () {
             let responseMock = getResponseMock(1, undefined, undefined, 1);
@@ -51,8 +51,10 @@ describe('# Regra de negócio do Usuário', function () {
     });
 
     describe('## Update', function () {
-        let requestMock = getRequestMock('body', 'Nome', '81 981818181', 'emailtest@gmail.com');
-        requestMock['params'] = { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' };
+        let requestMock = {
+            'body': { 'name': 'Nome', 'phone': '81 981818181', 'email': 'emailtest@gmail.com' },
+            'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
+        };
 
         it('não autorizado', async function () {
             let responseMock = getResponseMock(0, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
@@ -261,61 +263,18 @@ describe('# Regra de negócio do Usuário', function () {
 });
 
 // --------------------- Funções Locais --------------------- //
-function getRequestMock(requestParamName, name, phone, email) {
-    let mockedObject = {};
-
-    if (name) {
-        mockedObject.name = name;
-    }
-
-    if (phone) {
-        mockedObject.phone = phone;
-    }
-
-    if (email) {
-        mockedObject.email = email;
-    }
-
-    return { [requestParamName]: mockedObject };
-};
-
 function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, stateCountDocumentAmmount, findOneUser) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'user': {
-                    'countDocuments': getExecObject(countDocumentAmmount),
-                    'findById': getExecObject(findByIdObject),
-                    'findOne': getExecObject(findOneUser)
-                },
-                'state': {
-                    'countDocuments': getExecObject(stateCountDocumentAmmount)
-                }
+    return testUtil.getBaseResponseMock(
+        loggedUserId,
+        {
+            'user': {
+                'countDocuments': testUtil.getExecObject(countDocumentAmmount),
+                'findById': testUtil.getExecObject(findByIdObject),
+                'findOne': testUtil.getExecObject(findOneUser)
             },
-            '_MONGOOSE': {
-                'Types': {
-                    'ObjectId': function (desiredId) {
-                        return desiredId;
-                    }
-                }
-            },
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
+            'state': {
+                'countDocuments': testUtil.getExecObject(stateCountDocumentAmmount)
             }
         }
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            exec: function () {
-                return returnedObject;
-            }
-        };
-    };
+    );
 };
