@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 // ------------------- Funções Exportadas ------------------- //
 const forgotPwd = async function (request, response, next) {
     try {
-        await send(request.body.email, 'Recuperação de senha', mailTemplates.forgotPwd(request.body.token));
+        await send(request.body.email, 'Recuperação de senha', mailTemplates.forgotPwd(request.body.token), true);
         next();
     } catch (error) {
         next(error);
@@ -72,7 +72,7 @@ const mediaRemoved = async function (request, response, next) {
 };
 
 // --------------------- Funções Locais --------------------- //
-function send(to, subject, html) {
+function send(to, subject, html, isForgotPwd) {
     let transporter = getTransporter();
 
     let mailOptions = {
@@ -82,7 +82,7 @@ function send(to, subject, html) {
         'html': html
     };
 
-    if (process.env.ENABLE_EMAIL === 'true') {
+    if (isForgotPwd || process.env.ENABLE_EMAIL === 'true') {
         return transporter.sendMail(mailOptions);
     }
 };
