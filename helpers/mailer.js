@@ -5,7 +5,7 @@ const nodemailer = require('nodemailer');
 // ------------------- Funções Exportadas ------------------- //
 const forgotPwd = async function (request, response, next) {
     try {
-        await send(request.body.email, 'Recuperação de senha', mailTemplates.forgotPwd(request.body.token), true);
+        await send(response.locals.data.email, 'Recuperação de senha', mailTemplates.forgotPwd(request.body.token), true);
         next();
     } catch (error) {
         next(error);
