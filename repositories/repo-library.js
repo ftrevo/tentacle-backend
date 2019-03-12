@@ -36,7 +36,10 @@ const searchHome = async function (request, response, next) {
             response.locals._MODELS.library.
                 find(
                     request.query,
-                    { '_id': 1, 'name': 1, 'aggregated_rating': 1, 'summary': 1, 'screenshots': 1 }
+                    { 
+                        '_id': 1, 'name': 1, 'aggregated_rating': 1, 'summary': 1, 'screenshots': 1, 
+                        'mediaPs3Count': 1, 'mediaPs4Count': 1, 'mediaXbox360Count': 1, 'mediaXboxOneCount': 1, 'mediaNintendo3dsCount': 1, 'mediaNintendoSwitchCount': 1  
+                    }
                 )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
@@ -46,7 +49,7 @@ const searchHome = async function (request, response, next) {
             response.locals._MODELS.library.find(request.query).countDocuments().exec()
         ];
 
-        let resolvedPromisses = await Promise.all(promisseStack);
+        let resolvedPromisses =  await Promise.all(promisseStack);
 
         response.locals._UTIL.setLocalsData(
             response,
@@ -60,7 +63,7 @@ const searchHome = async function (request, response, next) {
     }
 };
 
-const findById = async function (request, response, next) {
+const findById =  async function (request, response, next) {
     try {
         let foundObject = await response.locals._MODELS.library.findById(request.params._id);
 
