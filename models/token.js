@@ -17,6 +17,9 @@ const TokenSchema = new mongoose.Schema({
     },
     expirationDate: {
         type: Date
+    },
+    deviceToken: {
+        type: String
     }
 }, { versionKey: false, timestamps: false });
 

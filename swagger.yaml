@@ -19,6 +19,8 @@ paths:
                 password:
                   type: string
                   format: password
+                deviceToken:
+                  type: string
       responses:
         '200':
           description: Token de login gerado
@@ -43,6 +45,8 @@ paths:
               type: object
               properties:
                 refreshToken:
+                  type: string
+                deviceToken:
                   type: string
       responses:
         '200':
@@ -89,7 +93,12 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/User'
+              allOf:
+                - $ref: '#/components/schemas/User'
+                - type: object
+                  properties:
+                    deviceToken:
+                      type: string
       responses:
         '201':
           $ref: '#/components/responses/201'
