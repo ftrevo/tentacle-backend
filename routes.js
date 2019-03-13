@@ -50,7 +50,8 @@ const routes = function (app) {
     .post(modelInjector, validator('user', 'forgotPwd', 'body'), br.user.forgotPwd, repo.user.update, mailer.forgotPwd, defMethods.requestHandler);
 
   app.route('/users/restore-password')
-    .post(modelInjector, validator('user', 'restorePwd', 'body'), br.user.restorePwd, repo.user.update, defMethods.requestHandler);
+    .post(modelInjector, validator('user', 'restorePwd', 'body'), br.user.restorePwd, repo.user.update,
+      br.access.logInOnCreate, repo.token.update, defMethods.requestHandler);
 
   app.route('/users/profile')
     .get(modelInjector, privateRoute, br.user.profile, repo.user.findById, defMethods.requestHandler);
