@@ -2,7 +2,7 @@
 const joi = require('joi');
 
 // --------------------- Objetos Locais --------------------- //
-const userKeys = {
+const keys = {
     '_id': joi.string().regex(/^[0-9a-fA-F]{24}$/),
     'name': joi.string().trim(),
     'email': joi.string().email({ minDomainAtoms: 2 }).lowercase().trim(),
@@ -13,52 +13,54 @@ const userKeys = {
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
     'token': joi.string().regex(/^[0-9A-Z]{5}$/),
+    'deviceToken': joi.string().trim(),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };
 
 // ------------------- Funções Exportadas ------------------- //
 const create = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'name': userKeys.name.required(),
-    'email': userKeys.email.required(),
-    'phone': userKeys.phone.required(),
-    'password': userKeys.password.required(),
-    'state': userKeys.state.required(),
-    'city': userKeys.city.required()
+    'name': keys.name.required(),
+    'email': keys.email.required(),
+    'phone': keys.phone.required(),
+    'password': keys.password.required(),
+    'state': keys.state.required(),
+    'city': keys.city.required(),
+    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
 });
 
 const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'name': userKeys.name.optional(),
-    'email': userKeys.email.optional(),
-    'phone': userKeys.phone.optional(),
-    'password': userKeys.password.optional(),
-    'state': userKeys.state.optional(),
-    'city': userKeys.city.optional()
+    'name': keys.name.optional(),
+    'email': keys.email.optional(),
+    'phone': keys.phone.optional(),
+    'password': keys.password.optional(),
+    'state': keys.state.optional(),
+    'city': keys.city.optional()
 }).or('name', 'email', 'phone', 'password', 'state', 'city');
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': userKeys._id.optional(),
-    'name': userKeys.name.optional(),
-    'email': userKeys.email.optional(),
-    'phone': userKeys.phone.optional(),
-    'state': userKeys.state.optional(),
-    'city': userKeys.city.optional(),
-    'page': userKeys.page,
-    'limit': userKeys.limit
+    '_id': keys._id.optional(),
+    'name': keys.name.optional(),
+    'email': keys.email.optional(),
+    'phone': keys.phone.optional(),
+    'state': keys.state.optional(),
+    'city': keys.city.optional(),
+    'page': keys.page,
+    'limit': keys.limit
 });
 
 const id = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    '_id': userKeys._id.required()
+    '_id': keys._id.required()
 });
 
 const forgotPwd = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'email': userKeys.email.required()
+    'email': keys.email.required()
 });
 
 const restorePwd = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'email': userKeys.email.required(),
-    'token': userKeys.token.required(),
-    'password': userKeys.password.required()
+    'email': keys.email.required(),
+    'token': keys.token.required(),
+    'password': keys.password.required()
 });
 
 // --------------------- Module Exports --------------------- //

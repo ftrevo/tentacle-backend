@@ -2,21 +2,24 @@
 const joi = require('joi');
 
 // --------------------- Objetos Locais --------------------- //
-const accessKeys = {
+const keys = {
     'email': joi.string().email({ minDomainAtoms: 2 }).lowercase().trim(),
     'password': joi.string().min(5).trim(),
     'refreshToken': joi.string().regex(
-        /^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\.[0-9A-F]{24}\.[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i).trim()
+        /^[0-9A-F]{8}-[0-9A-F]{4}-[1][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}\.[0-9A-F]{24}\.[0-9A-F]{8}-[0-9A-F]{4}-[4][0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$/i).trim(),
+    'deviceToken': joi.string().trim()
 };
 
 // ------------------- Funções Exportadas ------------------- //
 const login = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'email': accessKeys.email.required(),
-    'password': accessKeys.password.required()
+    'email': keys.email.required(),
+    'password': keys.password.required(),
+    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
 });
 
 const refreshToken = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'refreshToken': accessKeys.refreshToken.required()
+    'refreshToken': keys.refreshToken.required(),
+    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
 });
 
 // --------------------- Module Exports --------------------- //
