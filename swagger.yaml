@@ -775,6 +775,80 @@ paths:
         '500':
           $ref: '#/components/responses/500'
 
+  /messages:
+    post:
+      tags:
+        - Message
+      summary: Rota de criação de mensagens
+      security:
+        - authenticationUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+                $ref: '#/components/schemas/Message'
+      responses:
+        '201':
+          $ref: '#/components/responses/201'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'  
+    get:
+      tags:
+        - Message
+      summary: Rota de detalhamento de Mensagens
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200List'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'
+
+  /messages/{id}:
+    parameters:
+      - $ref: '#/components/parameters/idParam'      
+    get:      
+      tags:
+        - Message
+      summary: Rota de detalhamento de Mensagens
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Detail'
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '404':
+          $ref: '#/components/responses/404'
+        '500':
+          $ref: '#/components/responses/500'  
+    delete:
+      tags:
+        - Message
+      summary: Rota de remoção de mensagem
+      security:
+        - authenticationUser: []
+      responses:
+        '200':
+          $ref: '#/components/responses/200Remove'
+        '403':
+          $ref: '#/components/responses/403'
+        '500':
+          $ref: '#/components/responses/500'                  
+
 components:
   securitySchemes:
     authenticationUser:
@@ -869,3 +943,17 @@ components:
       properties:
         media:
           type: string
+    Message:
+      type: object
+      properties:
+        action:
+          type: string
+        detail:
+          type: string
+        title:
+          type: string
+        recipient:
+          type: string
+        
+                
+

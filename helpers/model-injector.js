@@ -6,6 +6,7 @@ const state = require('../models/state');
 const game = require('../models/game');
 const loan = require('../models/loan');
 const user = require('../models/user');
+const message = require('../models/message')
 const mediaLoan = require('../models/media-loan');
 
 // ------------------- Funções Exportadas ------------------- //
@@ -18,7 +19,8 @@ const injector = function (request, response, next) {
         'media': media,
         'library': library.model,
         'loan': loan,
-        'mediaLoan': mediaLoan.model
+        'mediaLoan': mediaLoan.model,
+        'message': message
     };
 
     return next();

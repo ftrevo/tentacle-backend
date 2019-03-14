@@ -7,6 +7,7 @@ const repoMedia = require('./repo-media');
 const repoUser = require('./repo-user');
 const repoGame = require('./repo-game');
 const repoLoan = require('./repo-loan');
+const repoMessage = require('./repo-message')
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
@@ -15,6 +16,7 @@ module.exports = {
     'loan': repoLoan,
     'media': repoMedia,
     'mediaLoan': repoMediaLoan,
+    'message': repoMessage,
     'state': repoState,
     'token': repoToken,
     'user': repoUser

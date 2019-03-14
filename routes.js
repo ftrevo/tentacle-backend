@@ -115,6 +115,14 @@ const routes = function (app) {
 
   app.route('/media-loan/:_id')
     .get(modelInjector, privateRoute, validator('mediaLoan', 'id', 'params'), repo.mediaLoan.findById, defMethods.requestHandler);
+
+  app.route('/messages')
+    .get(modelInjector, privateRoute, validator('message', 'search', 'query'), br.message.search, repo.message.search, defMethods.requestHandler)
+    .post(modelInjector, privateRoute, validator('message', 'create', 'body'), repo.message.save, defMethods.requestHandler);
+
+  app.route('/messages/:_id')
+    .get(modelInjector, privateRoute, repo.message.findById, defMethods.requestHandler)
+    .delete(modelInjector, privateRoute, br.message.remove, repo.message.remove, defMethods.requestHandler);
 };
 
 // --------------------- Module Exports --------------------- //

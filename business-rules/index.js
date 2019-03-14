@@ -6,6 +6,7 @@ const brMedia = require('./br-media');
 const brUser = require('./br-user');
 const brGame = require('./br-game');
 const brLoan = require('./br-loan');
+const brMessage = require('./br-message');
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
@@ -15,5 +16,6 @@ module.exports = {
     'loan': brLoan,
     'media': brMedia,
     'mediaLoan': brMediaLoan,
+    'message': brMessage,
     'user': brUser
 };
