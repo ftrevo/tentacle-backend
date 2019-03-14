@@ -18,8 +18,6 @@ const logIn = async function (request, response, next) {
             return next({ 'isAuthDenied': true });
         }
 
-        console.log(request.body);
-
         user = user.toObject();
         response.locals._UTIL.clearObject(user, ['password']);
 
