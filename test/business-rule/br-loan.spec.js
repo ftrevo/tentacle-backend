@@ -36,7 +36,7 @@ describe('# Regra de negócio de Empréstimo', function () {
         it('mesmo dono', async function () {
             let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
-            let responseMock = getResponseMock({ 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' }, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b');
+            let responseMock = getResponseMock(undefined, undefined, '1a1a1a1a1a1a2b2b2b2b2b2b', undefined, { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' });
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -54,9 +54,11 @@ describe('# Regra de negócio de Empréstimo', function () {
             let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
             let responseMock = getResponseMock(
-                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' },
+                undefined,
                 { 'requestedBy': '2b2b2b2b2b2b3c3c3c3c3c3c' },
-                '2b2b2b2b2b2b3c3c3c3c3c3c'
+                '2b2b2b2b2b2b3c3c3c3c3c3c',
+                undefined,
+                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' }
             );
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -75,9 +77,11 @@ describe('# Regra de negócio de Empréstimo', function () {
             let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
             let responseMock = getResponseMock(
-                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' },
+                undefined,
                 { 'requestedBy': '2b2b2b2b2b2b3c3c3c3c3c3c' },
-                '3c3c3c3c3c3c4d4d4d4d4d4d'
+                '3c3c3c3c3c3c4d4d4d4d4d4d',
+                undefined,
+                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b' }
             );
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -96,9 +100,11 @@ describe('# Regra de negócio de Empréstimo', function () {
             let requestMock = { 'body': { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
             let responseMock = getResponseMock(
-                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b', 'game': '9a9a9a9a9a9a8b8b8b8b8b8b', 'platform': 'PS4' },
                 undefined,
-                '3c3c3c3c3c3c4d4d4d4d4d4d'
+                undefined,
+                '3c3c3c3c3c3c4d4d4d4d4d4d',
+                undefined,
+                { 'owner': '1a1a1a1a1a1a2b2b2b2b2b2b', 'game': '9a9a9a9a9a9a8b8b8b8b8b8b', 'platform': 'PS4' }
             );
 
             let nextObject = await brLoan.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -483,11 +489,12 @@ describe('# Regra de negócio de Empréstimo', function () {
 });
 
 // --------------------- Funções Locais --------------------- //
-function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, findByIdLoanObject) {
+function getResponseMock(findByIdMediaObject, findOneLoanObject, loggedUserId, findByIdLoanObject, findOneMediaObject) {
     return testUtil.getBaseResponseMock(
         loggedUserId,
         {
             'media': {
+                'findOne': testUtil.getExecObject(findOneMediaObject),
                 'findById': testUtil.getExecObject(findByIdMediaObject)
             },
             'loan': {

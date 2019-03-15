@@ -5,7 +5,7 @@ const ms = require('ms');
 const save = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.media.findById(request.body.media).exec(),
+            response.locals._MODELS.media.findOne({ '_id': request.body.media, 'active': true }).exec(),
             response.locals._MODELS.loan.findOne(
                 { 'media': request.body.media, 'returnDate': { $exists: false } }
             ).exec()
