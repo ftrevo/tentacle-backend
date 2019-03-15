@@ -24,6 +24,8 @@ const save = async function (request, response, next) {
         request.body.game = resolvedPromisses[0].game;
         request.body.mediaPlatform = resolvedPromisses[0].platform;
 
+        response.locals.notificationTo = { '_id': resolvedPromisses[0].owner };
+
         next();
     } catch (error) {
         /* istanbul ignore next */
@@ -66,6 +68,8 @@ const update = async function (request, response, next) {
 
             request.body = { 'returnDate': Date.now() };
         }
+
+        response.locals.notificationTo = { '_id': loan.requestedBy };
 
         next();
     } catch (error) {
@@ -146,7 +150,9 @@ const rememberDelivery = async function (request, response, next) {
 
         response.locals.data = loan;
         response.locals.statusCode = 200;
-        response.locals.message = 'E-mail enviado com sucesso';
+        response.locals.message = 'Notificação enviada com sucesso';
+
+        response.locals.notificationTo = { '_id': loan.requestedBy._id };
 
         next();
     } catch (error) {

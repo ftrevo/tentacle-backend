@@ -5,7 +5,7 @@ const passport = require('passport');
 const modelInjector = require('./helpers/model-injector');
 const defMethods = require('./helpers/default-methods');
 const validator = require('./helpers/validator');
-const mailer = require('./helpers/mailer');
+const notifications = require('./helpers/notifications');
 
 // --------------- Import de regras de negócio -------------- //
 const br = require('./business-rules');
@@ -21,11 +21,9 @@ const routes = function (app) {
   app.route('/').get(defMethods.route, defMethods.requestHandler);
 
   app.route('/login')
-    .post(modelInjector, validator('access', 'login', 'body'),
-      br.access.logIn, repo.token.update, defMethods.requestHandler);
+    .post(modelInjector, validator('access', 'login', 'body'), br.access.logIn, repo.token.update, defMethods.requestHandler);
   app.route('/refresh-token')
-    .post(modelInjector, validator('access', 'refreshToken', 'body'),
-      br.access.refreshToken, repo.token.update, defMethods.requestHandler);
+    .post(modelInjector, validator('access', 'refreshToken', 'body'), br.access.refreshToken, repo.token.update, defMethods.requestHandler);
 
 
   app.route('/states').get(modelInjector, repo.state.search, defMethods.requestHandler);
@@ -47,11 +45,16 @@ const routes = function (app) {
     );
 
   app.route('/users/forgot-password')
-    .post(modelInjector, validator('user', 'forgotPwd', 'body'), br.user.forgotPwd, repo.user.update, mailer.forgotPwd, defMethods.requestHandler);
+    .post(
+      modelInjector, validator('user', 'forgotPwd', 'body'), br.user.forgotPwd, repo.user.update,
+      notifications.forgotPwd, defMethods.requestHandler
+    );
 
   app.route('/users/restore-password')
-    .post(modelInjector, validator('user', 'restorePwd', 'body'), br.user.restorePwd, repo.user.update,
-      br.access.logInOnCreate, repo.token.update, defMethods.requestHandler);
+    .post(
+      modelInjector, validator('user', 'restorePwd', 'body'), br.user.restorePwd, repo.user.update,
+      br.access.logInOnCreate, repo.token.update, defMethods.requestHandler
+    );
 
   app.route('/users/profile')
     .get(modelInjector, privateRoute, br.user.profile, repo.user.findById, defMethods.requestHandler);
@@ -74,8 +77,10 @@ const routes = function (app) {
 
   app.route('/media/:_id')
     .get(modelInjector, privateRoute, validator('media', 'id', 'params'), repo.media.findById, defMethods.requestHandler)
-    .delete(modelInjector, privateRoute, validator('media', 'id', 'params'),
-      br.media.remove, repo.media.removeOrUpdate, repo.loan.removeFromMedia, mailer.mediaRemoved, defMethods.requestHandler)
+    .delete(
+      modelInjector, privateRoute, validator('media', 'id', 'params'), br.media.remove, repo.media.removeOrUpdate,
+      repo.loan.removeFromMedia, repo.token.findForNotification, notifications.mediaRemoved, defMethods.requestHandler
+    )
     .patch(
       modelInjector, privateRoute, validator('media', 'id', 'params'), validator('media', 'update', 'body'),
       br.media.update, repo.media.update, defMethods.requestHandler
@@ -83,39 +88,44 @@ const routes = function (app) {
 
 
   app.route('/library')
-    .get(
-      modelInjector, privateRoute, validator('library', 'search', 'query'),
-      br.library.search, repo.library.search, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('library', 'search', 'query'), br.library.search, repo.library.search, defMethods.requestHandler);
 
   app.route('/library/:_id([0-9a-fA-F]{24})')
-    .get(
-      modelInjector, privateRoute, validator('library', 'id', 'params'), repo.library.findById, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('library', 'id', 'params'), repo.library.findById, defMethods.requestHandler);
 
   app.route('/library/home')
     .get(
       modelInjector, privateRoute, validator('library', 'searchHome', 'query'),
-      br.library.searchHome, repo.library.searchHome, defMethods.requestHandler);
+      br.library.searchHome, repo.library.searchHome, defMethods.requestHandler
+    );
 
   app.route('/loans')
     .get(modelInjector, privateRoute, validator('loan', 'search', 'query'), br.loan.search, repo.loan.search, defMethods.requestHandler)
-    .post(modelInjector, privateRoute, validator('loan', 'create', 'body'), br.loan.save, repo.loan.save, mailer.loanReminder, defMethods.requestHandler);
+    .post(
+      modelInjector, privateRoute, validator('loan', 'create', 'body'), br.loan.save, repo.loan.save,
+      repo.token.findForNotification, notifications.loanReminder, defMethods.requestHandler
+    );
 
   app.route('/loans/:_id')
     .get(modelInjector, privateRoute, validator('loan', 'id', 'params'), repo.loan.findById, defMethods.requestHandler)
     .delete(modelInjector, privateRoute, validator('loan', 'id', 'params'), br.loan.remove, repo.loan.remove, defMethods.requestHandler)
     .patch(
       modelInjector, privateRoute, validator('loan', 'id', 'params'), validator('loan', 'update', 'body'),
-      br.loan.update, repo.loan.update, defMethods.requestHandler
+      br.loan.update, repo.loan.update, repo.token.findForNotification, notifications.loanChanged, defMethods.requestHandler
     );
 
   app.route('/loans/:_id/remember-delivery')
-    .post(modelInjector, privateRoute, validator('loan', 'id', 'params'), br.loan.rememberDelivery, mailer.rememberDelivery, defMethods.requestHandler);
+    .post(
+      modelInjector, privateRoute, validator('loan', 'id', 'params'), br.loan.rememberDelivery,
+      repo.token.findForNotification, notifications.rememberDelivery, defMethods.requestHandler
+    );
 
   app.route('/media-loan')
-    .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), br.mediaLoan.search, repo.mediaLoan.search, defMethods.requestHandler)
+    .get(modelInjector, privateRoute, validator('mediaLoan', 'search', 'query'), br.mediaLoan.search, repo.mediaLoan.search, defMethods.requestHandler);
 
   app.route('/media-loan/:_id')
     .get(modelInjector, privateRoute, validator('mediaLoan', 'id', 'params'), repo.mediaLoan.findById, defMethods.requestHandler);
+
 };
 
 // --------------------- Module Exports --------------------- //

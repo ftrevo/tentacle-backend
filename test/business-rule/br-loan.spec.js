@@ -110,6 +110,8 @@ describe('# Regra de negócio de Empréstimo', function () {
             requestMock.body.should.have.property('mediaOwner', '1a1a1a1a1a1a2b2b2b2b2b2b');
             requestMock.body.should.have.property('game', '9a9a9a9a9a9a8b8b8b8b8b8b');
             requestMock.body.should.have.property('mediaPlatform', 'PS4');
+            responseMock.locals.should.have.property('notificationTo');
+            responseMock.locals.notificationTo.should.have.property('_id', '1a1a1a1a1a1a2b2b2b2b2b2b');
         });
     });
 
@@ -170,7 +172,12 @@ describe('# Regra de negócio de Empréstimo', function () {
             it('dados OK', async function () {
                 let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }, 'body': { 'action': 'LEND' } };
 
-                let responseMock = getResponseMock(undefined, undefined, '3c3c3c3c3c3c4d4d4d4d4d4d', { 'mediaOwner': '3c3c3c3c3c3c4d4d4d4d4d4d' });
+                let responseMock = getResponseMock(
+                    undefined,
+                    undefined,
+                    '3c3c3c3c3c3c4d4d4d4d4d4d',
+                    { 'mediaOwner': '3c3c3c3c3c3c4d4d4d4d4d4d', 'requestedBy': '1a1a1a1a1a1a2b2b2b2b2b2b' }
+                );
 
                 let nextObject = await brLoan.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -179,6 +186,8 @@ describe('# Regra de negócio de Empréstimo', function () {
                 requestMock.body.should.have.property('loanDate').which.is.a.Number();
                 requestMock.body.should.have.property('estimatedReturnDate').which.is.a.Date();
                 requestMock.body.should.not.have.property('returnDate');
+                responseMock.locals.should.have.property('notificationTo');
+                responseMock.locals.notificationTo.should.have.property('_id', '1a1a1a1a1a1a2b2b2b2b2b2b');
             });
 
         });
@@ -232,8 +241,12 @@ describe('# Regra de negócio de Empréstimo', function () {
             it('dados OK', async function () {
                 let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }, 'body': { 'action': 'RETURN' } };
 
-                let responseMock = getResponseMock(undefined, undefined, '3c3c3c3c3c3c4d4d4d4d4d4d',
-                    { 'mediaOwner': '3c3c3c3c3c3c4d4d4d4d4d4d', 'loanDate': Date.now() });
+                let responseMock = getResponseMock(
+                    undefined,
+                    undefined,
+                    '3c3c3c3c3c3c4d4d4d4d4d4d',
+                    { 'mediaOwner': '3c3c3c3c3c3c4d4d4d4d4d4d', 'loanDate': Date.now(), 'requestedBy': '1a1a1a1a1a1a2b2b2b2b2b2b' }
+                );
 
                 let nextObject = await brLoan.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -242,6 +255,8 @@ describe('# Regra de negócio de Empréstimo', function () {
                 requestMock.body.should.have.property('returnDate').which.is.a.Number();
                 requestMock.body.should.not.have.property('loanDate');
                 requestMock.body.should.not.have.property('estimatedReturnDate');
+                responseMock.locals.should.have.property('notificationTo');
+                responseMock.locals.notificationTo.should.have.property('_id', '1a1a1a1a1a1a2b2b2b2b2b2b');
             });
 
         });
@@ -446,14 +461,22 @@ describe('# Regra de negócio de Empréstimo', function () {
         it('dados ok', async function () {
             let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
-            let responseMock = getResponseMock(undefined, undefined, '111111111111aaaaaaaaaaaa', { 'mediaOwner': '111111111111aaaaaaaaaaaa' });
+            let responseMock = getResponseMock(
+                undefined,
+                undefined,
+                '111111111111aaaaaaaaaaaa',
+                { 'mediaOwner': '111111111111aaaaaaaaaaaa', 'requestedBy': { '_id': '333333333333cccccccccccc' } }
+            );
 
             let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            responseMock.locals.should.have.property('data', { 'mediaOwner': '111111111111aaaaaaaaaaaa' });
+            responseMock.locals.should.have.property('data')
+            responseMock.locals.data.should.have.property('mediaOwner', '111111111111aaaaaaaaaaaa');
             responseMock.locals.should.have.property('statusCode', 200);
-            responseMock.locals.should.have.property('message', 'E-mail enviado com sucesso');
+            responseMock.locals.should.have.property('message', 'Notificação enviada com sucesso');
+            responseMock.locals.should.have.property('notificationTo');
+            responseMock.locals.notificationTo.should.have.property('_id', '333333333333cccccccccccc');
         });
 
     });

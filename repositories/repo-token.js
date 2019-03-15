@@ -34,8 +34,25 @@ const save = async function (request, response, next) {
     }
 };
 
+const findForNotification = async function (request, response, next) {
+    try {
+        if (response.locals.notificationTo) {
+            response.locals.notificationTo.token =
+                await response.locals._MODELS.token.findOne(
+                    { 'user': response.locals.notificationTo._id },
+                    { 'deviceToken': 1 }
+                ).exec();
+        }
+
+        next();
+    } catch (error) {
+        next(error);
+    }
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'save': save,
-    'update': update
+    'update': update,
+    'findForNotification': findForNotification
 };
