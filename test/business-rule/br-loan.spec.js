@@ -464,6 +464,49 @@ describe('# Regra de negócio de Empréstimo', function () {
             nextObject.should.have.property('isForbidden', true);
         });
 
+        it('apenas solicitação de empréstimo', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                undefined,
+                '111111111111aaaaaaaaaaaa',
+                { 'mediaOwner': '111111111111aaaaaaaaaaaa', 'requestedBy': { '_id': '333333333333cccccccccccc' }, 'returnDate': Date.now() }
+            );
+
+            let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep([
+                'Empréstimo ainda não efetivado'
+            ]);
+        });
+
+        it('devolução já efetivada', async function () {
+            let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
+
+            let responseMock = getResponseMock(
+                undefined,
+                undefined,
+                '111111111111aaaaaaaaaaaa',
+                {
+                    'mediaOwner': '111111111111aaaaaaaaaaaa', 'requestedBy': { '_id': '333333333333cccccccccccc' },
+                    'loanDate': Date.now(), 'returnDate': Date.now()
+                }
+            );
+
+            let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message').with.lengthOf(1);
+            nextObject.message.should.containDeep([
+                'Empréstimo já finalizado'
+            ]);
+        });
+
         it('dados ok', async function () {
             let requestMock = { 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' } };
 
@@ -471,7 +514,7 @@ describe('# Regra de negócio de Empréstimo', function () {
                 undefined,
                 undefined,
                 '111111111111aaaaaaaaaaaa',
-                { 'mediaOwner': '111111111111aaaaaaaaaaaa', 'requestedBy': { '_id': '333333333333cccccccccccc' } }
+                { 'mediaOwner': '111111111111aaaaaaaaaaaa', 'requestedBy': { '_id': '333333333333cccccccccccc' }, 'loanDate': Date.now() }
             );
 
             let nextObject = await brLoan.rememberDelivery(requestMock, responseMock, nextFunction = nextObject => nextObject);

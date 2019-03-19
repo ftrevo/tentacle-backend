@@ -148,6 +148,14 @@ const rememberDelivery = async function (request, response, next) {
             return next({ 'isForbidden': true });
         }
 
+        if (!loan.loanDate) {
+            return next({ 'isBusiness': true, 'message': ['Empréstimo ainda não efetivado'] });
+        }
+
+        if (loan.returnDate) {
+            return next({ 'isBusiness': true, 'message': ['Empréstimo já finalizado'] });
+        }
+
         response.locals.data = loan;
         response.locals.statusCode = 200;
         response.locals.message = 'Notificação enviada com sucesso';
