@@ -46,11 +46,34 @@ paths:
               properties:
                 refreshToken:
                   type: string
+      responses:
+        '200':
+          description: Token de login atualizado
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
+  /device-token:
+    post:
+      tags:
+        - Access
+      summary: Rota de atualização de token do device
+      security:
+        - authenticationUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
                 deviceToken:
                   type: string
       responses:
         '200':
-          description: Token de login atualizado
+          description: Token do device atualizado
         '400':
           $ref: '#/components/responses/400'
         '401':
@@ -93,12 +116,7 @@ paths:
         content:
           application/json:
             schema:
-              allOf:
-                - $ref: '#/components/schemas/User'
-                - type: object
-                  properties:
-                    deviceToken:
-                      type: string
+              $ref: '#/components/schemas/User'
       responses:
         '201':
           $ref: '#/components/responses/201'

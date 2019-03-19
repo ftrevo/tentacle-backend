@@ -13,17 +13,20 @@ const keys = {
 // ------------------- Funções Exportadas ------------------- //
 const login = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     'email': keys.email.required(),
-    'password': keys.password.required(),
-    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
+    'password': keys.password.required()
 });
 
 const refreshToken = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'refreshToken': keys.refreshToken.required(),
-    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
+    'refreshToken': keys.refreshToken.required()
+});
+
+const deviceToken = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
+    'deviceToken': keys.deviceToken.required()
 });
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'login': login,
-    'refreshToken': refreshToken
+    'refreshToken': refreshToken,
+    'deviceToken': deviceToken
 };
