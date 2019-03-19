@@ -19,8 +19,6 @@ paths:
                 password:
                   type: string
                   format: password
-                deviceToken:
-                  type: string
       responses:
         '200':
           description: Token de login gerado

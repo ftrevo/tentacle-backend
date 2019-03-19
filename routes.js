@@ -43,7 +43,7 @@ const routes = function (app) {
     .get(modelInjector, privateRoute, validator('user', 'id', 'params'), repo.user.findById, defMethods.requestHandler)
     .patch(
       modelInjector, privateRoute, validator('user', 'id', 'params'), validator('user', 'update', 'body'),
-      br.user.update, repo.user.update, defMethods.requestHandler
+      br.user.update, repo.user.update, br.access.logInOnCreate, repo.token.update, defMethods.requestHandler
     );
 
   app.route('/users/forgot-password')
