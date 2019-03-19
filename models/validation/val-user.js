@@ -13,7 +13,6 @@ const keys = {
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
     'token': joi.string().regex(/^[0-9A-Z]{5}$/),
-    'deviceToken': joi.string().trim(),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };
@@ -25,8 +24,7 @@ const create = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'phone': keys.phone.required(),
     'password': keys.password.required(),
     'state': keys.state.required(),
-    'city': keys.city.required(),
-    'deviceToken': keys.deviceToken.optional() //Será mudado para required quando implementado
+    'city': keys.city.required()
 });
 
 const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({

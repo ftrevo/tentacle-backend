@@ -24,6 +24,8 @@ const routes = function (app) {
     .post(modelInjector, validator('access', 'login', 'body'), br.access.logIn, repo.token.update, defMethods.requestHandler);
   app.route('/refresh-token')
     .post(modelInjector, validator('access', 'refreshToken', 'body'), br.access.refreshToken, repo.token.update, defMethods.requestHandler);
+  app.route('/device-token')
+    .post(modelInjector, privateRoute, validator('access', 'deviceToken', 'body'), repo.token.updateDeviceToken, defMethods.requestHandler);
 
 
   app.route('/states').get(modelInjector, repo.state.search, defMethods.requestHandler);
