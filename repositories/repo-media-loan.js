@@ -5,7 +5,7 @@ const search = async function (request, response, next) {
             response.locals._MODELS.mediaLoan
                 .find(
                     request.query,
-                    'id platform gameData._id gameData.name activeLoan._id activeLoan.requestedAt activeLoan.loanDate'
+                    'id platform active gameData._id gameData.name activeLoan._id activeLoan.requestedAt activeLoan.loanDate'
                 )
                 .skip(response.locals.pagination.skip)
                 .limit(response.locals.pagination.max)
