@@ -10,6 +10,7 @@ const keys = {
     'mineOnly': joi.boolean(),
     'createdAt': joi.date().raw(),
     'updatedAt': joi.date().raw(),
+    'active': joi.boolean(),
     'page': joi.number().default(0),
     'limit': joi.number().default(10).max(100)
 };
@@ -31,6 +32,7 @@ const search = joi.object().options({ abortEarly: false, stripUnknown: true }).k
     'mineOnly': keys.mineOnly.optional(),
     'game': keys.game.optional(),
     'owner': keys.owner.optional(),
+    'active': keys.active.optional(),
     'page': keys.page,
     'limit': keys.limit
 });
