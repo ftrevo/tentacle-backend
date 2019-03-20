@@ -424,7 +424,7 @@ paths:
             type: boolean
         - in: query
           name: active
-          description: Ver apenas jogos ativos ou jogos inativos, não informar para ver ambos
+          description: Ver apenas mídias ativas ou mídias inativas, não informar para ver ambos
           schema:
             type: boolean
         - $ref: '#/components/parameters/limitParam'
@@ -773,6 +773,11 @@ paths:
           description: ObjectId do jogo
           schema:
             type: string
+        - in: query
+          name: active
+          description: Ver apenas mídias ativas ou mídias inativas, não informar para ver ambos
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
