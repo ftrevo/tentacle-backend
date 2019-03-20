@@ -422,6 +422,11 @@ paths:
           description: Ver apenas minhas mídias
           schema:
             type: boolean
+        - in: query
+          name: active
+          description: Ver apenas jogos ativos ou jogos inativos, não informar para ver ambos
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
