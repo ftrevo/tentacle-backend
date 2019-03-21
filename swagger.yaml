@@ -779,7 +779,7 @@ paths:
     post:
       tags:
         - Message
-      summary: Rota de criação de mensagens
+      summary: Rota de criação de mensagem
       security:
         - authenticationUser: []
       requestBody:
@@ -821,7 +821,7 @@ paths:
     get:      
       tags:
         - Message
-      summary: Rota de detalhamento de Mensagens
+      summary: Rota de detalhamento de Mensagem
       security:
         - authenticationUser: []
       responses:
