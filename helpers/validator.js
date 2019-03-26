@@ -42,7 +42,8 @@ const validationMethods = {
     },
     'access': {
         'login': valAccess.login,
-        'refreshToken': valAccess.refreshToken
+        'refreshToken': valAccess.refreshToken,
+        'deviceToken': valAccess.deviceToken
     },
     'state': {
         'id': valState.id

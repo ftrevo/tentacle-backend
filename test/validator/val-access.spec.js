@@ -133,4 +133,41 @@ describe('# Validador de Acesso', function () {
             request.body.should.not.have.any.properties(['name', 'email']);
         });
     });
+
+    describe('## Device Token', function () {
+
+        it('campos obrigatórios', async function () {
+            let request = {
+                'body': {}
+            };
+
+            let validationFunction = validator('access', 'deviceToken', 'body');
+
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isJoi', true);
+            nextObject.should.have.property('details').with.lengthOf(1);
+            nextObject.details.should.containDeep([
+                { 'message': '"deviceToken" is required', 'type': 'any.required' }
+            ]);
+        });
+        it('limpeza de campos e dados OK', async function () {
+            let request = {
+                'body': {
+                    'refreshToken': 'Should be removed',
+                    'deviceToken': 'randomDeviceToken',
+                    'randomField': 'randomValue'
+                }
+            };
+
+            let validationFunction = validator('access', 'deviceToken', 'body');
+
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
+
+            should(nextObject).not.be.ok();
+            request.body.should.have.property('deviceToken', 'randomDeviceToken');
+            request.body.should.not.have.any.properties(['randomField', 'refreshToken']);
+        });
+    });
 });

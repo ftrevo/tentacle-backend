@@ -127,6 +127,8 @@ const removeFromMedia = async function (request, response, next) {
 
             request.body.loanRequestedByName = loan.requestedBy.name;
             request.body.loanRequestedByEmail = loan.requestedBy.email;
+
+            response.locals.notificationTo = { '_id': loan.requestedBy._id };
         }
 
         next();

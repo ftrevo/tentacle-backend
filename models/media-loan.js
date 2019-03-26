@@ -93,6 +93,9 @@ const MediaLoanSchema = new mongoose.Schema({
     createdAt: {
         type: Date
     },
+    active: {
+        type: Boolean
+    },
     activeLoan: ActiveLoanSchema,
     gameData: GameDataSchema
 }, { versionKey: false, timestamps: false });

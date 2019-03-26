@@ -53,6 +53,31 @@ paths:
           $ref: '#/components/responses/401'
         '500':
           $ref: '#/components/responses/500'
+  /device-token:
+    post:
+      tags:
+        - Access
+      summary: Rota de atualização de token do device
+      security:
+        - authenticationUser: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                deviceToken:
+                  type: string
+      responses:
+        '200':
+          description: Token do device atualizado
+        '400':
+          $ref: '#/components/responses/400'
+        '401':
+          $ref: '#/components/responses/401'
+        '500':
+          $ref: '#/components/responses/500'
 
   /states:
     get:
@@ -89,7 +114,7 @@ paths:
         content:
           application/json:
             schema:
-                $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/User'
       responses:
         '201':
           $ref: '#/components/responses/201'
@@ -395,6 +420,11 @@ paths:
         - in: query
           name: mineOnly
           description: Ver apenas minhas mídias
+          schema:
+            type: boolean
+        - in: query
+          name: active
+          description: Ver apenas mídias ativas ou mídias inativas, não informar para ver ambos
           schema:
             type: boolean
         - $ref: '#/components/parameters/limitParam'
@@ -743,6 +773,11 @@ paths:
           description: ObjectId do jogo
           schema:
             type: string
+        - in: query
+          name: active
+          description: Ver apenas mídias ativas ou mídias inativas, não informar para ver ambos
+          schema:
+            type: boolean
         - $ref: '#/components/parameters/limitParam'
         - $ref: '#/components/parameters/pageParam'
       responses:
