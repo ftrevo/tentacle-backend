@@ -34,5 +34,5 @@ const version = function (request, response, next) {
 module.exports = {
     'version': version,
     'requestHandler': requestHandler,
-    'route': route,
+    'route': route
 };

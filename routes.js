@@ -18,7 +18,7 @@ const privateRoute = passport.authenticate('jwt', { session: false });
 // ------------------- Funções Exportadas ------------------- //
 const routes = function (app) {
 
-  app.route('/').get(defMethods.route, defMethods.requestHandler);
+  app.route('/').get(modelInjector, defMethods.route, defMethods.requestHandler);
 
   app.route('/login')
     .post(
