@@ -6,6 +6,8 @@ paths:
       tags:
         - Access
       summary: Rota de Autenticação
+      security:
+        - appVersion: []
       requestBody:
         required: true
         content:
@@ -19,8 +21,6 @@ paths:
                 password:
                   type: string
                   format: password
-                deviceToken:
-                  type: string
       responses:
         '200':
           description: Token de login gerado
@@ -37,6 +37,8 @@ paths:
       tags:
         - Access
       summary: Rota de atualização do token
+      security:
+        - appVersion: []
       requestBody:
         required: true
         content:
@@ -62,6 +64,7 @@ paths:
       summary: Rota de atualização de token do device
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -86,6 +89,8 @@ paths:
       tags:
         - State
       summary: Rota de listagem de estados
+      security:
+        - appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200List'
@@ -98,6 +103,8 @@ paths:
       tags:
         - State
       summary: Rota de detalhamento de estado
+      security:
+        - appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -111,6 +118,8 @@ paths:
       tags:
         - User
       summary: Rota de criação de usuário
+      security:
+        - appVersion: []
       requestBody:
         required: true
         content:
@@ -130,6 +139,7 @@ paths:
       summary: Rota de listagem de usuários
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - $ref: '#/components/parameters/nameParam'
         - in: query
@@ -158,6 +168,7 @@ paths:
       summary: Rota de detalhamento de usuário
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -175,6 +186,7 @@ paths:
       summary: Rota de alteração de usuário
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -197,6 +209,8 @@ paths:
       tags:
         - User
       summary: Rota de envio de e-mail com token
+      security:
+        - appVersion: []
       requestBody:
         required: true
         content:
@@ -221,6 +235,8 @@ paths:
       tags:
         - User
       summary: Rota de alteração de senha
+      security:
+        - appVersion: []
       requestBody:
         required: true
         content:
@@ -251,6 +267,7 @@ paths:
       summary: Rota de perfil
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/response/200Detail'
@@ -268,6 +285,7 @@ paths:
       summary: Rota de criação de jogos
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -289,6 +307,7 @@ paths:
       summary: Rota de listagem de jogos
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: name
@@ -315,6 +334,7 @@ paths:
       summary: Rota de detalhamento de jogos
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -333,6 +353,7 @@ paths:
       summary: Rota de detalhamento de jogos do IGDB
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: name
@@ -358,6 +379,7 @@ paths:
       summary: Rota de criação de jogos do IGDB
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -381,6 +403,7 @@ paths:
       summary: Rota de criação de mídias
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -402,6 +425,7 @@ paths:
       summary: Rota de listagem de mídias
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: platform
@@ -444,6 +468,7 @@ paths:
       summary: Rota de detalhamento de mídias
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -461,6 +486,7 @@ paths:
       summary: Rota de remoção de mídias
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Remove'
@@ -474,6 +500,7 @@ paths:
       summary: Rota de alteração de mídias
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -499,6 +526,7 @@ paths:
       summary: Rota de listagem de biblioteca
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: _id
@@ -539,6 +567,7 @@ paths:
       summary: Rota de detalhamento de biblioteca
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -557,6 +586,7 @@ paths:
       summary: Rota de listagem da home
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: mediaPlatform
@@ -587,6 +617,7 @@ paths:
       summary: Rota de criação de empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -608,6 +639,7 @@ paths:
       summary: Rota de listagem de empréstimos ativos
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: _id
@@ -673,6 +705,7 @@ paths:
       summary: Rota de detalhamento de empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -690,6 +723,7 @@ paths:
       summary: Rota de remoção de empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Remove'
@@ -703,6 +737,7 @@ paths:
       summary: Rota de alteração de empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       requestBody:
         required: true
         content:
@@ -734,6 +769,7 @@ paths:
       summary: Rota de envio de e-mail lembrando da devolução da mídia
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           description: Envio de e-mail de lembrete de devolução de jogo
@@ -753,6 +789,7 @@ paths:
       summary: Rota de listagem de Mídia/Empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       parameters:
         - in: query
           name: _id
@@ -790,6 +827,7 @@ paths:
       summary: Rota de detalhamento de Mídia/Empréstimo
       security:
         - authenticationUser: []
+          appVersion: []
       responses:
         '200':
           $ref: '#/components/responses/200Detail'
@@ -809,6 +847,11 @@ components:
       name: Authorization
       in: header
       description: Token JWT do usuário
+    appVersion:
+      type: apiKey
+      name: App-Version
+      in: header
+      description: Versão do aplicativo
   parameters:
     idParam:
       in: path
