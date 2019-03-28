@@ -246,7 +246,8 @@ describe('# Validador de Mídia de Jogos', function () {
                     'platform': 'invalidPlatform',
                     'mineOnly': 'invalidMineOnly',
                     'game': 'invalidGame',
-                    'page': 'teste',
+                    'active': 'invalidActive',
+                    'page': 'invalidPage',
                     'limit': 999
                 }
             };
@@ -257,7 +258,7 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(7);
+            nextObject.should.have.property('details').with.lengthOf(8);
             nextObject.details.should.containDeep([
                 {
                     'message': '"_id" with value "invalidId" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
@@ -280,6 +281,10 @@ describe('# Validador de Mídia de Jogos', function () {
                     'type': 'boolean.base'
                 },
                 {
+                    'message': '"active" must be a boolean',
+                    'type': 'boolean.base'
+                },
+                {
                     'message': '"page" must be a number',
                     'type': 'number.base'
                 },
@@ -298,6 +303,7 @@ describe('# Validador de Mídia de Jogos', function () {
                     'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
                     'platform': 'PS4',
                     'mineOnly': true,
+                    'active': false,
                     'createdAt': 'Should be removed',
                     'updatedAt': 'Should be removed',
                     'randomField': 'Should be removed'
@@ -309,7 +315,7 @@ describe('# Validador de Mídia de Jogos', function () {
             let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.query.should.have.properties(['_id', 'owner', 'platform', 'game', 'page', 'limit', 'mineOnly']);
+            request.query.should.have.properties(['_id', 'owner', 'platform', 'game', 'page', 'limit', 'mineOnly', 'active']);
             request.query.limit.should.be.eql(10);
             request.query.page.should.be.eql(0);
             request.query.should.not.have.any.properties(['createdAt', 'updatedAt', 'randomField']);
