@@ -1,74 +1,18 @@
 // ------------------- Funções Exportadas ------------------- //
-const search = async function (request, response, next) {
+const aggregate = async function (request, response, next) {
     try {
-        let promisseStack = [
-            response.locals._MODELS.library.
-                find(
-                    request.query,
-                    'name ' +
-                    'mediaPs3Count mediaPs4Count mediaXbox360Count mediaXboxOneCount mediaNintendo3dsCount mediaNintendoSwitchCount'
-                )
-                .skip(response.locals.pagination.skip)
-                .limit(response.locals.pagination.max)
-                .sort('name')
-                .exec(),
+        let foundObject = await response.locals._MODELS.library.aggregate(request.query.aggregate);
 
-            response.locals._MODELS.library.find(request.query).countDocuments().exec()
-        ];
+        if (foundObject.length === 0) {
+            if (request.query.endpoint === 'detail') {
+                return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+            }
 
-        let resolvedPromisses = await Promise.all(promisseStack);
+            foundObject = { 'count': 0, 'list': [] };
+        }
 
-        response.locals._UTIL.setLocalsData(
-            response,
-            200,
-            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
-const searchHome = async function (request, response, next) {
-    try {
-        let promisseStack = [
-            response.locals._MODELS.library.
-                find(
-                    request.query,
-                    { 
-                        '_id': 1, 'name': 1, 'aggregated_rating': 1, 'summary': 1, 'screenshots': 1, 
-                        'mediaPs3Count': 1, 'mediaPs4Count': 1, 'mediaXbox360Count': 1, 'mediaXboxOneCount': 1, 'mediaNintendo3dsCount': 1, 'mediaNintendoSwitchCount': 1  
-                    }
-                )
-                .skip(response.locals.pagination.skip)
-                .limit(response.locals.pagination.max)
-                .sort({ 'createdAt': -1 })
-                .exec(),
-
-            response.locals._MODELS.library.find(request.query).countDocuments().exec()
-        ];
-
-        let resolvedPromisses =  await Promise.all(promisseStack);
-
-        response.locals._UTIL.setLocalsData(
-            response,
-            200,
-            { 'list': resolvedPromisses[0], 'count': resolvedPromisses[1] }
-        );
-
-        next();
-    } catch (error) {
-        next(error);
-    }
-};
-
-const findById =  async function (request, response, next) {
-    try {
-        let foundObject = await response.locals._MODELS.library.findById(request.params._id);
-
-        if (!foundObject) {
-            return next({ 'isDatabase': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+        if (foundObject.length === 1) {
+            foundObject = foundObject[0];
         }
 
         response.locals._UTIL.setLocalsData(
@@ -85,8 +29,6 @@ const findById =  async function (request, response, next) {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'search': search,
-    'searchHome': searchHome,
-    'findById': findById
+    'aggregate': aggregate
 };
 
