@@ -9,6 +9,9 @@ Backend do projeto Tentacle
 ### Variáveis de ambiente
 Variáveis de ambiente para desenvolvimento. (Podem ser criadas em um arquivo na raiz chamado .env)
 ```
+APP_VERSION=
+APP_DOWNLOAD_URL=
+
 DB_URL=mongodb://localhost:27017/tentacle
 PORT=3000
 LOGGER_LEVEL=silly
@@ -31,7 +34,6 @@ ENABLE_EMAIL=true
 
 ```
 #### TODO's
-* Revisão no arquivo do Swagger, adicionando os filtros faltantes e as descrições
 * Refatorar o arquivo de rotas, quebrando mesmo em múltiplos arquivos para melhor legibilidade
 * Repensar a função genérica de validação para melhor usabilidade
 * Revisar os objetos de populate nos repo's para unificação dos mesmos em uma constante no arquivo
