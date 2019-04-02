@@ -105,4 +105,50 @@ describe('# Util', function () {
             response.locals.should.not.have.property('message', 'Mensagem');
         });
     });
+
+    describe('## Media Platform Description', function () {
+
+        it('PS3 ', function () {
+            let platformDescription = util.getMediaPlatformDescription('PS3');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('PS3');
+        });
+
+        it('PS4 ', function () {
+            let platformDescription = util.getMediaPlatformDescription('PS4');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('PS4');
+        });
+
+        it('XBOXONE ', function () {
+            let platformDescription = util.getMediaPlatformDescription('XBOXONE');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('XONE');
+        });
+
+        it('XBO360 ', function () {
+            let platformDescription = util.getMediaPlatformDescription('XBOX360');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('X360');
+        });
+
+        it('NINTENDO3DS ', function () {
+            let platformDescription = util.getMediaPlatformDescription('NINTENDO3DS');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('3DS');
+        });
+
+        it('NINTENDOSWITCH ', function () {
+            let platformDescription = util.getMediaPlatformDescription('NINTENDOSWITCH');
+
+            should(platformDescription).be.ok();
+            (platformDescription).should.be.eql('SWITCH');
+        });
+    });
+
 });

@@ -22,8 +22,9 @@ const loanReminder = async function (request, response, next) {
             notificationSent = await sendNotification(
                 response.locals.notificationTo.token.deviceToken,
                 'Empréstimo solicitado',
-                `O seu jogo ${response.locals.data.game.name} para a plataforma ${response.locals.data.media.platform} ` +
-                `foi solicitado por ${response.locals.data.requestedBy.name}. Ao entregar o jogo não esqueça de registrar na aba 'Meus Jogos'.`
+                `O seu jogo ${response.locals.data.game.name} para a plataforma ` +
+                response.locals._UTIL.getMediaPlatformDescription(response.locals.data.media.platform) +
+                ` foi solicitado por ${response.locals.data.requestedBy.name}. Ao entregar o jogo não esqueça de registrar na aba 'Meus Jogos'.`
             );
         }
 
@@ -33,7 +34,7 @@ const loanReminder = async function (request, response, next) {
                 'Empréstimo solicitado',
                 mailTemplates.mediaRequested(
                     response.locals.data.game.name,
-                    response.locals.data.media.platform,
+                    response.locals._UTIL.getMediaPlatformDescription(response.locals.data.media.platform),
                     response.locals.data.requestedBy.name
                 )
             );
@@ -54,7 +55,8 @@ const rememberDelivery = async function (request, response, next) {
                 response.locals.notificationTo.token.deviceToken,
                 'Lembrete de devolução',
                 `${response.locals._USER.name} está solicitando a devolução do jogo ` +
-                `${response.locals.data.game.name} para a plataforma ${response.locals.data.media.platform} que você pegou emprestado.`
+                `${response.locals.data.game.name} para a plataforma ` +
+                response.locals._UTIL.getMediaPlatformDescription(response.locals.data.media.platform) + ' que você pegou emprestado.'
             );
         }
 
@@ -64,7 +66,7 @@ const rememberDelivery = async function (request, response, next) {
                 'Lembrete de devolução de jogo',
                 mailTemplates.rememberDelivery(
                     response.locals.data.game.name,
-                    response.locals.data.media.platform,
+                    response.locals._UTIL.getMediaPlatformDescription(response.locals.data.media.platform),
                     response.locals._USER.name
                 )
             );
@@ -85,8 +87,9 @@ const mediaRemoved = async function (request, response, next) {
                 notificationSent = await sendNotification(
                     response.locals.notificationTo.token.deviceToken,
                     'Indisponibilização de jogo',
-                    `O jogo ${response.locals.data.game.name} para a plataforma ${response.locals.data.platform} ` +
-                    `que você solicitou foi indisponibilizado por ${response.locals._USER.name}. ` +
+                    `O jogo ${response.locals.data.game.name} para a plataforma ` +
+                    response.locals._UTIL.getMediaPlatformDescription(response.locals.data.platform) +
+                    ` que você solicitou foi indisponibilizado por ${response.locals._USER.name}. ` +
                     `Para pesquisar a disponibilidade de outras mídias para este jogo olhe a aba 'Biblioteca'.`
                 );
             }
@@ -97,7 +100,7 @@ const mediaRemoved = async function (request, response, next) {
                     'Indisponibilização de jogo',
                     mailTemplates.mediaRemoved(
                         response.locals.data.game.name,
-                        response.locals.data.platform,
+                        response.locals._UTIL.getMediaPlatformDescription(response.locals.data.platform),
                         response.locals._USER.name
                     )
                 );
@@ -123,8 +126,9 @@ const loanChanged = async function (request, response, next) {
             notificationSent = await sendNotification(
                 response.locals.notificationTo.token.deviceToken,
                 'Jogo ' + titleComplement,
-                `O jogo ${response.locals.data.game.name} para a plataforma ${response.locals.data.media.platform} ` +
-                `que você solicitou foi marcado como ${titleComplement} por ${response.locals._USER.name}.`
+                `O jogo ${response.locals.data.game.name} para a plataforma ` +
+                response.locals._UTIL.getMediaPlatformDescription(response.locals.data.media.platform) +
+                ` que você solicitou foi marcado como ${titleComplement} por ${response.locals._USER.name}.`
             );
         }
 
