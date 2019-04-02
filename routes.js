@@ -90,15 +90,15 @@ const routes = function (app) {
 
 
   app.route('/library')
-    .get(modelInjector, privateRoute, validator('library', 'search', 'query'), br.library.search, repo.library.search, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('library', 'search', 'query'), br.library.search, repo.library.aggregate, defMethods.requestHandler);
 
   app.route('/library/:_id([0-9a-fA-F]{24})')
-    .get(modelInjector, privateRoute, validator('library', 'id', 'params'), repo.library.findById, defMethods.requestHandler);
+    .get(modelInjector, privateRoute, validator('library', 'id', 'params'), br.library.detail, repo.library.aggregate, defMethods.requestHandler);
 
   app.route('/library/home')
     .get(
       modelInjector, privateRoute, validator('library', 'searchHome', 'query'),
-      br.library.searchHome, repo.library.searchHome, defMethods.requestHandler
+      br.library.searchHome, repo.library.aggregate, defMethods.requestHandler
     );
 
   app.route('/loans')
