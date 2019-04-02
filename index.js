@@ -3,7 +3,6 @@ require('dotenv').config();
 // ----------------- Import de dependências ----------------- //
 const swaggerUi = require('swagger-ui-express');
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const express = require('express');
 const helmet = require('helmet')
@@ -12,8 +11,6 @@ const cors = require('cors');
 // --------------- Import de arquivos do core --------------- //
 const errorMapper = require('./helpers/error-mapper');
 const authorizer = require('./helpers/authorizer');
-const util = require('./helpers/util');
-const igdb = require('./helpers/igdb');
 const routes = require('./routes');
 
 const swaggerYaml = require('yamljs').load('./swagger.yaml');
@@ -31,14 +28,6 @@ app.use(bodyParser.json({ limit: '5mb' }));
 //Passport Middleware
 app.use(passport.initialize());
 authorizer.authorize(passport);
-
-//Middleware para definição do Locals
-app.all('*', (request, response, next) => {
-    response.locals._UTIL = util;
-    response.locals._MONGOOSE = mongoose;
-    response.locals._IGDB = igdb;
-    next();
-});
 
 //Definição de rotas
 routes(app);

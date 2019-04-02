@@ -1,3 +1,6 @@
+// ----------------- Import de dependências ----------------- //
+const mongoose = require('mongoose');
+
 // --------------- Import de arquivos do core --------------- //
 const library = require('../models/library');
 const token = require('../models/token');
@@ -7,6 +10,9 @@ const game = require('../models/game');
 const loan = require('../models/loan');
 const user = require('../models/user');
 const mediaLoan = require('../models/media-loan');
+
+const util = require('./util');
+const igdb = require('./igdb');
 
 // ------------------- Funções Exportadas ------------------- //
 const injector = function (request, response, next) {
@@ -20,6 +26,10 @@ const injector = function (request, response, next) {
         'loan': loan,
         'mediaLoan': mediaLoan.model
     };
+
+    response.locals._UTIL = util;
+    response.locals._MONGOOSE = mongoose;
+    response.locals._IGDB = igdb;
 
     return next();
 };

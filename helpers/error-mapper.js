@@ -29,6 +29,17 @@ const handleErrors = function (error, request, response, next) {
         return response.locals._UTIL.handleRequests(403, response);
     }
 
+    if (error.isOutdated) {
+        return response.locals._UTIL.handleRequests(
+            426,
+            response,
+            {
+                'message': [`O aplicativo que você está utilizando está com a versão desatualizada (Versão ${request.headers['app-version']}). ` +
+                    `Para voltar a ter acesso ao Tentacle, atualize para a versão ${process.env.APP_VERSION}`]
+            }
+        );
+    }
+
     if (error instanceof SyntaxError && error.type === 'entity.parse.failed') {
         return handleBodyParserParsingError(response);
     }
