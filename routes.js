@@ -102,7 +102,7 @@ const routes = function (app) {
 
   app.route('/library')
     .get(
-      modelInjector, defMethods.version, privateRoute, validator('library', 'search', 'query'), 
+      modelInjector, defMethods.version, privateRoute, validator('library', 'search', 'query'),
       br.library.search, repo.library.aggregate, defMethods.requestHandler
     );
 
