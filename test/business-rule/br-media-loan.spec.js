@@ -2,8 +2,8 @@
 const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
-const brMediaLoan = require('../../business-rule/br-media-loan');
-const util = require('../../helpers/util');
+const brMediaLoan = require('../../business-rules/br-media-loan');
+const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Mídia/Empréstimo', function () {
 
@@ -19,7 +19,7 @@ describe('# Regra de negócio de Mídia/Empréstimo', function () {
                 }
             };
 
-            let responseMock = getResponseMock();
+            let responseMock = testUtil.getBaseResponseMock();
 
             let nextObject = await brMediaLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -43,7 +43,7 @@ describe('# Regra de negócio de Mídia/Empréstimo', function () {
 
             let ownerId = '112233445566778899001122';
 
-            let responseMock = getResponseMock(ownerId);
+            let responseMock = testUtil.getBaseResponseMock(ownerId);
 
             let nextObject = await brMediaLoan.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -56,17 +56,3 @@ describe('# Regra de negócio de Mídia/Empréstimo', function () {
     });
 });
 
-// --------------------- Funções Locais --------------------- //
-function getResponseMock(loggedUserId) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_UTIL': util,
-            '_USER': {
-                '_id': loggedUserId
-            }
-        }
-    };
-};

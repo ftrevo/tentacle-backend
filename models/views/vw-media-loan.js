@@ -23,7 +23,7 @@ const createVwObject = {
                             'requestedAt': 1,
                             'loanDate': 1,
                             'estimatedReturnDate': 1,
-                            'requestedBy': 1
+                            'requestedBy': 1,
                         }
                     },
                     {
@@ -84,7 +84,10 @@ const createVwObject = {
                             'cover': 1,
                             'aggregated_rating': 1,
                             'formattedReleaseDate': 1,
-                            'aggregated_rating_count': 1
+                            'first_release_date': 1,
+                            'game_modes': 1,
+                            'genres': 1,
+                            'summary': 1
                         }
                     }
                 ],

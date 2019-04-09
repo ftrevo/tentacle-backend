@@ -1,3 +1,11 @@
+const mediaPlatform = {
+    'PS4': 'PS4',
+    'PS3': 'PS3',
+    'XBOXONE': 'XONE',
+    'XBOX360': 'X360',
+    'NINTENDOSWITCH': 'SWITCH',
+    'NINTENDO3DS': '3DS'
+};
 // ------------------- Funções Exportadas ------------------- //
 const resolvePagination = (params) => {
     let page = parseInt(params.page);
@@ -66,10 +74,15 @@ const getUtcFormattedDateFromDate = (targetDate) => {
     return `${((targetDate.getUTCDate()) + '').padStart(2, '0')}/${((targetDate.getUTCMonth() + 1) + '').padStart(2, '0')}/${targetDate.getFullYear()}`;
 }
 
+const getMediaPlatformDescription = (value) => {
+    return mediaPlatform[value];
+}
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
     'clearObject': clearObject,
     'getUtcFormattedDateFromDate': getUtcFormattedDateFromDate,
+    'getMediaPlatformDescription': getMediaPlatformDescription,
     'handleRequests': handleRequests,
     'resolvePagination': resolvePagination,
     'setLocalsData': setLocalsData,

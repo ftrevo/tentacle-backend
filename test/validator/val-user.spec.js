@@ -13,9 +13,9 @@ describe('# Validador do Usuário', function () {
                 'body': {}
             };
 
-            let createValidatorFunction = validator('user', 'create', 'body');
+            let validationFunction = validator('user', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -42,9 +42,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let createValidatorFunction = validator('user', 'create', 'body');
+            let validationFunction = validator('user', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -79,9 +79,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let createValidatorFunction = validator('user', 'create', 'body');
+            let validationFunction = validator('user', 'create', 'body');
 
-            let nextObject = await createValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['name', 'email', 'phone', 'password', 'state', 'city']);
@@ -96,9 +96,9 @@ describe('# Validador do Usuário', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('user', 'id', 'params');
+            let validationFunction = validator('user', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -115,9 +115,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let idValidatorFunction = validator('user', 'id', 'params');
+            let validationFunction = validator('user', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -138,9 +138,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let idValidatorFunction = validator('user', 'id', 'params');
+            let validationFunction = validator('user', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['name', '_id']);
@@ -160,9 +160,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('user', 'search', 'query');
+            let validationFunction = validator('user', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -204,9 +204,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let searchValidatorFunction = validator('user', 'search', 'query');
+            let validationFunction = validator('user', 'search', 'query');
 
-            let nextObject = await searchValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.query.should.have.properties(['_id', 'name', 'email', 'phone', 'state', 'city', 'page', 'limit']);
@@ -223,9 +223,9 @@ describe('# Validador do Usuário', function () {
                 'body': {}
             };
 
-            let updateValidatorFunction = validator('user', 'update', 'body');
+            let validationFunction = validator('user', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -245,9 +245,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('user', 'update', 'body');
+            let validationFunction = validator('user', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -282,9 +282,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let updateValidatorFunction = validator('user', 'update', 'body');
+            let validationFunction = validator('user', 'update', 'body');
 
-            let nextObject = await updateValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.properties(['name', 'email', 'phone', 'password', 'state', 'city']);
@@ -299,9 +299,9 @@ describe('# Validador do Usuário', function () {
                 'body': {}
             };
 
-            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+            let validationFunction = validator('user', 'forgotPwd', 'body');
 
-            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -318,9 +318,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+            let validationFunction = validator('user', 'forgotPwd', 'body');
 
-            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -339,9 +339,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let forgotPwdValidatorFunction = validator('user', 'forgotPwd', 'body');
+            let validationFunction = validator('user', 'forgotPwd', 'body');
 
-            let nextObject = await forgotPwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('email', 'validemail@gmail.com');
@@ -356,9 +356,9 @@ describe('# Validador do Usuário', function () {
                 'body': {}
             };
 
-            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+            let validationFunction = validator('user', 'restorePwd', 'body');
 
-            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -379,9 +379,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+            let validationFunction = validator('user', 'restorePwd', 'body');
 
-            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -407,9 +407,9 @@ describe('# Validador do Usuário', function () {
                 }
             };
 
-            let restorePwdValidatorFunction = validator('user', 'restorePwd', 'body');
+            let validationFunction = validator('user', 'restorePwd', 'body');
 
-            let nextObject = await restorePwdValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.body.should.have.property('email', 'validemail@gmail.com');

@@ -17,6 +17,9 @@ const TokenSchema = new mongoose.Schema({
     },
     expirationDate: {
         type: Date
+    },
+    deviceToken: {
+        type: String
     }
 }, { versionKey: false, timestamps: false });
 
@@ -33,8 +36,10 @@ TokenSchema.pre('save', async function (next) {
 TokenSchema.pre('findOneAndUpdate', async function (next) {
     let query = this;
 
-    query._update.logInDate = Date.now();
-    query._update.expirationDate = new Date(query._update['logInDate'] + ms(process.env.REFRESH_EXP_TIME));
+    if (query._update.refreshToken) {
+        query._update.logInDate = Date.now();
+        query._update.expirationDate = new Date(query._update['logInDate'] + ms(process.env.REFRESH_EXP_TIME));
+    }
 
     next();
 });

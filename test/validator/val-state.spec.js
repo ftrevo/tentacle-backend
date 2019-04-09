@@ -13,9 +13,9 @@ describe('# Validador do Estado', function () {
                 'params': {}
             };
 
-            let idValidatorFunction = validator('state', 'id', 'params');
+            let validationFunction = validator('state', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -32,9 +32,9 @@ describe('# Validador do Estado', function () {
                 }
             };
 
-            let idValidatorFunction = validator('state', 'id', 'params');
+            let validationFunction = validator('state', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
@@ -55,9 +55,9 @@ describe('# Validador do Estado', function () {
                 }
             };
 
-            let idValidatorFunction = validator('state', 'id', 'params');
+            let validationFunction = validator('state', 'id', 'params');
 
-            let nextObject = await idValidatorFunction(request, null, nextFunction = nextObject => nextObject);
+            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
             request.params.should.have.properties(['name', '_id']);

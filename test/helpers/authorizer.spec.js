@@ -3,6 +3,7 @@ const should = require('should');
 
 // --------------- Import de arquivos do core --------------- //
 const authorizer = require('../../helpers/authorizer');
+const testUtil = require('../test-util');
 
 describe('# Authorizer', function () {
 
@@ -47,28 +48,14 @@ describe('# Authorizer', function () {
 
 // --------------------- Funções Locais --------------------- //
 function getResponseMock(findByIdObject) {
-    return {
-        status: () => ({
-            json: obj => obj
-        }),
-        locals: {
-            '_MODELS': {
-                'user': {
-                    'findById': getExecObject(findByIdObject)
-                }
+    return testUtil.getBaseResponseMock(
+        undefined,
+        {
+            'user': {
+                'findById': testUtil.getExecObject(findByIdObject)
             }
         }
-    };
-};
-
-function getExecObject(returnedObject) {
-    return function () {
-        return {
-            exec: function () {
-                return returnedObject;
-            }
-        };
-    };
+    );
 };
 
 function getMockedUser(isUpdatedResponse) {
@@ -86,3 +73,4 @@ function doneFunction(error, validatedUser) {
         'validatedUser': validatedUser
     };
 };
+

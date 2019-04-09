@@ -22,8 +22,17 @@ const route = function (request, response, next) {
     next();
 };
 
+const version = function (request, response, next) {
+    if (!request.headers['app-version'] || request.headers['app-version'] !== process.env.APP_VERSION) {
+        return next({ 'isOutdated': true });
+    }
+
+    next();
+};
+
 // --------------------- Module Exports --------------------- //
 module.exports = {
+    'version': version,
     'requestHandler': requestHandler,
     'route': route
 };
