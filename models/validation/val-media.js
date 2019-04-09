@@ -22,8 +22,7 @@ const create = joi.object().options({ abortEarly: false, stripUnknown: true }).k
 });
 
 const update = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'platform': keys.platform.required(),
-    'game': keys.game.required()
+    'active': keys.active.required()
 });
 
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({

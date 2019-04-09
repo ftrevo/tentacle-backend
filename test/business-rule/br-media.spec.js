@@ -73,8 +73,7 @@ describe('# Regra de negócio de Jogo', function () {
         it('mídia não encontrada', async function () {
             let requestMock = {
                 'body': {
-                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'platform': 'PS4'
+                    'active': true
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
@@ -94,24 +93,18 @@ describe('# Regra de negócio de Jogo', function () {
 
             let requestMock = {
                 'body': {
-                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'platform': 'PS4'
+                    'active': true
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
-            let responseMock = getResponseMock(0, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, 0);
+            let responseMock = getResponseMock(0, undefined, ownerId, 0);
 
             let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).be.ok();
             should(requestMock.body.owner).not.be.ok();
             nextObject.should.have.property('isBusiness', true);
-            nextObject.should.have.property('message').with.lengthOf(1);
-            nextObject.message.should.containDeep(
-                [
-                    'Jogo não encontrado'
-                ]
-            );
+            nextObject.should.have.property('message', 'Mídia não encontrada');
         });
 
         it('outro dono', async function () {
@@ -119,8 +112,7 @@ describe('# Regra de negócio de Jogo', function () {
 
             let requestMock = {
                 'body': {
-                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'platform': 'PS4'
+                    'active': true
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
@@ -132,13 +124,37 @@ describe('# Regra de negócio de Jogo', function () {
             nextObject.should.have.property('isForbidden', true);
         });
 
+        it('jogo emprestado', async function () {
+            let ownerId = '112233445566778899001122';
+
+            let requestMock = {
+                'body': {
+                    'active': false
+                },
+                'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
+            };
+            let responseMock = getResponseMock(
+                0,
+                { '_id': requestMock.params._id, 'owner': ownerId },
+                ownerId,
+                1,
+                undefined,
+                { 'media': '1a2b3c4d5e6f1a2b3c4d5e6f' }
+            );
+
+            let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
+
+            should(nextObject).be.ok();
+            nextObject.should.have.property('isBusiness', true);
+            nextObject.should.have.property('message', 'Mídia emprestada, espere a devolução para inativar o jogo.');
+        });
+
         it('dados OK', async function () {
             let ownerId = '112233445566778899001122';
 
             let requestMock = {
                 'body': {
-                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'platform': 'PS4'
+                    'active': true
                 },
                 'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
             };
@@ -149,32 +165,6 @@ describe('# Regra de negócio de Jogo', function () {
             should(nextObject).not.be.ok();
         });
 
-        describe('### Campos já cadastrados', function () {
-            it('mídia já cadastrado', async function () {
-                let ownerId = '112233445566778899001122';
-
-                let requestMock = {
-                    'body': {
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                        'platform': 'PS4'
-                    },
-                    'params': { '_id': '1a2b3c4d5e6f1a2b3c4d5e6f' }
-                };
-                let responseMock = getResponseMock(1, { '_id': requestMock.params._id, 'owner': ownerId }, ownerId, 1);
-
-                let nextObject = await brMedia.update(requestMock, responseMock, nextFunction = nextObject => nextObject);
-
-                should(nextObject).be.ok();
-                should(requestMock.body.owner).not.be.ok();
-                nextObject.should.have.property('isBusiness', true);
-                nextObject.should.have.property('message').with.lengthOf(1);
-                nextObject.message.should.containDeep(
-                    [
-                        'Mídia já cadastrada'
-                    ]
-                );
-            });
-        });
     });
 
     describe('## Search', function () {
@@ -392,7 +382,7 @@ describe('# Regra de negócio de Jogo', function () {
 });
 
 // --------------------- Funções Locais --------------------- //
-function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount, findLoanObject) {
+function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, countGameDocAmmount, findLoanObject, findOneLoanObject) {
     return testUtil.getBaseResponseMock(
         loggedUserId,
         {
@@ -404,9 +394,9 @@ function getResponseMock(countMediaDocAmmount, findByIdObject, loggedUserId, cou
                 'countDocuments': testUtil.getExecObject(countGameDocAmmount)
             },
             'loan': {
-                'find': testUtil.getSortObject(findLoanObject)
+                'find': testUtil.getSortObject(findLoanObject),
+                'findOne': testUtil.getExecObject(findOneLoanObject)
             }
         }
     );
 };
-

@@ -511,7 +511,10 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Media'
+              type: object
+              properties:
+                active:
+                  type: boolean
       responses:
         '200':
           $ref: '#/components/responses/200Update'

@@ -335,18 +335,16 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(2);
+            nextObject.should.have.property('details').with.lengthOf(1);
             nextObject.details.should.containDeep([
-                { 'message': '"platform" is required', 'type': 'any.required' },
-                { 'message': '"game" is required', 'type': 'any.required' }
+                { 'message': '"active" is required', 'type': 'any.required' }
             ]);
         });
 
         it('dados inválidos', async function () {
             let request = {
                 'body': {
-                    'platform': 'invalidPlatform',
-                    'game': 'invalidGame'
+                    'active': 'invalidActive'
                 }
             };
 
@@ -356,15 +354,11 @@ describe('# Validador de Mídia de Jogos', function () {
 
             should(nextObject).be.ok();
             nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(2);
+            nextObject.should.have.property('details').with.lengthOf(1);
             nextObject.details.should.containDeep([
                 {
-                    'message': '"game" with value "invalidGame" fails to match the required pattern: /^[0-9a-fA-F]{24}$/',
-                    'type': 'string.regex.base'
-                },
-                {
-                    'message': '"platform" must be one of [PS4, PS3, XBOXONE, XBOX360, NINTENDOSWITCH, NINTENDO3DS]',
-                    'type': 'any.allowOnly'
+                    'message': '"active" must be a boolean',
+                    'type': 'boolean.base'
                 }
             ]);
         });
@@ -372,9 +366,7 @@ describe('# Validador de Mídia de Jogos', function () {
         it('limpeza de campos e dados OK', async function () {
             let request = {
                 'body': {
-                    'platform': 'PS4',
-                    'game': '1a2b3c4d5e6f1a2b3c4d5e6f',
-                    'owner': 'Should be removed',
+                    'active': true,
                     '_id': 'Should be removed',
                     'createdAt': 'Should be removed',
                     'updatedAt': 'Should be removed',
@@ -387,107 +379,9 @@ describe('# Validador de Mídia de Jogos', function () {
             let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            request.body.should.have.properties(['platform', 'game']);
-            request.body.should.not.have.any.properties(['_id', 'owner', 'randomField', 'createdBy', 'updatedBy']);
+            request.body.should.have.property('active', true);
+            request.body.should.not.have.any.properties(['_id', 'randomField', 'createdBy', 'updatedBy']);
         });
 
-        describe('### Campo Plataforma', function () {
-
-            it('- PS4', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'PS4',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'PS4');
-            });
-
-            it('- PS3', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'PS3',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'PS3');
-            });
-
-            it('- XBOXONE', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'XBOXONE',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'XBOXONE');
-            });
-
-            it('- XBOX360', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'XBOX360',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'XBOX360');
-            });
-
-            it('- NINTENDOSWITCH', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'NINTENDOSWITCH',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'NINTENDOSWITCH');
-            });
-
-            it('- NINTENDO3DS', async function () {
-                let request = {
-                    'body': {
-                        'platform': 'NINTENDO3DS',
-                        'game': '1a2b3c4d5e6f1a2b3c4d5e6f'
-                    }
-                };
-
-                let validationFunction = validator('media', 'update', 'body');
-
-                let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-                should(nextObject).not.be.ok();
-                request.body.should.have.property('platform', 'NINTENDO3DS');
-            });
-        });
     });
 });

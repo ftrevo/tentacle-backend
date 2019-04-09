@@ -31,32 +31,20 @@ const save = async function (request, response, next) {
 const update = async function (request, response, next) {
     try {
         let promisseStack = [
-            response.locals._MODELS.media.countDocuments(
-                {
-                    '_id': { '$ne': response.locals._MONGOOSE.Types.ObjectId(request.params._id) },
-                    'game': request.body.game,
-                    'platform': request.body.platform,
-                    'owner': response.locals._USER._id
-                }
-            ).exec(),
-
-            response.locals._MODELS.game.countDocuments({ '_id': request.body.game }).exec(),
-
-            response.locals._MODELS.media.findById(request.params._id).exec()
+            response.locals._MODELS.media.findById(request.params._id).exec(),
+            response.locals._MODELS.loan.findOne({ 'media': request.params._id, 'returnDate': { $exists: false } }).exec()
         ];
 
         let resolvedPromisses = await Promise.all(promisseStack);
 
-        let existsAndOwnerError = validateExistenceAndOwnership(resolvedPromisses[2], response.locals._USER);
+        let existsAndOwnerError = validateExistenceAndOwnership(resolvedPromisses[0], response.locals._USER);
 
         if (existsAndOwnerError) {
             return next(existsAndOwnerError);
         }
 
-        let validationErrors = validateData(resolvedPromisses);
-
-        if (validationErrors && validationErrors.length > 0) {
-            return next({ 'isBusiness': true, 'message': validationErrors });
+        if (!request.body.active && resolvedPromisses[1]) {
+            return next({ 'isBusiness': true, 'message': 'Mídia emprestada, espere a devolução para inativar o jogo.' });
         }
 
         next();
@@ -65,6 +53,7 @@ const update = async function (request, response, next) {
         next(error);
     }
 };
+
 
 const remove = async function (request, response, next) {
     try {
