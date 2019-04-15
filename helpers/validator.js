@@ -48,9 +48,7 @@ const validationMethods = {
         'id': valState.id
     },
     'game': {
-        'create': valGame.create,
         'id': valGame.id,
-        'update': valGame.update,
         'search': valGame.search,
         'searchRemote': valGame.searchRemote,
         'createRemote': valGame.createRemote
