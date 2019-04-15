@@ -7,37 +7,6 @@ const testUtil = require('../test-util');
 
 describe('# Regra de negócio de Jogo', function () {
 
-    describe('## Save', function () {
-        it('título já cadastrado', async function () {
-            let requestMock = { 'body': { 'name': 'Nome do jogo' } };
-            let responseMock = getResponseMock(1);
-
-            let nextObject = await brGame.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
-
-            should(nextObject).be.ok();
-            should(requestMock.body.createdBy).not.be.ok();
-            should(requestMock.body.updatedBy).not.be.ok();
-            nextObject.should.have.property('isBusiness', true);
-            nextObject.should.have.property('message').with.lengthOf(1);
-            nextObject.message.should.containDeep(
-                [
-                    'Jogo já cadastrado'
-                ]
-            );
-        });
-
-        it('dados OK', async function () {
-            let requestMock = { 'body': { 'name': 'Nome do jogo' } };
-            let responseMock = getResponseMock(0, undefined, '1a2b3c4d5e6f1a2b3c4d5e6f');
-
-            let nextObject = await brGame.save(requestMock, responseMock, nextFunction = nextObject => nextObject);
-
-            should(nextObject).not.be.ok();
-            should(requestMock.body.updatedBy).not.be.ok();
-            requestMock.body.should.have.property('createdBy', '1a2b3c4d5e6f1a2b3c4d5e6f');
-        });
-    });
-
     describe('## Search', function () {
         let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
 

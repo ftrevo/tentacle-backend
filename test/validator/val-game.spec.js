@@ -6,48 +6,6 @@ const validator = require('../../helpers/validator');
 
 describe('# Validador de Jogos', function () {
 
-    describe('## Create', function () {
-
-        it('campos obrigatórios', async function () {
-            let request = {
-                'body': {}
-            };
-
-            let validationFunction = validator('game', 'create', 'body');
-
-            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-            should(nextObject).be.ok();
-            nextObject.should.have.property('isJoi', true);
-            nextObject.should.have.property('details').with.lengthOf(1);
-            nextObject.details.should.containDeep([
-                { 'message': '"name" is required', 'type': 'any.required' }
-            ]);
-        });
-
-        it('limpeza de campos e dados OK', async function () {
-            let request = {
-                'body': {
-                    'name': 'Nome',
-                    'createdBy': 'Should be removed',
-                    'updatedBy': 'Should be removed',
-                    '_id': 'Should be removed',
-                    'createdAt': 'Should be removed',
-                    'updatedAt': 'Should be removed',
-                    'randomField': 'Should be removed'
-                }
-            };
-
-            let validationFunction = validator('game', 'create', 'body');
-
-            let nextObject = await validationFunction(request, null, nextFunction = nextObject => nextObject);
-
-            should(nextObject).not.be.ok();
-            request.body.should.have.properties(['name']);
-            request.body.should.not.have.any.properties(['_id', 'createdAt', 'updatedAt', 'randomField', 'createdBy', 'updatedBy']);
-        });
-    });
-
     describe('## Id', function () {
 
         it('campos obrigatórios', async function () {

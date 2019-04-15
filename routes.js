@@ -73,15 +73,17 @@ const routes = function (app) {
     .get(modelInjector, defMethods.version, privateRoute, br.user.profile, repo.user.findById, defMethods.requestHandler);
 
   app.route('/games')
-    .get(modelInjector, defMethods.version, privateRoute, validator('game', 'search', 'query'), br.game.search, repo.game.search, defMethods.requestHandler)
-    .post(modelInjector, defMethods.version, privateRoute, validator('game', 'create', 'body'), br.game.save, repo.game.save, defMethods.requestHandler);
+    .get(modelInjector, defMethods.version, privateRoute, validator('game', 'search', 'query'), br.game.search, repo.game.search, defMethods.requestHandler);
 
   app.route('/games/:_id([0-9a-fA-F]{24})')
     .get(modelInjector, defMethods.version, privateRoute, validator('game', 'id', 'params'), repo.game.findById, defMethods.requestHandler);
 
   app.route('/games/remote')
     .get(modelInjector, defMethods.version, privateRoute, validator('game', 'searchRemote', 'query'), br.game.searchRemote, defMethods.requestHandler)
-    .post(modelInjector, defMethods.version, privateRoute, br.game.saveRemote, repo.game.save, defMethods.requestHandler);
+    .post(
+      modelInjector, defMethods.version, privateRoute, validator('game', 'createRemote', 'body'),
+      br.game.saveRemote, repo.game.save, defMethods.requestHandler
+    );
 
 
   app.route('/media')

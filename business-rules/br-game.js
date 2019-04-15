@@ -1,27 +1,4 @@
 // ------------------- Funções Exportadas ------------------- //
-const save = async function (request, response, next) {
-    try {
-        let promisseStack = [
-            response.locals._MODELS.game.countDocuments({ 'name': new RegExp(`^${request.body.name}$`, 'i') }).exec(),
-        ];
-
-        let resolvedPromisses = await Promise.all(promisseStack);
-
-        let validationErrors = validateGameData(resolvedPromisses);
-
-        if (validationErrors && validationErrors.length > 0) {
-            return next({ 'isBusiness': true, 'message': validationErrors });
-        }
-
-        request.body.createdBy = response.locals._USER._id;
-
-        next();
-    } catch (error) {
-        /* istanbul ignore next */
-        next(error);
-    }
-};
-
 const search = async function (request, response, next) {
     try {
         response.locals.pagination = response.locals._UTIL.resolvePagination(request.query);
@@ -117,7 +94,6 @@ function transformUnixDate(singleGame, response) {
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'save': save,
     'saveRemote': saveRemote,
     'search': search,
     'searchRemote': searchRemote
