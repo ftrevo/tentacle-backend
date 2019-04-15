@@ -15,10 +15,6 @@ const keys = {
 };
 
 // ------------------- Funções Exportadas ------------------- //
-const create = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
-    'name': keys.name.required()
-});
-
 const search = joi.object().options({ abortEarly: false, stripUnknown: true }).keys({
     '_id': keys._id.optional(),
     'name': keys.name.optional(),
@@ -44,7 +40,6 @@ const createRemote = joi.object().options({ abortEarly: false, stripUnknown: tru
 
 // --------------------- Module Exports --------------------- //
 module.exports = {
-    'create': create,
     'createRemote': createRemote,
     'id': id,
     'search': search,

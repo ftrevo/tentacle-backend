@@ -1,9 +1,12 @@
 // ------------------- Funções Exportadas ------------------- //
 const save = async function (request, response, next) {
     try {
-        let toBeIncluded = new response.locals._MODELS.game(request.body);
+        let toBeIncluded = request.body;
 
-        await toBeIncluded.save();
+        if (!toBeIncluded.createdAt) {
+            toBeIncluded = new response.locals._MODELS.game(toBeIncluded);
+            await toBeIncluded.save();
+        }
 
         response.locals._UTIL.setLocalsData(
             response,
