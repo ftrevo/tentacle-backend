@@ -63,7 +63,9 @@ describe('# Regra de negócio de Jogo', function () {
             let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
             should(nextObject).not.be.ok();
-            requestMock.should.have.property('body', { 'id': 987654321, 'name': 'Jogo 01' });
+            requestMock.should.have.property('body');
+            requestMock.body.should.have.property('id', 987654321);
+            requestMock.body.should.have.property('name', 'Jogo 01');
         });
 
         it('IGDB error', async function () {
