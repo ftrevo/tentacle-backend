@@ -11,7 +11,7 @@ describe('# Regra de negócio de Jogo', function () {
         let requestMock = { 'query': { 'name': 'Nome', '_id': '1a2b3c4d5e6f1a2b3c4d5e6f', 'page': 0, 'limit': 10 } };
 
         it('nome e paginação', async function () {
-            let responseMock = getResponseMock(1);
+            let responseMock = getResponseMock();
 
             let nextObject = await brGame.search(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -28,7 +28,7 @@ describe('# Regra de negócio de Jogo', function () {
         let requestMock = { 'query': { 'name': 'Nome', 'page': 0, 'limit': 10 } };
 
         it('IGDB error', async function () {
-            let responseMock = getResponseMock(undefined, undefined, undefined, { 'statusCode': 404, 'body': 'HTTP 404' });
+            let responseMock = getResponseMock(undefined, undefined, { 'statusCode': 404, 'body': 'HTTP 404' });
 
             let nextObject = await brGame.searchRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -38,7 +38,7 @@ describe('# Regra de negócio de Jogo', function () {
         });
 
         it('dados ok', async function () {
-            let responseMock = getResponseMock(undefined, undefined, undefined,
+            let responseMock = getResponseMock(undefined, undefined,
                 { 'statusCode': 200, 'body': '[ { "igdbData" : "OK", "first_release_date":1550016000 } ]' });
 
             let nextObject = await brGame.searchRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -58,23 +58,17 @@ describe('# Regra de negócio de Jogo', function () {
     describe('## Save Remote', function () {
         it('já cadastrado', async function () {
             let requestMock = { 'body': { 'id': 987654321 } };
-            let responseMock = getResponseMock(1);
+            let responseMock = getResponseMock({ 'id': 987654321, 'name': 'Jogo 01' });
 
             let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
-            should(nextObject).be.ok();
-            nextObject.should.have.property('isBusiness', true);
-            nextObject.should.have.property('message').with.lengthOf(1);
-            nextObject.message.should.containDeep(
-                [
-                    'Jogo já cadastrado'
-                ]
-            );
+            should(nextObject).not.be.ok();
+            requestMock.should.have.property('body', { 'id': 987654321, 'name': 'Jogo 01' });
         });
 
         it('IGDB error', async function () {
             let requestMock = { 'body': { 'id': 987654321 } };
-            let responseMock = getResponseMock(0, undefined, undefined, undefined, { 'statusCode': 403, 'body': 'HTTP 403' });
+            let responseMock = getResponseMock(undefined, undefined, undefined, { 'statusCode': 403, 'body': 'HTTP 403' });
 
             let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -86,7 +80,7 @@ describe('# Regra de negócio de Jogo', function () {
         describe('### IGDB not found', function () {
             it('undefined', async function () {
                 let requestMock = { 'body': { 'id': 987654321 } };
-                let responseMock = getResponseMock(0, undefined, undefined, undefined, { 'statusCode': 200 });
+                let responseMock = getResponseMock(undefined, undefined, undefined, { 'statusCode': 200 });
 
                 let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -98,7 +92,7 @@ describe('# Regra de negócio de Jogo', function () {
 
             it('empty list', async function () {
                 let requestMock = { 'body': { 'id': 987654321 } };
-                let responseMock = getResponseMock(0, undefined, undefined, undefined, { 'statusCode': 200, 'body': '[]' });
+                let responseMock = getResponseMock(undefined, undefined, undefined, { 'statusCode': 200, 'body': '[]' });
 
                 let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
 
@@ -111,7 +105,7 @@ describe('# Regra de negócio de Jogo', function () {
 
         it('dados OK', async function () {
             let requestMock = { 'body': { 'id': 987654321 } };
-            let responseMock = getResponseMock(0, undefined, '1a2b3c4d5e6f1a2b3c4d5e6f', undefined,
+            let responseMock = getResponseMock(undefined, '1a2b3c4d5e6f1a2b3c4d5e6f', undefined,
                 { 'statusCode': 200, 'body': '[{"first_release_date":1550016000, "id": 987654321}]' });
 
             let nextObject = await brGame.saveRemote(requestMock, responseMock, nextFunction = nextObject => nextObject);
@@ -128,13 +122,12 @@ describe('# Regra de negócio de Jogo', function () {
 });
 
 // --------------------- Funções Locais --------------------- //
-function getResponseMock(countDocumentAmmount, findByIdObject, loggedUserId, listIgdbObject, detailIgdbObject) {
+function getResponseMock(findOneObject, loggedUserId, listIgdbObject, detailIgdbObject) {
     return testUtil.getBaseResponseMock(
         loggedUserId,
         {
             'game': {
-                'countDocuments': testUtil.getExecObject(countDocumentAmmount),
-                'findById': testUtil.getExecObject(findByIdObject)
+                'findOne': testUtil.getExecObject(findOneObject)
             }
         },
         {

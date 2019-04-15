@@ -36,33 +36,27 @@ const searchRemote = async function (request, response, next) {
 
 const saveRemote = async function (request, response, next) {
     try {
-        let promisseStack = [
-            response.locals._MODELS.game.countDocuments({ 'id': request.body.id }).exec()
-        ];
+        let game = await response.locals._MODELS.game.findOne({ 'id': request.body.id }).exec();
 
-        let resolvedPromisses = await Promise.all(promisseStack);
+        if (game) {
+            request.body = game;
+        } else {
+            let igdbResponse = await response.locals._IGDB.detail(request.body.id);
 
-        let validationErrors = validateGameData(resolvedPromisses);
+            if (igdbResponse.statusCode !== 200) {
+                return next({ 'statusCode': 500, 'message': `IGDB ${igdbResponse.statusCode}` });
+            }
 
-        if (validationErrors && validationErrors.length > 0) {
-            return next({ 'isBusiness': true, 'message': validationErrors });
+            let igdbResponseBody = JSON.parse(igdbResponse.body || '[]');
+
+            if (!igdbResponseBody || igdbResponseBody.length !== 1) {
+                return next({ 'isBusiness': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
+            }
+
+            request.body = transformUnixDate(igdbResponseBody[0], response);
+
+            request.body.createdBy = response.locals._USER._id;
         }
-
-        let igdbResponse = await response.locals._IGDB.detail(request.body.id);
-
-        if (igdbResponse.statusCode !== 200) {
-            return next({ 'statusCode': 500, 'message': `IGDB ${igdbResponse.statusCode}` });
-        }
-
-        let igdbResponseBody = JSON.parse(igdbResponse.body || '[]');
-
-        if (!igdbResponseBody || igdbResponseBody.length !== 1) {
-            return next({ 'isBusiness': true, 'message': 'Jogo não encontrado', 'isNotFound': true });
-        }
-
-        request.body = transformUnixDate(igdbResponseBody[0], response);
-
-        request.body.createdBy = response.locals._USER._id;
 
         next();
     } catch (error) {
@@ -72,16 +66,6 @@ const saveRemote = async function (request, response, next) {
 };
 
 // --------------------- Funções Locais --------------------- //
-function validateGameData(resolvedPromisses) {
-    let validationErrors = [];
-
-    if (resolvedPromisses[0] > 0) {
-        validationErrors.push('Jogo já cadastrado');
-    }
-
-    return validationErrors;
-};
-
 function transformUnixDate(singleGame, response) {
     let releaseDate = new Date(singleGame.first_release_date * 1000);
 
